@@ -2,6 +2,7 @@ package com.reksoft.holiday.model;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 
 @Table(name = "calculate")
 @Entity
@@ -37,6 +38,30 @@ public class Calculate {
 
     @Column(name = "points")
     private Integer points;
+
+    @OneToOne (optional=false, cascade=CascadeType.ALL)
+    @JoinColumn (name="sponsor_1_id")
+    private User sponsor_1;
+
+    @OneToOne (optional=false, cascade=CascadeType.ALL)
+    @JoinColumn (name="sponsor_2_id")
+    private User sponsor_2;
+
+    public User getSponsor_1() {
+        return sponsor_1;
+    }
+
+    public void setSponsor_1(User sponsor_1) {
+        this.sponsor_1 = sponsor_1;
+    }
+
+    public User getSponsor_2() {
+        return sponsor_2;
+    }
+
+    public void setSponsor_2(User sponsor_2) {
+        this.sponsor_2 = sponsor_2;
+    }
 
     public Integer getPoints() {
         return points;

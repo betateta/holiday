@@ -1,11 +1,13 @@
 package com.reksoft.holiday.controller;
 
+import com.reksoft.holiday.model.InputParameter;
 import com.reksoft.holiday.model.User;
 import com.reksoft.holiday.service.UserService;
 import freemarker.template.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +44,11 @@ public class MainController {
     @RequestMapping(value = "/session", method = RequestMethod.GET)
     public String new_session (Model model){
 
-
+        InputParameter parameters = user.getInputParameters();
+        model.addAttribute("user", user);
+        model.addAttribute("parameters", parameters);
+        model.addAttribute("session_players", parameters.getSessionPlayers());
+        model.addAttribute("session_duration", parameters.getSessionDuration());
         return "session";
     }
 }

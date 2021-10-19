@@ -6,11 +6,9 @@ import javax.persistence.*;
 @Entity
 public class InputParameter {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
-
-    @Column(name = "user_id", nullable = false)
-    private Integer userId;
 
     @Column(name = "session_players")
     private Integer sessionPlayers;
@@ -48,13 +46,12 @@ public class InputParameter {
     @Column(name = "holiday_dinner_chance")
     private Integer holidayDinnerChance;
 
-    @OneToOne(optional=false, mappedBy="inputParameters")
+    @OneToOne(optional=true, mappedBy="inputParameters")
     private User user;
 
     public User getUser() {
         return user;
     }
-
     public void setUser(User user) {
         this.user = user;
     }
@@ -155,13 +152,6 @@ public class InputParameter {
         this.sessionPlayers = sessionPlayers;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
 
     public Integer getId() {
         return id;

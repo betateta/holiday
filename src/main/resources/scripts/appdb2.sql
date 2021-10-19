@@ -29,7 +29,6 @@ CREATE TABLE public.holiday (
 
 CREATE TABLE public.input_parameters (
 	id int4 NOT NULL,
-	user_id int4 NOT NULL,
 	session_players int4 NULL,
 	session_duration int4 NULL,
 	players_addshot_chance int4 NULL,
@@ -75,27 +74,6 @@ CREATE TABLE public."session" (
 );
 
 
--- public.calculate definition
-
--- Drop table
-
--- DROP TABLE public.calculate;
-
-CREATE TABLE public.calculate (
-	id int4 NOT NULL,
-	holiday_id int4 NOT NULL,
-	session_id int4 NULL,
-	capacity int4 NULL,
-	start_time timestamp NULL,
-	stop_time timestamp NULL,
-	uniq_players_number int4 NULL,
-	points int4 NULL,
-	CONSTRAINT calculate_pk PRIMARY KEY (id),
-	CONSTRAINT calculate_fk FOREIGN KEY (id) REFERENCES public.holiday(id),
-	CONSTRAINT calculate_fk_ses FOREIGN KEY (id) REFERENCES public."session"(id)
-);
-
-
 -- public.users definition
 
 -- Drop table
@@ -116,6 +94,29 @@ CREATE TABLE public.users (
 	CONSTRAINT users_fk_session FOREIGN KEY (session_id) REFERENCES public."session"(id)
 );
 
+
+-- public.calculate definition
+
+-- Drop table
+
+-- DROP TABLE public.calculate;
+
+CREATE TABLE public.calculate (
+	id int4 NOT NULL,
+	holiday_id int4 NOT NULL,
+	session_id int4 NULL,
+	capacity int4 NULL,
+	start_time timestamp NULL,
+	stop_time timestamp NULL,
+	uniq_players_number int4 NULL,
+	points int4 NULL,
+	sponsor_1_id int4 NULL,
+	sponsor_2_id int4 NULL,
+	CONSTRAINT calculate_pk PRIMARY KEY (id),
+	CONSTRAINT calculate_fk FOREIGN KEY (holiday_id) REFERENCES public.holiday(id),
+	CONSTRAINT calculate_fk_sp1 FOREIGN KEY (sponsor_1_id) REFERENCES public."users"(id),
+	CONSTRAINT calculate_fk_sp2 FOREIGN KEY (sponsor_2_id) REFERENCES public."users"(id)
+);
 
 -- public.users_roles definition
 

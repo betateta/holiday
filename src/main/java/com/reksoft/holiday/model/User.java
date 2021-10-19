@@ -1,13 +1,11 @@
 package com.reksoft.holiday.model;
 
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -36,7 +34,7 @@ public class User implements UserDetails {
             inverseJoinColumns=@JoinColumn(name="role_id"))
     private Set<Role> roles;
 
-    @OneToOne (optional=false, cascade=CascadeType.ALL)
+    @OneToOne (optional=true, cascade=CascadeType.ALL)
     @JoinColumn (name="input_parameters_id")
     private InputParameter inputParameters;
 
@@ -44,12 +42,34 @@ public class User implements UserDetails {
     @JoinColumn (name="session_id")
     private Session session;
 
-    public InputParameter getParameters() {
+    @OneToOne(optional=false, mappedBy="sponsor_1")
+    private Calculate calc1;
+
+    @OneToOne(optional=false, mappedBy="sponsor_2")
+    private Calculate calc2;
+
+    public InputParameter getInputParameters() {
         return inputParameters;
     }
 
-    public void setParameters(InputParameter parameters) {
-        this.inputParameters = parameters;
+    public void setInputParameters(InputParameter inputParameters) {
+        this.inputParameters = inputParameters;
+    }
+
+    public Calculate getCalc1() {
+        return calc1;
+    }
+
+    public void setCalc1(Calculate calc1) {
+        this.calc1 = calc1;
+    }
+
+    public Calculate getCalc2() {
+        return calc2;
+    }
+
+    public void setCalc2(Calculate calc2) {
+        this.calc2 = calc2;
     }
 
     public Session getSession() {
