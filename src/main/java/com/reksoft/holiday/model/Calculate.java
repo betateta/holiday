@@ -1,28 +1,31 @@
 package com.reksoft.holiday.model;
 
+import lombok.*;
+import org.hibernate.Hibernate;
+
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
-@Table(name = "calculate")
+@Getter
+@Setter
+@Table(name = "calculates")
 @Entity
 public class Calculate {
     @Id
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "holiday_id", nullable = false)
-    private Integer holidayId;
-/*
-    @Column(name = "session_id")
-    private Integer sessionId;
-
- */
+    @OneToOne(optional=false,  cascade=CascadeType.ALL)
+    @JoinColumn(name="holiday_id")
+    private Holiday holiday;
 
     @ManyToOne(fetch=FetchType.LAZY,
             cascade=CascadeType.ALL)
     @JoinColumn (name="session_id")
-    private Session session;
+    @ToString.Exclude
+    private SessionGame session;
 
     @Column(name = "capacity")
     private Integer capacity;
@@ -39,91 +42,22 @@ public class Calculate {
     @Column(name = "points")
     private Integer points;
 
-    @OneToOne (optional=false, cascade=CascadeType.ALL)
-    @JoinColumn (name="sponsor_1_id")
-    private User sponsor_1;
+    @ManyToMany (fetch = FetchType.EAGER)
+    @JoinTable (name="players_calculates",
+            joinColumns=@JoinColumn (name="calculate_id"),
+            inverseJoinColumns=@JoinColumn(name="player_id"))
+    private Set<Player> players;
 
-    @OneToOne (optional=false, cascade=CascadeType.ALL)
-    @JoinColumn (name="sponsor_2_id")
-    private User sponsor_2;
-
-    public User getSponsor_1() {
-        return sponsor_1;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Calculate calculate = (Calculate) o;
+        return id != null && Objects.equals(id, calculate.id);
     }
 
-    public void setSponsor_1(User sponsor_1) {
-        this.sponsor_1 = sponsor_1;
-    }
-
-    public User getSponsor_2() {
-        return sponsor_2;
-    }
-
-    public void setSponsor_2(User sponsor_2) {
-        this.sponsor_2 = sponsor_2;
-    }
-
-    public Integer getPoints() {
-        return points;
-    }
-
-    public void setPoints(Integer points) {
-        this.points = points;
-    }
-
-    public Integer getUniqPlayersNumber() {
-        return uniqPlayersNumber;
-    }
-
-    public void setUniqPlayersNumber(Integer uniqPlayersNumber) {
-        this.uniqPlayersNumber = uniqPlayersNumber;
-    }
-
-    public Instant getStopTime() {
-        return stopTime;
-    }
-
-    public void setStopTime(Instant stopTime) {
-        this.stopTime = stopTime;
-    }
-
-    public Instant getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Instant startTime) {
-        this.startTime = startTime;
-    }
-
-    public Integer getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(Integer capacity) {
-        this.capacity = capacity;
-    }
-
-    public Session getSession() {
-        return session;
-    }
-
-    public void setSession(Session session) {
-        this.session = session;
-    }
-
-    public Integer getHolidayId() {
-        return holidayId;
-    }
-
-    public void setHolidayId(Integer holidayId) {
-        this.holidayId = holidayId;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    @Override
+    public int hashCode() {
+        return 0;
     }
 }

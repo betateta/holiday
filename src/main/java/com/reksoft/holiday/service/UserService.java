@@ -47,7 +47,17 @@ public class UserService implements UserDetailsService {
         }
         user.setRoles(Collections.singleton(new Role(1, "ROLE_USER")));
         user.setPassword(NoOpPasswordEncoder.getInstance().encode(user.getPassword()));
+        user.setEnable(true);
         userRepository.save(user);
+        return true;
+    }
+    public boolean updateUser(User user) {
+        User userFromDB = userRepository.findByUsername(user.getUsername());
+        if (userFromDB == null) {
+            return false;
+        }
+        userRepository.save(user);
+
         return true;
     }
 

@@ -10,13 +10,11 @@
                         <tr>
                             <td>Идентификатор</td>
                             <td>Имя пользователя</td>
-                            <td>Набранные очки</td>
                         </tr>
                              <#list users as user>
                                 <tr>
                                   <td>${user.id}</td>
                                     <td>${user.username}</td>
-                                    <td>${user.points}</td>
                                 </tr>
                              </#list>
                  </table>

@@ -1,12 +1,15 @@
 package com.reksoft.holiday.model;
 
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
+@Getter
+@Setter
 @Table(name = "role")
 @Entity
 public class Role implements GrantedAuthority {
@@ -27,6 +30,7 @@ public class Role implements GrantedAuthority {
     public Role() {
 
     }
+
     public Role(Integer id) {
         this.id = id;
     }
@@ -36,32 +40,21 @@ public class Role implements GrantedAuthority {
         this.rolename = rolename;
     }
 
-    public String getRolename() {
-        return rolename;
-    }
-
-    public void setRolename(String rolename) {
-        this.rolename = rolename;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
     @Override
     public String getAuthority() {
         return getRolename();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Role role = (Role) o;
+        return id != null && Objects.equals(id, role.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
     }
 }

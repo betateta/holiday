@@ -22,11 +22,10 @@
                              </#list>
                              </td>
                          </tr>
-                        <tr>
-                            <td>Набранные очки</td>
-                            <td>${points}</td>
+                       <tr>
+                            <td>Идентификатор сессии</td>
+                            <td>${session_id ! 0}</td>
                         </tr>
-
                  </table>
          </div>
          <div>
