@@ -16,5 +16,10 @@ public class SessionServiceImpl implements SessionService{
         return sessionRepository.findByUser(user);
     }
 
+    @Override
+    public void save(SessionGame session) {
+        sessionRepository.saveAndFlush(session);
+    }
+
 
 }

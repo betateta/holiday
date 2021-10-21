@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -47,22 +48,19 @@ public class MainController {
         model.addAttribute("users", allUsers);
         return "users";
     }
-/*
+
     @RequestMapping(value = "/session", method = RequestMethod.GET)
     public String new_session (Model model){
-        SessionGame session_parameters = new SessionGame();
-        model.addAttribute("parameters", parameters);
+        SessionGame session_parameters = new SessionGame(user);
+        model.addAttribute("parameters", session_parameters);
         return "session";
     }
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save( @ModelAttribute("parameters") InputParameter parameters) {
-
-        user.setInputParameters(parameters);
-        System.out.println("Debug parameters: "+parameters.getSessionPlayers());
-        userService.updateUser(user);
-       // HttpServletRequest request;
-
+    public String save( @ModelAttribute("parameters") SessionGame parameters) {
+        parameters.setId(user.getId());
+        parameters.setUser(user);
+        sessionServiceImpl.save(parameters);
         return "session";
     }
-    */
+
 }

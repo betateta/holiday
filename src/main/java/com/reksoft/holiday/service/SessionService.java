@@ -5,4 +5,7 @@ import com.reksoft.holiday.model.User;
 
 public interface SessionService {
     SessionGame findByUser (User user);
+    void save(SessionGame session);
+
+
 }

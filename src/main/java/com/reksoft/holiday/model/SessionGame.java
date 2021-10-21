@@ -10,6 +10,7 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "sessions")
 @Entity
 public class SessionGame {
@@ -18,7 +19,7 @@ public class SessionGame {
     private Integer id;
 
     @OneToOne(optional=false,  cascade=CascadeType.ALL)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id",nullable = false)
     private User user;
 
     @Column(name = "start_time")
@@ -75,6 +76,14 @@ public class SessionGame {
             cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<Calculate> calculateList;
+
+    public SessionGame(Integer id) {
+        this.id = id;
+    }
+
+    public SessionGame(User user) {
+        this.user = user;
+    }
 
     @Override
     public boolean equals(Object o) {

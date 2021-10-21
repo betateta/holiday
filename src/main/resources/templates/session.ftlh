@@ -11,8 +11,6 @@
             <fieldset>
                 <legend><h3>Установочные параметры сессии</h3></legend>
                 <form name="parameters" action="save" method="POST">
-                    <@ui.formInput id="t1" name="id" label="id"
-                        value="${parameters.id ! 0}"/> <br/>
                     <@ui.formInput id="t2" name="sessionPlayers" label="Количество игроков"
                         value="${parameters.sessionPlayers ! 0}"/> <br/>
                     <@ui.formInput id="t3" name="sessionDuration" label="Длительность сессии"
