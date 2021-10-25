@@ -1,17 +1,21 @@
 package com.reksoft.holiday.service;
 
+import com.reksoft.holiday.dto.SessionParameters;
+import com.reksoft.holiday.exception.ValidationException;
 import com.reksoft.holiday.model.SessionGame;
 import com.reksoft.holiday.model.User;
 import com.reksoft.holiday.repository.SessionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class SessionServiceImpl implements SessionService{
-    @Autowired
-    private SessionRepository sessionRepository;
 
-   @Override
+    private final SessionRepository sessionRepository;
+    private final SessionConfig sessionConfig;
+
+    @Override
     public SessionGame findByUser(User user) {
         return sessionRepository.findByUser(user);
     }
@@ -21,5 +25,18 @@ public class SessionServiceImpl implements SessionService{
         sessionRepository.saveAndFlush(session);
     }
 
+    @Override
+    public SessionGame setSessionParameters(SessionGame sessionGame, SessionParameters sessionParameters) {
+        return sessionConfig.setSessionParameters(sessionGame,sessionParameters);
+    }
 
+    @Override
+    public SessionParameters getSessionParameters(SessionGame sessionGame) {
+        return sessionConfig.getSessionParameters(sessionGame);
+    }
+
+    @Override
+    public void validateParameters(SessionParameters sessionParameters) throws ValidationException {
+
+    }
 }

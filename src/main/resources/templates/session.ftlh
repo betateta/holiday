@@ -13,7 +13,7 @@
                 <form name="parameters" action="save" method="POST">
                     <@ui.formInput id="t2" name="sessionPlayers" label="Количество игроков"
                         value="${parameters.sessionPlayers ! 0}"/> <br/>
-                    <@ui.formInput id="t3" name="sessionDuration" label="Длительность сессии"
+                    <@ui.formInput id="t3" name="sessionDuration" label="Длительность сессии, суток"
                         value="${parameters.sessionDuration ! 0}"/> <br/>
                     <@ui.formInput id="t4" name="playersAddshotChance" label="Вероятность дополнительных попыток, %"
                         value="${parameters.playersAddshotChance ! 0}"/> <br/>

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
@@ -24,22 +24,27 @@ public class UserService implements UserDetailsService {
 
         return user;
     }
+
     public User getUser(Integer id) {
         return userRepository.<User>getById(id);
     }
     public Integer getUserId(String name) {
         return userRepository.findByUsername(name).getId();
     }
+
     public Set<Role> getUserRoles(Integer id) {
         return userRepository.<User>getById(id).getRoles();
     }
+
     public List<User> allUsers() {
         return userRepository.findAll();
     }
+
     public User findUserById(Integer userId) {
         Optional<User> userFromDb = userRepository.findById(userId);
         return userFromDb.orElse(new User());
     }
+
     public boolean saveUser(User user) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
         if (userFromDB != null) {
@@ -48,16 +53,16 @@ public class UserService implements UserDetailsService {
         user.setRoles(Collections.singleton(new Role(1, "ROLE_USER")));
         user.setPassword(NoOpPasswordEncoder.getInstance().encode(user.getPassword()));
         user.setEnable(true);
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
         return true;
     }
+
     public boolean updateUser(User user) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
         if (userFromDB == null) {
             return false;
         }
-        userRepository.save(user);
-
+        userRepository.saveAndFlush(user);
         return true;
     }
 
