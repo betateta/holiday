@@ -1,56 +1,51 @@
 package com.reksoft.holiday.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-
-
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Validated
 public class SessionParameters {
 
     @Min(20)
     private Integer sessionPlayers;
-
+    @Min(10)
     private Integer sessionDuration;
 
-    @NotBlank(message = "требуется ввести вероятность дополнительных попыток")
+    @Min( value=1,message = "требуется ввести вероятность дополнительных попыток")
     private Integer playersAddshotChance;
 
-    @NotBlank(message = "требуется ввести минимальное количество дополнительных попыток ")
+    @Min(value=1,message = "требуется ввести минимальное количество дополнительных попыток ")
     private Integer playersAddshotMin;
 
-    @NotBlank(message = "требуется ввести максимальное количество дополнительных попыток")
+    @Min(value=1,message = "требуется ввести максимальное количество дополнительных попыток")
     private Integer playersAddshotMax;
 
-    @NotBlank(message = "требуется ввести количество игроков с шансом на дополнительные попытки")
+    @Min(value=1,message = "требуется ввести количество игроков с шансом на дополнительные попытки")
     private Integer playersNumberAddshot;
 
-    @NotBlank(message = "требуется ввести частоту дискретизации")
+    @Min(value=1,message = "требуется ввести частоту дискретизации")
     private Integer holidaySampleFreq;
 
-    @NotBlank(message = "требуется ввести веротяность заполнения праздника")
+    @Min(value=1,message = "требуется ввести веротяность заполнения праздника")
     private Integer holidayFillChance;
 
-    @NotBlank(message = "требуется ввести веротяность смещения игрока с праздника")
+    @Min(value=1,message = "требуется ввести веротяность смещения игрока с праздника")
     private Integer holidayPushChance;
 
-    @NotBlank(message = "требуется ввести веротяность простого праздника")
+    @Min(value=1,message = "требуется ввести веротяность простого праздника")
     private Integer holidaySimpleChance;
 
-    @NotBlank(message = "требуется ввести веротяность пиршенства")
+    @Min(value=1,message = "требуется ввести веротяность пиршенства")
     private Integer holidayBanquetChance;
 
-    @NotBlank(message = "требуется ввести веротяность ужина")
+    @Min(value=1,message = "требуется ввести веротяность ужина")
     private Integer holidayDinnerChance;
 }

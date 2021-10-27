@@ -8,21 +8,23 @@ import com.reksoft.holiday.model.User;
 import com.reksoft.holiday.service.PlayerServiceImpl;
 import com.reksoft.holiday.service.SessionServiceImpl;
 import com.reksoft.holiday.service.UserServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
+//import javax.validation.Valid;
 import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@Validated
 public class MainController {
 
     @Autowired
@@ -71,7 +73,7 @@ public class MainController {
     }
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String save(@ModelAttribute("parameters") @Valid SessionParameters parameters,
-                                    BindingResult errors) throws ValidationException {
+                                    Errors errors) throws ValidationException {
         if (errors.hasErrors()) {
             System.out.println("Debug:  "+ errors.getFieldError());
             return "session";
