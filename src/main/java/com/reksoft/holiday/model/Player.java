@@ -14,6 +14,7 @@ import java.util.Set;
 @Entity
 public class Player {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 

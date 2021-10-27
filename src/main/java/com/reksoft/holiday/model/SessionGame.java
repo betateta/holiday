@@ -28,11 +28,12 @@ import java.util.Objects;
 @Entity
 public class SessionGame {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @OneToOne(optional=false,  cascade=CascadeType.ALL)
-    @JoinColumn(name="user_id",nullable = false)
+    @OneToOne(optional=false,  cascade=CascadeType.MERGE)
+    @JoinColumn(name="user_id")
     private User user;
 
     @Column(name = "start_time")

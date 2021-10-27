@@ -15,9 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
@@ -49,6 +47,7 @@ public class MainController {
         } else {
             session = new SessionGame();
             sessionParameters = new SessionParameters();
+            session.setUser(user);
         }
         model.addAttribute("id",user.getId());
         model.addAttribute("name",user.getUsername());
@@ -72,7 +71,7 @@ public class MainController {
     }
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String save(@ModelAttribute("parameters") @Valid SessionParameters parameters,
-                       BindingResult errors) throws ValidationException {
+                                    BindingResult errors) throws ValidationException {
         if (errors.hasErrors()) {
             System.out.println("Debug:  "+ errors.getFieldError());
             return "session";

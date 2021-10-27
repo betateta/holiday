@@ -12,6 +12,7 @@ import java.util.Objects;
 @Entity
 public class Holiday {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
