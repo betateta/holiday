@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Table(name = "players")
 @Entity
 public class Player {
@@ -17,7 +17,6 @@ public class Player {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Lob
     @Column(name = "name")
     private String name;
 
@@ -45,4 +44,11 @@ public class Player {
     public int hashCode() {
         return 0;
     }
+
+    public Player(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+
 }

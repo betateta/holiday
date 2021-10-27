@@ -1,13 +1,5 @@
---DROP SCHEMA public;
-
-CREATE SCHEMA public AUTHORIZATION postgres;
-
-COMMENT ON SCHEMA public IS 'standard public schema';
--- public.holiday definition
-
--- Drop table
-
---DROP TABLE public.holiday;
+-- DROP SCHEMA public CASCADE;
+-- CREATE SCHEMA public AUTHORIZATION postgres;
 
 CREATE TABLE public.holiday (
 	id int4 NOT NULL,

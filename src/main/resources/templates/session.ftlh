@@ -21,25 +21,34 @@
                         value="${parameters.playersAddshotMin ! 0}"/> <br/>
                     <@ui.formInput id="t6" name="playersAddshotMax" label="Максимальное количество дополнительных попыток"
                         value="${parameters.playersAddshotMax ! 0}"/> <br/>
-                    <@ui.formInput id="t7" name="playersAddshotMax" label="Количество игроков с шансом на дополнительные попытки"
-                        value="${parameters.playersAddshotMax ! 0}"/> <br/>
+                    <@ui.formInput id="t7" name="playersNumberAddshot" label="Количество игроков с шансом на дополнительные попытки"
+                        value="${parameters.playersNumberAddshot ! 0}"/> <br/>
                     <@ui.formInput id="t8" name="holidaySampleFreq" label="Частота дискретизации, мин"
                         value="${parameters.holidaySampleFreq ! 0}"/> <br/>
-                    <@ui.formInput id="t9" name="holidayFillChance" label="Веротяность заполнения праздника, %"
+                    <@ui.formInput id="t9" name="holidayFillChance" label="Вероятность заполнения праздника, %"
                         value="${parameters.holidayFillChance ! 0}"/> <br/>
-                    <@ui.formInput id="t10" name="holidayPushChance" label="Веротяность смещения игрока с праздника ,%"
+                    <@ui.formInput id="t10" name="holidayPushChance" label="Вероятность смещения игрока с праздника ,%"
                         value="${parameters.holidayPushChance ! 0}"/> <br/>
-                    <@ui.formInput id="t11" name="holidaySimpleChance" label="Веротяность простого праздника ,%"
+                    <@ui.formInput id="t11" name="holidaySimpleChance" label="Вероятность простого праздника ,%"
                         value="${parameters.holidaySimpleChance ! 0}"/> <br/>
-                    <@ui.formInput id="t12" name="holidayBanquetChance" label="Веротяность пиршенства ,%"
+                    <@ui.formInput id="t12" name="holidayBanquetChance" label="Вероятность пиршенства ,%"
                         value="${parameters.holidayBanquetChance ! 0}"/> <br/>
-                    <@ui.formInput id="t13" name="holidayDinnerChance" label="Веротяность ужина ,%"
+                    <@ui.formInput id="t13" name="holidayDinnerChance" label="Вероятность ужина ,%"
                         value="${parameters.holidayDinnerChance ! 0}"/> <br/>
 
                         <input type="hidden" name="${_csrf.parameterName}"value="${_csrf.token}" />
-                    <input type="submit" value="Save" />
+                    <input type="submit" value="Сохранить параметры" />
                 </form>
             </fieldset>
         </div>
+        <div>
+                    <fieldset>
+                        <legend><h3>Новая сессия</h3></legend>
+                        <form name="parameters" action="start_session" method="GET">
+
+                            <input type="submit" value="Начать новую сессию" />
+                        </form>
+                    </fieldset>
+                </div>
    </body>
 </html>

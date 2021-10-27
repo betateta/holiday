@@ -9,7 +9,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
+
 
 
 @Data
@@ -19,7 +19,7 @@ import javax.validation.constraints.Positive;
 @Validated
 public class SessionParameters {
 
-    @Min(5)
+    @Min(20)
     private Integer sessionPlayers;
 
     private Integer sessionDuration;

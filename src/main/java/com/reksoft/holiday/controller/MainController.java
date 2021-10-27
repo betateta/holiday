@@ -1,8 +1,11 @@
 package com.reksoft.holiday.controller;
 
 import com.reksoft.holiday.dto.SessionParameters;
+import com.reksoft.holiday.exception.ValidationException;
+import com.reksoft.holiday.mechanic.CalculateSession;
 import com.reksoft.holiday.model.SessionGame;
 import com.reksoft.holiday.model.User;
+import com.reksoft.holiday.service.PlayerServiceImpl;
 import com.reksoft.holiday.service.SessionServiceImpl;
 import com.reksoft.holiday.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +26,13 @@ import java.util.List;
 @Controller
 @Validated
 public class MainController {
-   // @Autowired
-    //private Configuration configuration;
+
     @Autowired
     private UserServiceImpl userServiceImpl;
     @Autowired
     private SessionServiceImpl sessionServiceImpl;
+    @Autowired
+    private PlayerServiceImpl playerService;
 
     private SessionGame session;
     private SessionParameters sessionParameters;
@@ -44,6 +48,7 @@ public class MainController {
             sessionParameters = sessionServiceImpl.getSessionParameters(session);
         } else {
             session = new SessionGame();
+            sessionParameters = new SessionParameters();
         }
         model.addAttribute("id",user.getId());
         model.addAttribute("name",user.getUsername());
@@ -61,22 +66,37 @@ public class MainController {
     }
 
     @RequestMapping(value = "/session", method = RequestMethod.GET)
-    public String new_session (Model model){
+    public String create_session (Model model){
         model.addAttribute("parameters", sessionParameters);
         return "session";
     }
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String save(@ModelAttribute("parameters") @Valid SessionParameters parameters,
-                       BindingResult errors) {
+                       BindingResult errors) throws ValidationException {
         if (errors.hasErrors()) {
             System.out.println("Debug:  "+ errors.getFieldError());
             return "session";
         }
+        try {
+            sessionServiceImpl.validateParameters(parameters);
+        } catch (ValidationException validationException) {return "session";}
+
         session = sessionServiceImpl.setSessionParameters(session,parameters);
         sessionServiceImpl.save(session);
-           return "session";
-
-
+        return "session";
+    }
+    @RequestMapping(value = "start_session", method = RequestMethod.GET)
+    public String startNewSession (Model model){
+        CalculateSession calculateSession = new CalculateSession(session,playerService);
+        sessionServiceImpl.save(calculateSession.getSessionGame());
+        return "start_session";
     }
 
+    public SessionGame getSession() {
+        return session;
+    }
+
+    public SessionParameters getSessionParameters() {
+        return sessionParameters;
+    }
 }
