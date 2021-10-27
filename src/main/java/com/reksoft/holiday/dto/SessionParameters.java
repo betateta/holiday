@@ -1,56 +1,51 @@
 package com.reksoft.holiday.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-
-
+import org.hibernate.validator.constraints.Range;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Validated
 public class SessionParameters {
 
-    @Min(20)
+    @Range(min = 3,max = 100)
     private Integer sessionPlayers;
 
+    @Range(min = 1,max = 100)
     private Integer sessionDuration;
 
-    @NotBlank(message = "требуется ввести вероятность дополнительных попыток")
+    @Range(min = 0,max = 100)
     private Integer playersAddshotChance;
 
-    @NotBlank(message = "требуется ввести минимальное количество дополнительных попыток ")
+    @Range(min = 0,max = 100)
     private Integer playersAddshotMin;
 
-    @NotBlank(message = "требуется ввести максимальное количество дополнительных попыток")
+    @Range(min = 0,max = 100)
     private Integer playersAddshotMax;
 
-    @NotBlank(message = "требуется ввести количество игроков с шансом на дополнительные попытки")
+    @Range(min = 0,max = 100)
     private Integer playersNumberAddshot;
 
-    @NotBlank(message = "требуется ввести частоту дискретизации")
+    @Range(min = 1,max = 100)
     private Integer holidaySampleFreq;
 
-    @NotBlank(message = "требуется ввести веротяность заполнения праздника")
+    @Range(min = 0,max = 100)
     private Integer holidayFillChance;
 
-    @NotBlank(message = "требуется ввести веротяность смещения игрока с праздника")
+    @Range(min = 0,max = 100)
     private Integer holidayPushChance;
 
-    @NotBlank(message = "требуется ввести веротяность простого праздника")
+    @Range(min = 0,max = 100)
     private Integer holidaySimpleChance;
 
-    @NotBlank(message = "требуется ввести веротяность пиршенства")
+    @Range(min = 0,max = 100)
     private Integer holidayBanquetChance;
 
-    @NotBlank(message = "требуется ввести веротяность ужина")
+    @Range(min = 0,max = 100)
     private Integer holidayDinnerChance;
 }

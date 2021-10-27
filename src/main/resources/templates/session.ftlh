@@ -1,4 +1,4 @@
-<#import "ui.ftlh" as ui/>
+<#import "/spring.ftl" as spring />
 
 <!DOCTYPE HTML>
 <html>
@@ -11,33 +11,47 @@
             <fieldset>
                 <legend><h3>Установочные параметры сессии</h3></legend>
                 <form name="parameters" action="save" method="POST">
-                    <@ui.formInput id="t2" name="sessionPlayers" label="Количество игроков"
-                        value="${parameters.sessionPlayers ! 0}"/> <br/>
-                    <@ui.formInput id="t3" name="sessionDuration" label="Длительность сессии, суток"
-                        value="${parameters.sessionDuration ! 0}"/> <br/>
-                    <@ui.formInput id="t4" name="playersAddshotChance" label="Вероятность дополнительных попыток, %"
-                        value="${parameters.playersAddshotChance ! 0}"/> <br/>
-                    <@ui.formInput id="t5" name="playersAddshotMin" label="Минимальное количество дополнительных попыток"
-                        value="${parameters.playersAddshotMin ! 0}"/> <br/>
-                    <@ui.formInput id="t6" name="playersAddshotMax" label="Максимальное количество дополнительных попыток"
-                        value="${parameters.playersAddshotMax ! 0}"/> <br/>
-                    <@ui.formInput id="t7" name="playersNumberAddshot" label="Количество игроков с шансом на дополнительные попытки"
-                        value="${parameters.playersNumberAddshot ! 0}"/> <br/>
-                    <@ui.formInput id="t8" name="holidaySampleFreq" label="Частота дискретизации, мин"
-                        value="${parameters.holidaySampleFreq ! 0}"/> <br/>
-                    <@ui.formInput id="t9" name="holidayFillChance" label="Вероятность заполнения праздника, %"
-                        value="${parameters.holidayFillChance ! 0}"/> <br/>
-                    <@ui.formInput id="t10" name="holidayPushChance" label="Вероятность смещения игрока с праздника ,%"
-                        value="${parameters.holidayPushChance ! 0}"/> <br/>
-                    <@ui.formInput id="t11" name="holidaySimpleChance" label="Вероятность простого праздника ,%"
-                        value="${parameters.holidaySimpleChance ! 0}"/> <br/>
-                    <@ui.formInput id="t12" name="holidayBanquetChance" label="Вероятность пиршенства ,%"
-                        value="${parameters.holidayBanquetChance ! 0}"/> <br/>
-                    <@ui.formInput id="t13" name="holidayDinnerChance" label="Вероятность ужина ,%"
-                        value="${parameters.holidayDinnerChance ! 0}"/> <br/>
+                    Количество игроков:<br>
+                        <@spring.formInput path="parameters.sessionPlayers" attributes="" fieldType="number"/>
+                        <@spring.showErrors "<br>"/> <br>
+                    Длительность сессии, суток: <br>
+                        <@spring.formInput path="parameters.sessionDuration" attributes="" fieldType="number"/>
+                        <@spring.showErrors "<br>"/> <br>
+                    Вероятность дополнительных попыток, %:<br>
+                        <@spring.formInput path="parameters.playersAddshotChance" attributes="" fieldType="number"/>
+                        <@spring.showErrors "<br>"/> <br>
+                    Минимальное количество дополнительных попыток:<br>
+                        <@spring.formInput path="parameters.playersAddshotMin" attributes="" fieldType="number"/>
+                        <@spring.showErrors "<br>"/> <br>
+                    Максимальное количество дополнительных попыток:<br>
+                        <@spring.formInput path="parameters.playersAddshotMax" attributes="" fieldType="number"/>
+                        <@spring.showErrors "<br>"/> <br>
+                    Количество игроков с шансом на дополнительные попытки:<br>
+                        <@spring.formInput path="parameters.playersNumberAddshot" attributes="" fieldType="number"/>
+                        <@spring.showErrors "<br>"/> <br>
+                    Частота дискретизации, мин :<br>
+                        <@spring.formInput path="parameters.holidaySampleFreq" attributes="" fieldType="number"/>
+                        <@spring.showErrors "<br>"/> <br>
+                    Вероятность заполнения праздника, %:<br>
+                        <@spring.formInput path="parameters.holidayFillChance" attributes="" fieldType="number"/>
+                        <@spring.showErrors "<br>"/> <br>
+                    Вероятность смещения игрока с праздника ,%:<br>
+                        <@spring.formInput path="parameters.holidayPushChance" attributes="" fieldType="number"/>
+                        <@spring.showErrors "<br>"/> <br>
+                    Вероятность простого праздника ,%:<br>
+                        <@spring.formInput path="parameters.holidaySimpleChance" attributes="" fieldType="number"/>
+                        <@spring.showErrors "<br>"/> <br>
+                    Вероятность пиршенства ,%:<br>
+                        <@spring.formInput path="parameters.holidayBanquetChance" attributes="" fieldType="number"/>
+                        <@spring.showErrors "<br>"/> <br>
+                    Вероятность ужина ,%:<br>
+                        <@spring.formInput path="parameters.holidayDinnerChance" attributes="" fieldType="number"/>
+                        <@spring.showErrors "<br>"/> <br>
 
                         <input type="hidden" name="${_csrf.parameterName}"value="${_csrf.token}" />
-                    <input type="submit" value="Сохранить параметры" />
+                    <div>
+                      <p>  <input type="submit" value="Сохранить параметры" /> </p>
+                    </div>
                 </form>
             </fieldset>
         </div>
@@ -45,7 +59,6 @@
                     <fieldset>
                         <legend><h3>Новая сессия</h3></legend>
                         <form name="parameters" action="start_session" method="GET">
-
                             <input type="submit" value="Начать новую сессию" />
                         </form>
                     </fieldset>
