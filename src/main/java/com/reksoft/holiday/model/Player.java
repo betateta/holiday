@@ -51,5 +51,10 @@ public class Player {
         this.name = name;
     }
 
-
+    public Player(Integer id, String name, Integer playerPoints, Boolean isOrganizator) {
+        this.id = id;
+        this.name = name;
+        this.playerPoints = playerPoints;
+        this.isOrganizator = isOrganizator;
+    }
 }
