@@ -3,12 +3,9 @@ package com.reksoft.holiday.mechanic;
 import com.reksoft.holiday.model.Player;
 import com.reksoft.holiday.model.SessionGame;
 import com.reksoft.holiday.service.PlayerServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -28,16 +25,6 @@ public class CalculateSession {
         initSession();
         runSession();
         saveResults();
-        HashMap <String,Integer> map = new HashMap<String,Integer>();
-        map.put("name1",40);
-        map.put("name2",60);
-
-        new Dice().getMultiEventResult(map);
-        new Dice().getMultiEventResult(map);
-        new Dice().getMultiEventResult(map);
-        new Dice().getMultiEventResult(map);
-        new Dice().getMultiEventResult(map);
-
         return sessionGame;
     }
 
