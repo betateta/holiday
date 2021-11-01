@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class DiceTest {
     @Test
-    public void testGetSession (){
+    public void test(){
         HashMap<String,Integer> map = new HashMap<>();
 
         map.put("name1",70);

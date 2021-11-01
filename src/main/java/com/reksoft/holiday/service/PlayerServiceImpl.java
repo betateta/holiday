@@ -2,16 +2,16 @@ package com.reksoft.holiday.service;
 
 import com.reksoft.holiday.model.Player;
 import com.reksoft.holiday.repository.PlayerRepository;
-import com.reksoft.holiday.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
+@AllArgsConstructor
 public class PlayerServiceImpl {
-    @Autowired
-    private PlayerRepository playerRepository;
+
+    private final PlayerRepository playerRepository;
 
     public boolean savePlayer (Player player){
         if (playerRepository.findByName(player.getName())!=null) {
@@ -26,4 +26,5 @@ public class PlayerServiceImpl {
     public void saveAll (Set<Player> playerSet){
         playerRepository.saveAll(playerSet);
     }
+
 }

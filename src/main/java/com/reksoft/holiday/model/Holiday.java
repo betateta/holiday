@@ -1,6 +1,7 @@
 package com.reksoft.holiday.model;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -16,7 +17,7 @@ public class Holiday {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Lob
+  //  @Lob
     @Column(name = "name", nullable = false)
     private String name;
 

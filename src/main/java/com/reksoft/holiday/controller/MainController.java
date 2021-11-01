@@ -5,7 +5,6 @@ import com.reksoft.holiday.exception.ValidationException;
 import com.reksoft.holiday.mechanic.CalculateSession;
 import com.reksoft.holiday.model.SessionGame;
 import com.reksoft.holiday.model.User;
-import com.reksoft.holiday.service.PlayerServiceImpl;
 import com.reksoft.holiday.service.SessionServiceImpl;
 import com.reksoft.holiday.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 import javax.validation.Valid;
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class MainController {
     @Autowired
     private SessionServiceImpl sessionServiceImpl;
     @Autowired
-    private PlayerServiceImpl playerService;
+    private CalculateSession calculateSession;
 
     private SessionGame session;
     private SessionParameters sessionParameters;
@@ -82,16 +84,17 @@ public class MainController {
     }
     @RequestMapping(value = "start_session", method = RequestMethod.GET)
     public String startNewSession (Model model){
-        CalculateSession calculateSession = new CalculateSession(session,playerService);
+        calculateSession.setSessionGame(session);
+        //System.out.println(calculateSession.getSessionGame());
         sessionServiceImpl.save(calculateSession.getSessionGame());
         return "start_session";
     }
 
-    public SessionGame getSession() {
-        return session;
+    public void setUserServiceImpl(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
 
-    public SessionParameters getSessionParameters() {
-        return sessionParameters;
+    public void setSessionServiceImpl(SessionServiceImpl sessionServiceImpl) {
+        this.sessionServiceImpl = sessionServiceImpl;
     }
 }
