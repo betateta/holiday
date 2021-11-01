@@ -1,6 +1,8 @@
 package com.reksoft.holiday.model;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -24,6 +26,12 @@ public class Player {
     @Column(name = "player_points")
     private Integer playerPoints;
 
+    @Column(name = "std_shots")
+    private Integer stdShots;
+
+    @Column(name = "bonus_shots")
+    private Integer bonusShots;
+
     @Column(name = "is_organizator")
     private Boolean isOrganizator;
 
@@ -45,16 +53,18 @@ public class Player {
     public int hashCode() {
         return 0;
     }
-
+/*
     public Player(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
-
-    public Player(Integer id, String name, Integer playerPoints, Boolean isOrganizator) {
+*/
+    public Player(Integer id, String name, Integer playerPoints, Integer stdShots, Integer bonusShots, Boolean isOrganizator) {
         this.id = id;
         this.name = name;
         this.playerPoints = playerPoints;
+        this.stdShots = stdShots;
+        this.bonusShots = bonusShots;
         this.isOrganizator = isOrganizator;
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 @Component
@@ -24,8 +25,12 @@ public class CalculateSession {
 
     private SessionGame sessionGame;
     private Set<Player> playerSet;
-    private Calculate calculate;
+
+    private Set<Calculate> calculateSet;
     private Instant currentTime;
+
+    private HashMap<String,Integer> holidayFullDiceMap;
+    private HashMap<String,Integer> holidayWithoutDinnerDiceMap;
 
     public SessionGame getSessionGame(){
         initSession();
@@ -44,9 +49,32 @@ public class CalculateSession {
     private Set<Player> createPlayers(Integer numberOfPlayers){
         playerService.deleteAll();
         Set<Player> playersSet = new HashSet<Player>();
-        for (int i = 0;i<numberOfPlayers;i++){
-            playersSet.add(new Player(i,"player_"+i,0,false));
+        for (int i = 0;i < numberOfPlayers; i++){
+            playersSet.add(new Player(i,"player_"+i,0,5,0,false));
         }
+        /*
+        Fill players profile
+         */
+
+        Integer playersNumberAddshot = sessionGame.getPlayersNumberAddshot();
+
+        HashMap<String,Integer> addShotMap =new HashMap<>();
+        addShotMap.put("addshots",sessionGame.getPlayersAddshotChance());
+
+        Iterator<Player> iterator = playersSet.iterator();
+        Integer bonus_addshots =0;
+        if (numberOfPlayers >= playersNumberAddshot){
+            for (int i = 0; i < playersNumberAddshot; i++){
+                if (new Dice().getMultiEventResult(addShotMap).equals("addshots")) {
+                    if (iterator.hasNext()){
+                        bonus_addshots = new Dice().getRandFromRange(sessionGame.getPlayersAddshotMin(),
+                                sessionGame.getPlayersAddshotMax());
+                        iterator.next().setBonusShots(bonus_addshots);
+                    }
+                }
+            }
+        }
+
         return playersSet;
     }
 
@@ -66,43 +94,19 @@ public class CalculateSession {
          */
         Set<Holiday> holidaySet = holidayService.getAllSet();
 
-        HashMap<String,Integer> holidayFullDiceMap = getHolidayDiceMap(holidaySet);
-        HashMap<String,Integer> holidayWithoutDinnerDiceMap = new HashMap<>();
+        calculateSet =new HashSet<>();
+        holidayFullDiceMap = getHolidayDiceMap(holidaySet);
+        holidayWithoutDinnerDiceMap = new HashMap<>();
         holidayWithoutDinnerDiceMap = (HashMap<String, Integer>) holidayFullDiceMap.clone();
         holidayWithoutDinnerDiceMap.remove("dinner");
 
         /*  Session cycle      */
         while (currentTime.isBefore(sessionGame.getStopTime())){
-
-        /*  Check available resources     */
-            Integer freePlayers = getFreePlayers(playerSet);
-            String holidayName="";
-            if (freePlayers > 1) {
-                holidayName = new Dice().getMultiEventResult(holidayFullDiceMap);
-            }
-            else if (freePlayers == 1){
-                holidayName = new Dice().getMultiEventResult(holidayWithoutDinnerDiceMap);
+            Calculate calculate = startNewCalculate();
+            if( calculate != null) {
+                calculateSet.add(calculate);
             }
 
-            if (!holidayName.isBlank() && !holidayName.isEmpty() && !holidayName.equals("eventMiss")){
-
-                calculate = new Calculate();
-                Set<Player> playersOrg = new HashSet<>();
-
-                /* set player(s) as organizator(s) */
-                if (holidayName.equals("dinner")) {
-                    playersOrg.add(setPlayerAsOrganizator(playerSet));
-                    playersOrg.add(setPlayerAsOrganizator(playerSet));
-                } else {
-                    playersOrg.add(setPlayerAsOrganizator(playerSet));
-                }
-                calculate.setPlayers(playersOrg);
-                calculate.setSession(sessionGame);
-                calculate.setHoliday(holidayService.findByName(holidayName));
-
-               // System.out.println("save calculate:"+calculate);
-            }
-            System.out.println("Free players:"+freePlayers+" holiday name:"+holidayName);
 
             currentTime = currentTime.plusSeconds(timeTick);
         }
@@ -127,9 +131,11 @@ public class CalculateSession {
         }
         return null;
     }
+
     private void saveResults(){
         playerService.saveAll(playerSet);
     }
+
     private HashMap<String,Integer> getHolidayDiceMap(Set<Holiday> holidaySet){
         HashMap<String,Integer> holidayFullDiceMap = new HashMap<>();
         for (Holiday item:holidaySet
@@ -152,5 +158,51 @@ public class CalculateSession {
         return holidayFullDiceMap;
     }
 
+    private Integer getHolidayCapacity(Holiday holiday){
+        return new Dice().getRandFromRange(holiday.getMinCapacity(),holiday.getMaxCapacity());
+    }
+    private Integer getPlayerAddshot(SessionGame sessionGame){
+        return new Dice().getRandFromRange(sessionGame.getPlayersAddshotMin(),sessionGame.getPlayersAddshotMax());
+    }
+
+    private Calculate startNewCalculate () {
+
+        /*  Check available resources     */
+        Integer freePlayers = getFreePlayers(playerSet);
+        String holidayName = "";
+        if (freePlayers > 1) {
+            holidayName = new Dice().getMultiEventResult(holidayFullDiceMap);
+        } else if (freePlayers == 1) {
+            holidayName = new Dice().getMultiEventResult(holidayWithoutDinnerDiceMap);
+        }
+
+        if (!holidayName.isBlank() && !holidayName.isEmpty() && !holidayName.equals("eventMiss")) {
+
+            Calculate calculate = new Calculate();
+            Set<Player> playersOrg = new HashSet<>();
+
+            /* set player(s) as organizator(s) */
+            if (holidayName.equals("dinner")) {
+                playersOrg.add(setPlayerAsOrganizator(playerSet));
+                playersOrg.add(setPlayerAsOrganizator(playerSet));
+            } else {
+                playersOrg.add(setPlayerAsOrganizator(playerSet));
+            }
+
+            calculate.setPlayers(playersOrg);
+            calculate.setHoliday(holidayService.findByName(holidayName));
+            calculate.setSession(sessionGame);
+            calculate.setCapacity(getHolidayCapacity(holidayService.findByName(holidayName)));
+            calculate.setStartTime(currentTime);
+            calculate.setPoints(0);
+            calculate.setUniqPlayersNumber(0);
+
+            return calculate;
+        }
+        return null;
+    }
+    private void checkCurrentCalculates (){
+
+    }
 }
 

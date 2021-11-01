@@ -85,7 +85,6 @@ public class MainController {
     @RequestMapping(value = "start_session", method = RequestMethod.GET)
     public String startNewSession (Model model){
         calculateSession.setSessionGame(session);
-        //System.out.println(calculateSession.getSessionGame());
         sessionServiceImpl.save(calculateSession.getSessionGame());
         return "start_session";
     }

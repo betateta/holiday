@@ -12,6 +12,7 @@ import java.util.Map;
 @Getter
 public class Dice {
     private String eventName="";
+    private final String evenMiss= "eventMiss";
 
     public String getMultiEventResult (HashMap<String,Integer> map){
 
@@ -41,7 +42,7 @@ public class Dice {
         values[0] = 0;
         keys[0] = "start";
         values[mapSize+1] = 0;
-        keys[mapSize+1] = "eventMiss";
+        keys[mapSize+1] = evenMiss;
         values[mapSize+2] = 100;
         keys[mapSize+2] = "end";
 
@@ -96,13 +97,18 @@ public class Dice {
         Test output
          */
         System.out.println("=================");
+        /*
         System.out.println("Sum = "+sum);
         for (int i = 0; i < arraySize; i++){
             System.out.println("a["+i+"]="+a[i]+"\tkeys["+i+"]="+keys[i]+"\t values["+i+"]="+values[i]);
         }
+
+         */
         System.out.println("rand="+rand+" index="+index+" eventName="+keys[index]+" dice: "+chanceHit);
 
         return eventName;
     }
-
+    public Integer getRandFromRange (Integer min, Integer max) {
+        return (int) ((Math.random()* (++max)) + min);
+    }
 }
