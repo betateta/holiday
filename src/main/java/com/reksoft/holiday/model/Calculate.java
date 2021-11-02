@@ -1,10 +1,13 @@
 package com.reksoft.holiday.model;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -18,12 +21,11 @@ public class Calculate {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @OneToOne(optional=false,  cascade=CascadeType.ALL)
+    @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="holiday_id")
     private Holiday holiday;
 
-    @ManyToOne(fetch=FetchType.LAZY,
-            cascade=CascadeType.ALL)
+    @ManyToOne(fetch=FetchType.LAZY,cascade = CascadeType.MERGE)
     @JoinColumn (name="session_id")
     @ToString.Exclude
     private SessionGame session;
@@ -48,6 +50,12 @@ public class Calculate {
             joinColumns=@JoinColumn (name="calculate_id"),
             inverseJoinColumns=@JoinColumn(name="player_id"))
     private Set<Player> players;
+
+    @OneToMany(fetch = FetchType.EAGER,
+            mappedBy = "sponsoredHoliday",
+            cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<Player> sponsorPlayerList;
 
     @Override
     public boolean equals(Object o) {

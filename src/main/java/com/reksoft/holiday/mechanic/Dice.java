@@ -109,6 +109,7 @@ public class Dice {
         return eventName;
     }
     public Integer getRandFromRange (Integer min, Integer max) {
+        max -= min;
         return (int) ((Math.random()* (++max)) + min);
     }
 }

@@ -17,49 +17,49 @@ public class SessionParameters {
 
     @NotNull
     @Range(min = 3,max = 100)
-    private Integer sessionPlayers;
+    private Integer sessionPlayers = 10;
 
     @NotNull
     @Range(min = 1,max = 100)
-    private Integer sessionDuration;
+    private Integer sessionDuration = 1;
 
     @NotNull
     @Range(min = 0,max = 100)
-    private Integer playersAddshotChance;
+    private Integer playersAddshotChance = 5;
 
     @NotNull
     @Range(min = 0,max = 100)
-    private Integer playersAddshotMin;
+    private Integer playersAddshotMin = 5;
 
     @NotNull
     @Range(min = 0,max = 100)
-    private Integer playersAddshotMax;
+    private Integer playersAddshotMax = 10;
 
     @NotNull
     @Range(min = 0,max = 100)
-    private Integer playersNumberAddshot;
+    private Integer playersNumberAddshot = 5;
 
     @NotNull
     @Range(min = 1,max = 100)
-    private Integer holidaySampleFreq;
+    private Integer holidaySampleFreq = 10;
 
     @NotNull
     @Range(min = 0,max = 100)
-    private Integer holidayFillChance;
+    private Integer holidayFillChance = 56;
 
     @NotNull
     @Range(min = 0,max = 100)
-    private Integer holidayPushChance;
+    private Integer holidayPushChance = 30;
 
     @NotNull
     @Range(min = 0,max = 100)
-    private Integer holidaySimpleChance;
+    private Integer holidaySimpleChance = 60;
 
     @NotNull
     @Range(min = 0,max = 100)
-    private Integer holidayBanquetChance;
+    private Integer holidayBanquetChance = 60;
 
     @NotNull
     @Range(min = 0,max = 100)
-    private Integer holidayDinnerChance;
+    private Integer holidayDinnerChance = 60;
 }

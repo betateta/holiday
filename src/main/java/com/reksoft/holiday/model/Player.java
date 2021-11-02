@@ -3,6 +3,7 @@ package com.reksoft.holiday.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -41,6 +42,11 @@ public class Player {
             inverseJoinColumns=@JoinColumn(name="calculate_id"))
     private Set<Calculate> calculates;
 
+    @ManyToOne (fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
+    @JoinColumn (name="sponsored_holiday")
+    @ToString.Exclude
+    private Calculate sponsoredHoliday;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -53,14 +59,8 @@ public class Player {
     public int hashCode() {
         return 0;
     }
-/*
-    public Player(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-*/
-    public Player(Integer id, String name, Integer playerPoints, Integer stdShots, Integer bonusShots, Boolean isOrganizator) {
-        this.id = id;
+
+    public Player(String name, Integer playerPoints, Integer stdShots, Integer bonusShots, Boolean isOrganizator) {
         this.name = name;
         this.playerPoints = playerPoints;
         this.stdShots = stdShots;

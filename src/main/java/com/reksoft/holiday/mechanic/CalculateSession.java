@@ -6,6 +6,7 @@ import com.reksoft.holiday.model.Player;
 import com.reksoft.holiday.model.SessionGame;
 import com.reksoft.holiday.service.HolidayServiceImpl;
 import com.reksoft.holiday.service.PlayerServiceImpl;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+@NoArgsConstructor
 @Component
 public class CalculateSession {
 
@@ -26,7 +28,8 @@ public class CalculateSession {
     private SessionGame sessionGame;
     private Set<Player> playerSet;
 
-    private Set<Calculate> calculateSet;
+    private Set<Calculate> currentCalculateSet;
+    private Set<Calculate> completedCalculateSet;
     private Instant currentTime;
 
     private HashMap<String,Integer> holidayFullDiceMap;
@@ -39,9 +42,6 @@ public class CalculateSession {
         return sessionGame;
     }
 
-    public CalculateSession() {
-    }
-
     public void setSessionGame(SessionGame sessionGame) {
         this.sessionGame = sessionGame;
     }
@@ -49,8 +49,8 @@ public class CalculateSession {
     private Set<Player> createPlayers(Integer numberOfPlayers){
         playerService.deleteAll();
         Set<Player> playersSet = new HashSet<Player>();
-        for (int i = 0;i < numberOfPlayers; i++){
-            playersSet.add(new Player(i,"player_"+i,0,5,0,false));
+        for (int i = 1;i <= numberOfPlayers; i++){
+            playersSet.add(new Player("player_"+i,0,5,0,false));
         }
         /*
         Fill players profile
@@ -94,7 +94,8 @@ public class CalculateSession {
          */
         Set<Holiday> holidaySet = holidayService.getAllSet();
 
-        calculateSet =new HashSet<>();
+        currentCalculateSet =new HashSet<>();
+        completedCalculateSet =new HashSet<>();
         holidayFullDiceMap = getHolidayDiceMap(holidaySet);
         holidayWithoutDinnerDiceMap = new HashMap<>();
         holidayWithoutDinnerDiceMap = (HashMap<String, Integer>) holidayFullDiceMap.clone();
@@ -103,10 +104,10 @@ public class CalculateSession {
         /*  Session cycle      */
         while (currentTime.isBefore(sessionGame.getStopTime())){
             Calculate calculate = startNewCalculate();
-            if( calculate != null) {
-                calculateSet.add(calculate);
-            }
 
+            if( calculate != null) {
+                currentCalculateSet.add(calculate);
+            }
 
             currentTime = currentTime.plusSeconds(timeTick);
         }
@@ -120,11 +121,13 @@ public class CalculateSession {
         }
         return count;
     }
-    private Player setPlayerAsOrganizator(Set<Player> players){
+    private Player setPlayerAsOrganizator(Set<Player> players, Calculate calculate){
         if (getFreePlayers(players) != 0){
             for (Player item: players) {
                 if (!item.getIsOrganizator()){
                     item.setIsOrganizator(true);
+                    item.setPlayerPoints(item.getPlayerPoints()+1500);
+                    item.setSponsoredHoliday(calculate);
                     return item;
                 }
             }
@@ -183,13 +186,12 @@ public class CalculateSession {
 
             /* set player(s) as organizator(s) */
             if (holidayName.equals("dinner")) {
-                playersOrg.add(setPlayerAsOrganizator(playerSet));
-                playersOrg.add(setPlayerAsOrganizator(playerSet));
+                playersOrg.add(setPlayerAsOrganizator(playerSet, calculate));
+                playersOrg.add(setPlayerAsOrganizator(playerSet, calculate));
             } else {
-                playersOrg.add(setPlayerAsOrganizator(playerSet));
+                playersOrg.add(setPlayerAsOrganizator(playerSet, calculate));
             }
 
-            calculate.setPlayers(playersOrg);
             calculate.setHoliday(holidayService.findByName(holidayName));
             calculate.setSession(sessionGame);
             calculate.setCapacity(getHolidayCapacity(holidayService.findByName(holidayName)));
@@ -202,6 +204,23 @@ public class CalculateSession {
         return null;
     }
     private void checkCurrentCalculates (){
+
+        for (Calculate item: currentCalculateSet
+             ) {
+            /*
+            complete  holiday by time expiration
+             freeing resurces
+             */
+            if (currentTime.isAfter(item.getStartTime().plusSeconds(item.getHoliday().getDuration()*3600))){
+                completedCalculateSet.add(item);
+                for (Player player: playerSet
+                     ) {
+                    player.getCalculates();
+                }
+            }
+
+
+        }
 
     }
 }
