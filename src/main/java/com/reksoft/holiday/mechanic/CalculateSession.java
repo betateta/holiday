@@ -4,6 +4,7 @@ import com.reksoft.holiday.model.Calculate;
 import com.reksoft.holiday.model.Holiday;
 import com.reksoft.holiday.model.Player;
 import com.reksoft.holiday.model.SessionGame;
+import com.reksoft.holiday.service.CalculateServiceImpl;
 import com.reksoft.holiday.service.HolidayServiceImpl;
 import com.reksoft.holiday.service.PlayerServiceImpl;
 import lombok.NoArgsConstructor;
@@ -11,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 @NoArgsConstructor
 @Component
@@ -24,12 +22,14 @@ public class CalculateSession {
     private PlayerServiceImpl playerService;
     @Autowired
     private HolidayServiceImpl holidayService;
+    @Autowired
+    private CalculateServiceImpl calculateService;
 
     private SessionGame sessionGame;
     private Set<Player> playerSet;
 
-    private Set<Calculate> currentCalculateSet;
-    private Set<Calculate> completedCalculateSet;
+    private List<Calculate> currentCalculateList;
+    private List<Calculate> completedCalculateList;
     private Instant currentTime;
 
     private HashMap<String,Integer> holidayFullDiceMap;
@@ -47,7 +47,7 @@ public class CalculateSession {
     }
 
     private Set<Player> createPlayers(Integer numberOfPlayers){
-        playerService.deleteAll();
+
         Set<Player> playersSet = new HashSet<Player>();
         for (int i = 1;i <= numberOfPlayers; i++){
             playersSet.add(new Player("player_"+i,0,5,0,false));
@@ -82,6 +82,9 @@ public class CalculateSession {
         sessionGame.setStartTime(Instant.now());
         sessionGame.setStopTime(sessionGame.getStartTime().plusSeconds(sessionGame.getSessionDuration()*24*3600));
         currentTime = sessionGame.getStartTime();
+
+        calculateService.deleteAll();
+        playerService.deleteAll();
         playerSet = createPlayers(sessionGame.getSessionPlayers());
 
     }
@@ -94,8 +97,8 @@ public class CalculateSession {
          */
         Set<Holiday> holidaySet = holidayService.getAllSet();
 
-        currentCalculateSet =new HashSet<>();
-        completedCalculateSet =new HashSet<>();
+        currentCalculateList = new ArrayList<>();
+        completedCalculateList = new ArrayList<>();
         holidayFullDiceMap = getHolidayDiceMap(holidaySet);
         holidayWithoutDinnerDiceMap = new HashMap<>();
         holidayWithoutDinnerDiceMap = (HashMap<String, Integer>) holidayFullDiceMap.clone();
@@ -105,12 +108,13 @@ public class CalculateSession {
         while (currentTime.isBefore(sessionGame.getStopTime())){
             Calculate calculate = startNewCalculate();
 
-            if( calculate != null) {
-                currentCalculateSet.add(calculate);
+            if(calculate != null) {
+                currentCalculateList.add(calculate);
             }
 
             currentTime = currentTime.plusSeconds(timeTick);
         }
+
     }
     private Integer getFreePlayers (Set<Player> players){
         int count=0;
@@ -135,9 +139,7 @@ public class CalculateSession {
         return null;
     }
 
-    private void saveResults(){
-        playerService.saveAll(playerSet);
-    }
+
 
     private HashMap<String,Integer> getHolidayDiceMap(Set<Holiday> holidaySet){
         HashMap<String,Integer> holidayFullDiceMap = new HashMap<>();
@@ -205,14 +207,14 @@ public class CalculateSession {
     }
     private void checkCurrentCalculates (){
 
-        for (Calculate item: currentCalculateSet
+        for (Calculate item: currentCalculateList
              ) {
             /*
             complete  holiday by time expiration
-             freeing resurces
+            freeing resurces
              */
             if (currentTime.isAfter(item.getStartTime().plusSeconds(item.getHoliday().getDuration()*3600))){
-                completedCalculateSet.add(item);
+                completedCalculateList.add(item);
                 for (Player player: playerSet
                      ) {
                     player.getCalculates();
@@ -222,6 +224,9 @@ public class CalculateSession {
 
         }
 
+    }
+    private void saveResults(){
+        playerService.saveAll(playerSet);
     }
 }
 

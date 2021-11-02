@@ -21,7 +21,8 @@ public class Calculate {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @OneToOne(cascade=CascadeType.ALL)
+    //@OneToOne(cascade=CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name="holiday_id")
     private Holiday holiday;
 

@@ -23,8 +23,9 @@ public class PlayerServiceImpl {
     public void deleteAll (){
         playerRepository.deleteAll();
     }
+
     public void saveAll (Set<Player> playerSet){
-        playerRepository.saveAll(playerSet);
+        playerRepository.saveAllAndFlush(playerSet);
     }
 
 }
