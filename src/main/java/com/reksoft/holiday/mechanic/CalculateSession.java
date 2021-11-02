@@ -10,12 +10,14 @@ import com.reksoft.holiday.service.PlayerServiceImpl;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.Instant;
 import java.util.*;
 
 @NoArgsConstructor
 @Component
+@Validated
 public class CalculateSession {
 
     @Autowired
@@ -82,11 +84,9 @@ public class CalculateSession {
         sessionGame.setStartTime(Instant.now());
         sessionGame.setStopTime(sessionGame.getStartTime().plusSeconds(sessionGame.getSessionDuration()*24*3600));
         currentTime = sessionGame.getStartTime();
-
         calculateService.deleteAll();
         playerService.deleteAll();
         playerSet = createPlayers(sessionGame.getSessionPlayers());
-
     }
 
     private void runSession(){
@@ -111,7 +111,7 @@ public class CalculateSession {
             if(calculate != null) {
                 currentCalculateList.add(calculate);
             }
-
+           // checkCurrentCalculates();
             currentTime = currentTime.plusSeconds(timeTick);
         }
 
@@ -138,8 +138,6 @@ public class CalculateSession {
         }
         return null;
     }
-
-
 
     private HashMap<String,Integer> getHolidayDiceMap(Set<Holiday> holidaySet){
         HashMap<String,Integer> holidayFullDiceMap = new HashMap<>();
@@ -184,7 +182,7 @@ public class CalculateSession {
         if (!holidayName.isBlank() && !holidayName.isEmpty() && !holidayName.equals("eventMiss")) {
 
             Calculate calculate = new Calculate();
-            Set<Player> playersOrg = new HashSet<>();
+            List<Player> playersOrg = new ArrayList<>();
 
             /* set player(s) as organizator(s) */
             if (holidayName.equals("dinner")) {
@@ -200,7 +198,7 @@ public class CalculateSession {
             calculate.setStartTime(currentTime);
             calculate.setPoints(0);
             calculate.setUniqPlayersNumber(0);
-
+            calculate.setSponsorPlayerList(playersOrg);
             return calculate;
         }
         return null;
@@ -211,21 +209,24 @@ public class CalculateSession {
              ) {
             /*
             complete  holiday by time expiration
-            freeing resurces
              */
             if (currentTime.isAfter(item.getStartTime().plusSeconds(item.getHoliday().getDuration()*3600))){
                 completedCalculateList.add(item);
-                for (Player player: playerSet
-                     ) {
-                    player.getCalculates();
+                /* freeing player-sponsor */
+                List<Player> players = item.getSponsorPlayerList();
+                for (Player player: players
+                ) {
+                    player.setIsOrganizator(false);
+                    player.setSponsoredHoliday(null);
                 }
+                currentCalculateList.remove(item);
+
             }
-
-
         }
-
     }
     private void saveResults(){
+       //debug
+        calculateService.saveAll(currentCalculateList);
         playerService.saveAll(playerSet);
     }
 }

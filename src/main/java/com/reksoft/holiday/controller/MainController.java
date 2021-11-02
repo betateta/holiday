@@ -13,9 +13,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -34,7 +34,7 @@ public class MainController {
     private SessionParameters sessionParameters;
     private User user;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @GetMapping(value = "/")
     public String view_auth_user (Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authUserName = auth.getName();
@@ -55,19 +55,19 @@ public class MainController {
         }
         return "index";
     }
-    @RequestMapping(value = "/userslist", method = RequestMethod.GET)
+    @GetMapping(value = "/userslist")
     public String view_users_list (Model model){
         List<User> allUsers = userServiceImpl.allUsers();
         model.addAttribute("users", allUsers);
         return "users";
     }
 
-    @RequestMapping(value = "/session", method = RequestMethod.GET)
+    @GetMapping(value = "/session")
     public String create_session (Model model){
         model.addAttribute("parameters", sessionParameters);
         return "session";
     }
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @PostMapping(value = "/save")
     public String save(@ModelAttribute("parameters") @Valid SessionParameters parameters,
                        BindingResult errors) throws ValidationException {
         if (errors.hasErrors()) {
@@ -82,13 +82,13 @@ public class MainController {
         sessionServiceImpl.save(session);
         return "session";
     }
-    @RequestMapping(value = "start_session", method = RequestMethod.GET)
+    @GetMapping(value = "start_session")
     public String startNewSession (Model model){
         calculateSession.setSessionGame(session);
         sessionServiceImpl.save(calculateSession.getSessionGame());
         return "start_session";
     }
-
+/*
     public void setUserServiceImpl(UserServiceImpl userServiceImpl) {
         this.userServiceImpl = userServiceImpl;
     }
@@ -96,4 +96,6 @@ public class MainController {
     public void setSessionServiceImpl(SessionServiceImpl sessionServiceImpl) {
         this.sessionServiceImpl = sessionServiceImpl;
     }
+
+ */
 }

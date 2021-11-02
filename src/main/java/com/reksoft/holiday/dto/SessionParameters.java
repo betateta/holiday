@@ -25,7 +25,7 @@ public class SessionParameters {
 
     @NotNull
     @Range(min = 0,max = 100)
-    private Integer playersAddshotChance = 5;
+    private Integer playersAddshotChance = 70;
 
     @NotNull
     @Range(min = 0,max = 100)
@@ -37,7 +37,7 @@ public class SessionParameters {
 
     @NotNull
     @Range(min = 0,max = 100)
-    private Integer playersNumberAddshot = 5;
+    private Integer playersNumberAddshot = 8;
 
     @NotNull
     @Range(min = 1,max = 100)
@@ -53,13 +53,13 @@ public class SessionParameters {
 
     @NotNull
     @Range(min = 0,max = 100)
-    private Integer holidaySimpleChance = 60;
+    private Integer holidaySimpleChance = 30;
 
     @NotNull
     @Range(min = 0,max = 100)
-    private Integer holidayBanquetChance = 60;
+    private Integer holidayBanquetChance = 20;
 
     @NotNull
     @Range(min = 0,max = 100)
-    private Integer holidayDinnerChance = 60;
+    private Integer holidayDinnerChance = 50;
 }
