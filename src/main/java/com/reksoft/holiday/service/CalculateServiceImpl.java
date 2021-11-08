@@ -9,11 +9,13 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class CalculateServiceImpl {
+public class CalculateServiceImpl implements CalculateService {
     private final CalculateRepository calculateRepository;
 
+    @Override
     public void deleteAll(){
         calculateRepository.deleteAll();
     }
+    @Override
     public void saveAll(List<Calculate> calculateList) {calculateRepository.saveAllAndFlush(calculateList);}
 }

@@ -9,7 +9,6 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -50,7 +49,7 @@ public class Calculate {
     @JoinTable (name="players_calculates",
             joinColumns=@JoinColumn (name="calculate_id"),
             inverseJoinColumns=@JoinColumn(name="player_id"))
-    private Set<Player> players;
+    private List<Player> players;
 
     @OneToMany(fetch = FetchType.EAGER,
             mappedBy = "sponsoredHoliday",

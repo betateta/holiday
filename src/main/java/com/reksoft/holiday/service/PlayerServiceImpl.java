@@ -9,22 +9,25 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
-public class PlayerServiceImpl {
+public class PlayerServiceImpl implements PlayerService {
 
     private final PlayerRepository playerRepository;
 
-    public boolean savePlayer (Player player){
+    @Override
+    public boolean savePlayer(Player player){
         if (playerRepository.findByName(player.getName())!=null) {
              return false;
         }
         playerRepository.saveAndFlush(player);
         return true;
     }
-    public void deleteAll (){
+    @Override
+    public void deleteAll(){
         playerRepository.deleteAll();
     }
 
-    public void saveAll (Set<Player> playerSet){
+    @Override
+    public void saveAll(Set<Player> playerSet){
         playerRepository.saveAllAndFlush(playerSet);
     }
 

@@ -24,8 +24,11 @@ public class Player {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "player_points")
-    private Integer playerPoints;
+    @Column(name = "holiday_points")
+    private Integer holidayPoints;
+
+    @Column(name = "session_points")
+    private Integer sessionPoints;
 
     @Column(name = "std_shots")
     private Integer stdShots;
@@ -35,6 +38,12 @@ public class Player {
 
     @Column(name = "is_organizator")
     private Boolean isOrganizator;
+
+    @Column(name = "is_at_party")
+    private Boolean isAtParty;
+
+    @Column(name = "is_busy")
+    private Boolean isBusy;
 
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable (name="players_calculates",
@@ -60,11 +69,18 @@ public class Player {
         return 0;
     }
 
-    public Player(String name, Integer playerPoints, Integer stdShots, Integer bonusShots, Boolean isOrganizator) {
+    public Player(String name,
+                  Integer holidayPoints, Integer sessionPoints,
+                  Integer stdShots, Integer bonusShots,
+                  Boolean isOrganizator, Boolean isAtParty, Boolean isBusy) {
         this.name = name;
-        this.playerPoints = playerPoints;
+        this.holidayPoints = holidayPoints;
+        this.sessionPoints = sessionPoints;
         this.stdShots = stdShots;
         this.bonusShots = bonusShots;
         this.isOrganizator = isOrganizator;
+        this.isAtParty = isAtParty;
+        this.isBusy = isBusy;
     }
+
 }

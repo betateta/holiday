@@ -12,7 +12,7 @@ import java.util.Map;
 @Getter
 public class Dice {
     private String eventName="";
-    private final String evenMiss= "eventMiss";
+    private final String eventMiss= "eventMiss";
 
     public String getMultiEventResult (HashMap<String,Integer> map){
 
@@ -42,7 +42,7 @@ public class Dice {
         values[0] = 0;
         keys[0] = "start";
         values[mapSize+1] = 0;
-        keys[mapSize+1] = evenMiss;
+        keys[mapSize+1] = eventMiss;
         values[mapSize+2] = 100;
         keys[mapSize+2] = "end";
 

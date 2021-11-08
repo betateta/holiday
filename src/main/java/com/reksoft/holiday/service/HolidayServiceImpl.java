@@ -9,11 +9,12 @@ import java.util.*;
 
 @Service
 @AllArgsConstructor
-public class HolidayServiceImpl {
+public class HolidayServiceImpl implements HolidayService {
 
     private HolidayRepository holidayRepository;
 
-    public Set<Holiday> getAllSet (){
+    @Override
+    public Set<Holiday> getAllSet(){
         List<Holiday> holidayArray = holidayRepository.findAll();
         Set<Holiday> holidaySet = new HashSet<>();
         for (Holiday item: holidayArray) {
@@ -23,6 +24,7 @@ public class HolidayServiceImpl {
         }
         return holidaySet;
     }
+    @Override
     public Map<String,Holiday> getAllMapNameKey(){
         Map<String,Holiday> map = new HashMap<>();
         List<Holiday> holidayArray = holidayRepository.findAll();
@@ -33,7 +35,8 @@ public class HolidayServiceImpl {
         }
         return map;
     }
-    public Holiday findByName (String name){
+    @Override
+    public Holiday findByName(String name){
         return getAllMapNameKey().get(name);
     }
 }

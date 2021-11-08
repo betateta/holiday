@@ -5,8 +5,8 @@ import com.reksoft.holiday.exception.ValidationException;
 import com.reksoft.holiday.mechanic.CalculateSession;
 import com.reksoft.holiday.model.SessionGame;
 import com.reksoft.holiday.model.User;
-import com.reksoft.holiday.service.SessionServiceImpl;
-import com.reksoft.holiday.service.UserServiceImpl;
+import com.reksoft.holiday.service.SessionService;
+import com.reksoft.holiday.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,9 +24,9 @@ import java.util.List;
 public class MainController {
 
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    private UserService userServiceImpl;
     @Autowired
-    private SessionServiceImpl sessionServiceImpl;
+    private SessionService sessionServiceImpl;
     @Autowired
     private CalculateSession calculateSession;
 

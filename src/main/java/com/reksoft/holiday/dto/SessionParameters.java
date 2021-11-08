@@ -41,7 +41,7 @@ public class SessionParameters {
 
     @NotNull
     @Range(min = 1,max = 100)
-    private Integer holidaySampleFreq = 10;
+    private Integer holidaySampleFreq = 30;
 
     @NotNull
     @Range(min = 0,max = 100)
