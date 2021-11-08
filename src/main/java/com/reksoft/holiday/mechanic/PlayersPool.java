@@ -1,7 +1,6 @@
 package com.reksoft.holiday.mechanic;
 
 import com.reksoft.holiday.dto.SessionParameters;
-import com.reksoft.holiday.model.Calculate;
 import com.reksoft.holiday.model.Player;
 import lombok.Getter;
 
@@ -21,74 +20,55 @@ public class PlayersPool {
     }
 
     public Set<Player> createNewPlayersSet(){
-        for (int i = 1;i <= sessionParameters.getSessionPlayers(); i++){
-            playersSet.add(new Player("player_"+i,
-                    0,0,
-                    5,0,
-                    false,false,false));
-        }
+        if (sessionParameters!=null) {
+            for (int i = 1; i <= sessionParameters.getSessionPlayers(); i++) {
+                playersSet.add(new Player("player_" + i,
+                        0,
+                        5, 0,
+                        false));
+            }
         /*
         Fill players profile
          */
 
-        Integer playersNumberAddshot = sessionParameters.getPlayersNumberAddshot();
+            Integer playersNumberAddshot = sessionParameters.getPlayersNumberAddshot();
 
-        HashMap<String,Integer> addShotMap =new HashMap<>();
-        addShotMap.put("addshots",sessionParameters.getPlayersAddshotChance());
+            HashMap<String, Integer> addShotMap = new HashMap<>();
+            addShotMap.put("addshots", sessionParameters.getPlayersAddshotChance());
 
-        Iterator<Player> iterator = playersSet.iterator();
-        Integer bonus_addshots =0;
-        if (sessionParameters.getSessionPlayers()>= playersNumberAddshot){
-            for (int i = 0; i < playersNumberAddshot; i++){
-                if (new Dice().getMultiEventResult(addShotMap).equals("addshots")) {
-                    if (iterator.hasNext()){
-                        bonus_addshots = new Dice().getRandFromRange(sessionParameters.getPlayersAddshotMin(),
-                                sessionParameters.getPlayersAddshotMax());
-                        iterator.next().setBonusShots(bonus_addshots);
+            Iterator<Player> iterator = playersSet.iterator();
+            Integer bonus_addshots = 0;
+            if (sessionParameters.getSessionPlayers() >= playersNumberAddshot) {
+                for (int i = 0; i < playersNumberAddshot; i++) {
+                    if (new Dice().getMultiEventResult(addShotMap).equals("addshots")) {
+                        if (iterator.hasNext()) {
+                            bonus_addshots = new Dice().getRandFromRange(sessionParameters.getPlayersAddshotMin(),
+                                    sessionParameters.getPlayersAddshotMax());
+                            iterator.next().setBonusShots(bonus_addshots);
+                        }
                     }
                 }
             }
-        }
-        return playersSet;
-    }
-    public Player setPlayerAsSponsor(Calculate calculate){
-        if (getFreePlayers() != 0){
-            for (Player item: playersSet) {
-                if (!item.getIsOrganizator()){
-                    item.setIsOrganizator(true);
-                    item.setIsBusy(true);
-                    item.setSponsoredHoliday(calculate);
-                    return item;
-                }
-            }
+            return playersSet;
         }
         return null;
     }
-    public Player setPlayerAsMember (Set<Player> players, Calculate calculate){
-        if (getFreePlayers() != 0){
-            for (Player item: playersSet) {
-                if (!item.getIsAtParty()){
-                    item.setIsAtParty(true);
-                    item.setIsBusy(true);
-                    item.setSponsoredHoliday(calculate);
-                    return item;
-                }
-            }
-        }
-        return null;
-    }
-    public void freePlayer (Player player){
+    public void setPlayerIsFree (Player player){
           for (Player item: playersSet) {
                 if (item.equals(player)){
-                    item.setIsAtParty(false);
-                    item.setIsBusy(false);
-                    item.setIsOrganizator(false);
-                    item.setSponsoredHoliday(null);
+                    item.setIsBusy(true);
                 }
             }
     }
+    public void setPlayerIsBusy (Player player){
+        for (Player item: playersSet) {
+            if (item.equals(player)){
+                item.setIsBusy(false);
+            }
+        }
+    }
 
-    public Integer getFreePlayers (){
+    public Integer getNumberFreePlayers (){
         int count = 0;
         for (Player entity : playersSet) {
             if (!entity.getIsBusy()){
@@ -97,4 +77,14 @@ public class PlayersPool {
         }
         return count;
     }
+    public Player getFreePlayer(){
+        for (Player item:playersSet
+             ) {
+            if (!item.getIsBusy()){
+                return item;
+            }
+        }
+        return null;
+    }
+
 }

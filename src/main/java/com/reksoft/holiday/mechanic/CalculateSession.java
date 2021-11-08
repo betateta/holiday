@@ -1,10 +1,7 @@
 package com.reksoft.holiday.mechanic;
 
 import com.reksoft.holiday.model.SessionGame;
-import com.reksoft.holiday.service.CalculateService;
-import com.reksoft.holiday.service.HolidayService;
-import com.reksoft.holiday.service.PlayerService;
-import com.reksoft.holiday.service.SessionService;
+import com.reksoft.holiday.service.*;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,6 +22,8 @@ public class CalculateSession {
     private CalculateService calculateService;
     @Autowired
     private SessionService sessionService;
+    @Autowired
+    private MemberService memberService;
 
     private SessionGame sessionGame;
     private Instant currentTime;
@@ -48,6 +47,7 @@ public class CalculateSession {
         currentTime = sessionGame.getStartTime();
         calculateService.deleteAll();
         playerService.deleteAll();
+        memberService.deleteAll();
 
         playersPool = new PlayersPool(sessionService.getSessionParameters(sessionGame));
         playersPool.createNewPlayersSet();
@@ -66,9 +66,9 @@ public class CalculateSession {
     }
 
     private void saveResults(){
-
-        calculateService.saveAll(calculatesPool.getCompletedCalculateList());
         playerService.saveAll(playersPool.getPlayersSet());
+        calculateService.saveAll(calculatesPool.getCompletedCalculateList());
+
     }
 }
 

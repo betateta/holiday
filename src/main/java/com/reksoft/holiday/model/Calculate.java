@@ -44,18 +44,18 @@ public class Calculate {
 
     @Column(name = "points")
     private Integer points;
-
+/*
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable (name="players_calculates",
             joinColumns=@JoinColumn (name="calculate_id"),
             inverseJoinColumns=@JoinColumn(name="player_id"))
     private List<Player> players;
+*/
 
     @OneToMany(fetch = FetchType.EAGER,
-            mappedBy = "sponsoredHoliday",
+            mappedBy = "calculate",
             cascade = CascadeType.ALL)
-    @ToString.Exclude
-    private List<Player> sponsorPlayerList;
+    private List<Member> memberList;
 
     @Override
     public boolean equals(Object o) {

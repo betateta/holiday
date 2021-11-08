@@ -3,12 +3,11 @@ package com.reksoft.holiday.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -24,9 +23,6 @@ public class Player {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "holiday_points")
-    private Integer holidayPoints;
-
     @Column(name = "session_points")
     private Integer sessionPoints;
 
@@ -36,25 +32,13 @@ public class Player {
     @Column(name = "bonus_shots")
     private Integer bonusShots;
 
-    @Column(name = "is_organizator")
-    private Boolean isOrganizator;
-
-    @Column(name = "is_at_party")
-    private Boolean isAtParty;
-
-    @Column(name = "is_busy")
+    @Transient
     private Boolean isBusy;
 
-    @ManyToMany (fetch = FetchType.EAGER)
-    @JoinTable (name="players_calculates",
-            joinColumns=@JoinColumn (name="player_id"),
-            inverseJoinColumns=@JoinColumn(name="calculate_id"))
-    private Set<Calculate> calculates;
-
-    @ManyToOne (fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
-    @JoinColumn (name="sponsored_holiday")
-    @ToString.Exclude
-    private Calculate sponsoredHoliday;
+    @OneToMany(fetch = FetchType.EAGER,
+            mappedBy = "player",
+            cascade = CascadeType.ALL)
+    private List<Member> memberList;
 
     @Override
     public boolean equals(Object o) {
@@ -70,16 +54,13 @@ public class Player {
     }
 
     public Player(String name,
-                  Integer holidayPoints, Integer sessionPoints,
+                  Integer sessionPoints,
                   Integer stdShots, Integer bonusShots,
-                  Boolean isOrganizator, Boolean isAtParty, Boolean isBusy) {
+                  Boolean isBusy) {
         this.name = name;
-        this.holidayPoints = holidayPoints;
         this.sessionPoints = sessionPoints;
         this.stdShots = stdShots;
         this.bonusShots = bonusShots;
-        this.isOrganizator = isOrganizator;
-        this.isAtParty = isAtParty;
         this.isBusy = isBusy;
     }
 
