@@ -24,7 +24,7 @@ public class Player {
     private String name;
 
     @Column(name = "session_points")
-    private Integer sessionPoints;
+    private Integer sessionPoints = 0;
 
     @Column(name = "shots")
     private Integer shots;

@@ -76,7 +76,7 @@ public class CalculatesPool {
     public void updateCalculates(Instant currentTime){
         checkHolidaysExpiration(currentTime);
         addPlayersToHolidays(currentTime);
-       // kickPlayerFromHoliday(currentTime);
+        kickPlayerFromHoliday(currentTime);
     }
     private void kickPlayerFromHoliday(Instant currentTime){
         /*
@@ -204,6 +204,21 @@ public class CalculatesPool {
                 }
                 /* total holiday points */
                 calc.setPoints(total_players_points+points);
+                /*
+                points for each player
+                 */
+
+                for (Player player: playersPool.getPlayersSet()
+                     ) {
+                    points=0;
+                    for (Member member: calc.getMemberSet()
+                         ) {
+                        if(member.getPlayer().equals(player)){
+                            points+=member.getHolidayPoints();
+                        }
+                    }
+                    player.setSessionPoints(player.getSessionPoints()+points);
+                }
                 completedCalculateList.add(calc);
             }
         }
