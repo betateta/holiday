@@ -3,6 +3,7 @@ package com.reksoft.holiday.mechanic;
 import com.reksoft.holiday.model.*;
 import com.reksoft.holiday.service.HolidayService;
 import lombok.Getter;
+import org.apache.log4j.Logger;
 
 import java.time.Instant;
 import java.util.*;
@@ -17,6 +18,7 @@ public class CalculatesPool {
 
     private final PlayersInterface playersPool;
     private final int org_points = 1500;
+    private static final Logger log = Logger.getLogger(CalculatesPool.class);
 
     public CalculatesPool(SessionGame sessionGame, PlayersInterface playersPool, HolidayService holidayService) {
         this.sessionGame = sessionGame;
@@ -30,6 +32,8 @@ public class CalculatesPool {
     Method creates new Calculate and adding to current list
      */
     public void createCalculate (Instant currentTime) {
+        log.info("create Calculate");
+
         Set<Holiday> holidaySet = holidayService.getAllSet();
         HashMap<String,Integer> holidayFullDiceMap = getHolidayDiceMap(holidaySet);
         HashMap<String,Integer> holidayWithoutDinnerDiceMap = (HashMap<String, Integer>) holidayFullDiceMap.clone();
@@ -63,6 +67,7 @@ public class CalculatesPool {
             calculate.setPoints(0);
             calculate.setUniqPlayersNumber(0);
             calculate.setMemberSet(membersImpl.getMemberSet());
+            log.debug("add Calculate to current list");
             currentCalculateList.add(calculate);
         }
     }
@@ -74,6 +79,8 @@ public class CalculatesPool {
         - kick players from holiday (calculate)
      */
     public void updateCalculates(Instant currentTime){
+        log.info("call updateCalculates");
+
         checkHolidaysExpiration(currentTime);
         addPlayersToHolidays(currentTime);
         kickPlayerFromHoliday(currentTime);
@@ -82,6 +89,7 @@ public class CalculatesPool {
         /*
             Kick chance
          */
+        log.debug("call kickPlayerFromHoliday");
         Player player = playersPool.getFreePlayerWithShots();
         List<Calculate> calculatesWithoutPlaces = new ArrayList<>();
         HashMap<String,Integer> kick_map = new HashMap<>();
@@ -129,6 +137,7 @@ public class CalculatesPool {
        - list of free players with shots >0
     */
     private void addPlayersToHolidays(Instant currentTime){
+        log.debug("call addPlayersToHolidays");
         Player player = playersPool.getFreePlayerWithShots();
         if(!currentCalculateList.isEmpty() && (player != null)) {
             List<Calculate> calculatesWithPlaces = new ArrayList<>();
@@ -162,6 +171,7 @@ public class CalculatesPool {
         }
     }
     private void checkHolidaysExpiration (Instant currentTime){
+        log.debug("call checkHolidaysExpiration");
         for (Calculate calc : currentCalculateList
         ) {
             // complete  holiday by time expiration
@@ -226,6 +236,7 @@ public class CalculatesPool {
     }
    
     private void excludeCompletedFromCurrent(){
+        log.debug("call excludeCompletedFromCurrent");
         for (Calculate item: completedCalculateList
              ) {
             if (currentCalculateList.contains(item)){
@@ -234,9 +245,11 @@ public class CalculatesPool {
         }
     }
     private Integer getHolidayCapacity(Holiday holiday){
+        log.debug("call getHolidayCapacity");
         return new Dice().getRandFromRange(holiday.getMinCapacity(),holiday.getMaxCapacity());
     }
     private HashMap<String,Integer> getHolidayDiceMap(Set<Holiday> holidaySet){
+        log.debug("call getHolidayDiceMap");
         HashMap<String,Integer> holidayFullDiceMap = new HashMap<>();
         for (Holiday item:holidaySet
         ) {

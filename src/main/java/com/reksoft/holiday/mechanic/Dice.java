@@ -3,6 +3,7 @@ package com.reksoft.holiday.mechanic;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +14,10 @@ import java.util.Map;
 public class Dice {
     private String eventName="";
     private final String eventMiss= "eventMiss";
+    private static final Logger log = Logger.getLogger(Dice.class);
 
     public String getMultiEventResult (HashMap<String,Integer> map){
+        log.debug("call getMultiEventResult" );
 
         eventName="";
         boolean chanceHit = false;
@@ -93,22 +96,12 @@ public class Dice {
         }
         eventName=keys[index];
 
-        /*
-        Test output
-         */
-        System.out.println("=================");
-        /*
-        System.out.println("Sum = "+sum);
-        for (int i = 0; i < arraySize; i++){
-            System.out.println("a["+i+"]="+a[i]+"\tkeys["+i+"]="+keys[i]+"\t values["+i+"]="+values[i]);
-        }
-
-         */
-        System.out.println("rand="+rand+" index="+index+" eventName="+keys[index]+" dice: "+chanceHit);
+        log.info("rand="+rand+" index="+index+" eventName="+keys[index]+" dice: "+chanceHit);
 
         return eventName;
     }
     public Integer getRandFromRange (Integer min, Integer max) {
+        log.debug("call getRandFromRange" );
         max -= min;
         return (int) ((Math.random()* (++max)) + min);
     }

@@ -3,6 +3,7 @@ package com.reksoft.holiday.mechanic;
 import com.reksoft.holiday.model.SessionGame;
 import com.reksoft.holiday.service.*;
 import lombok.NoArgsConstructor;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +30,7 @@ public class CalculateSession {
     private Instant currentTime;
     private PlayersInterface playersImpl;
     private CalculatesPool calculatesPool;
+    private static final Logger log = Logger.getLogger(CalculateSession.class);
 
     public SessionGame getSessionGame(){
         initSession();
@@ -42,6 +44,7 @@ public class CalculateSession {
     }
 
     private void initSession(){
+        log.info("initSession");
         sessionGame.setStartTime(Instant.now());
         sessionGame.setStopTime(sessionGame.getStartTime().plusSeconds(sessionGame.getSessionDuration()*24*3600));
         currentTime = sessionGame.getStartTime();
@@ -54,6 +57,7 @@ public class CalculateSession {
         calculatesPool =new CalculatesPool(sessionGame, playersImpl, holidayService);
     }
     private void runSession(){
+        log.info("runSession");
         //Session duration in min
         Integer timeTick = sessionGame.getHolidaySampleFreq()*60;
 
@@ -66,6 +70,7 @@ public class CalculateSession {
     }
 
     private void saveResults(){
+        log.info("saveResults");
         playerService.saveAll(playersImpl.getPlayersSet());
         calculateService.saveAll(calculatesPool.getCompletedCalculateList());
 

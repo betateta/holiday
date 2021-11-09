@@ -3,6 +3,7 @@ package com.reksoft.holiday.mechanic;
 import com.reksoft.holiday.model.Calculate;
 import com.reksoft.holiday.model.Member;
 import com.reksoft.holiday.model.Player;
+import org.apache.log4j.Logger;
 
 import java.time.Instant;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ public class MembersImpl implements MembersInterface {
 
     private Calculate calculate;
     private PlayersInterface playersPool;
+    private static final Logger log = Logger.getLogger(MembersImpl.class);
 
     public MembersImpl(Calculate calculate,PlayersInterface playersPool) {
         this.calculate = calculate;
@@ -71,6 +73,7 @@ public class MembersImpl implements MembersInterface {
             Double points =  duration * calculate.getHoliday().getPointsRate();
             return points.intValue();
         }
+        log.warn("getPointsForPeriod: member time is invalid");
        return 0;
     }
     @Override
