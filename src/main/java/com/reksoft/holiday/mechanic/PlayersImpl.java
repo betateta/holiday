@@ -7,15 +7,16 @@ import lombok.Getter;
 import java.util.*;
 
 @Getter
-public class PlayersPool {
+public class PlayersImpl implements PlayersInterface {
     private Set<Player> playersSet;
     private SessionParameters sessionParameters;
 
-    public PlayersPool(SessionParameters sessionParameters) {
+    public PlayersImpl(SessionParameters sessionParameters) {
         this.sessionParameters = sessionParameters;
         this.playersSet = new HashSet<>();
     }
 
+    @Override
     public Set<Player> createNewPlayersSet(){
         final int std_shots = 5;
 
@@ -52,14 +53,16 @@ public class PlayersPool {
         }
         return null;
     }
-    public void setPlayerIsFree (Player player){
+    @Override
+    public void setPlayerIsFree(Player player){
           for (Player item: playersSet) {
                 if (item.equals(player)){
                     item.setIsBusy(true);
                 }
             }
     }
-    public void setPlayerIsBusy (Player player){
+    @Override
+    public void setPlayerIsBusy(Player player){
         for (Player item: playersSet) {
             if (item.equals(player)){
                 item.setIsBusy(false);
@@ -67,7 +70,8 @@ public class PlayersPool {
         }
     }
 
-    public Integer getNumberFreePlayers (){
+    @Override
+    public Integer getNumberFreePlayers(){
         int count = 0;
         for (Player entity : playersSet) {
             if (!entity.getIsBusy()){
@@ -76,6 +80,7 @@ public class PlayersPool {
         }
         return count;
     }
+    @Override
     public Player getFreePlayer(){
         for (Player item:playersSet
              ) {
@@ -85,6 +90,7 @@ public class PlayersPool {
         }
         return null;
     }
+    @Override
     public Player getFreePlayerWithShots(){
         for (Player item:playersSet
         ) {
@@ -94,6 +100,7 @@ public class PlayersPool {
         }
         return null;
     }
+    @Override
     public List<Player> getAllFreePlayer(){
         List<Player> players = new ArrayList<>();
         for (Player item:playersSet
@@ -104,6 +111,7 @@ public class PlayersPool {
         }
         return players;
     }
+    @Override
     public List<Player> getAllBusyPlayer(){
         List<Player> players = new ArrayList<>();
         for (Player item:playersSet
@@ -114,6 +122,7 @@ public class PlayersPool {
         }
         return players;
     }
+    @Override
     public List<Player> getAllFreePlayerWithShots(){
         List<Player> players = new ArrayList<>();
         for (Player item:playersSet

@@ -27,7 +27,7 @@ public class CalculateSession {
 
     private SessionGame sessionGame;
     private Instant currentTime;
-    private PlayersPool playersPool;
+    private PlayersInterface playersImpl;
     private CalculatesPool calculatesPool;
 
     public SessionGame getSessionGame(){
@@ -49,9 +49,9 @@ public class CalculateSession {
         playerService.deleteAll();
         memberService.deleteAll();
 
-        playersPool = new PlayersPool(sessionService.getSessionParameters(sessionGame));
-        playersPool.createNewPlayersSet();
-        calculatesPool =new CalculatesPool(sessionGame, playersPool, holidayService);
+        playersImpl = new PlayersImpl(sessionService.getSessionParameters(sessionGame));
+        playersImpl.createNewPlayersSet();
+        calculatesPool =new CalculatesPool(sessionGame, playersImpl, holidayService);
     }
     private void runSession(){
         //Session duration in min
@@ -66,7 +66,7 @@ public class CalculateSession {
     }
 
     private void saveResults(){
-        playerService.saveAll(playersPool.getPlayersSet());
+        playerService.saveAll(playersImpl.getPlayersSet());
         calculateService.saveAll(calculatesPool.getCompletedCalculateList());
 
     }
