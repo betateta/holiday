@@ -5,20 +5,17 @@ import com.reksoft.holiday.model.Member;
 import com.reksoft.holiday.model.Player;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MembersImpl implements MembersInterface {
 
     private Calculate calculate;
+    private PlayersInterface playersPool;
 
-    public MembersImpl(Calculate calculate) {
+    public MembersImpl(Calculate calculate,PlayersInterface playersPool) {
         this.calculate = calculate;
-    }
-
-    @Override
-    public List<Member> getMemberList() {
-        return calculate.getMemberList();
+        this.playersPool = playersPool;
     }
 
     @Override
@@ -27,27 +24,26 @@ public class MembersImpl implements MembersInterface {
     }
 
     @Override
-    public void setMemberList(List<Member> memberList){
-        this.calculate.setMemberList(memberList);
-    }
-
-    @Override
     public void addMember(Player player, Instant inputTime){
-        calculate.getMemberList().add(new Member(player, calculate, inputTime, false));
+        Member member = new Member(player, calculate,inputTime,false);
+        calculate.getMemberSet().add(member);
+        playersPool.setPlayerIsBusy(member.getPlayer());
     }
     @Override
     public void addMemberAsOrganizator(Player player, Instant inputTime){
-        calculate.getMemberList().add(new Member(player, calculate,inputTime,true));
+        playersPool.setPlayerIsBusy(player);
+        Member member = new Member(player, calculate,inputTime,true);
+        calculate.getMemberSet().add(member);
     }
     @Override
-    public List<Member> getAll() {
-        return calculate.getMemberList();
+    public Set<Member> getAll() {
+        return calculate.getMemberSet();
     }
 
     @Override
-    public List<Member> getOrganizators(){
-        List<Member> org = new ArrayList<>();
-        for (Member item:calculate.getMemberList()
+    public Set<Member> getOrganizators(){
+        Set<Member> org = new HashSet<>();
+        for (Member item:calculate.getMemberSet()
              ) {
             if (item.getIsOrganizator()){
                 org.add(item);
@@ -56,9 +52,9 @@ public class MembersImpl implements MembersInterface {
         return org;
     }
     @Override
-    public List<Member> getAllWithoutOrganizators(){
-        List<Member> org = new ArrayList<>();
-        for (Member item:calculate.getMemberList()
+    public Set<Member> getAllWithoutOrganizators(){
+        Set<Member> org = new HashSet<>();
+        for (Member item:calculate.getMemberSet()
         ) {
             if (!item.getIsOrganizator()){
                 org.add(item);
@@ -72,26 +68,36 @@ public class MembersImpl implements MembersInterface {
         if (member.getOutputTime().isAfter(member.getInputTime())){
             long duration = member.getOutputTime().getEpochSecond() - member.getInputTime().getEpochSecond();
         /* points of last period*/
-            int points = ((int) duration) * calculate.getHoliday().getPointsRate().intValue();
-            return points;
+            Double points =  duration * calculate.getHoliday().getPointsRate();
+            return points.intValue();
         }
        return 0;
     }
     @Override
     public boolean findMember(Member member){
-        if (calculate.getMemberList().contains(member)) {
+        if (calculate.getMemberSet().contains(member)) {
             return true;
         }
         return false;
     }
     @Override
     public boolean findPlayer(Player player){
-        for (Member member: calculate.getMemberList()
+        for (Member member: calculate.getMemberSet()
              ) {
             if (member.getPlayer().equals(player)) {
                 return true;
             }
         }
         return false;
+    }
+
+    @Override
+    public void setMemberSet(Set<Member> memberSet) {
+       calculate.setMemberSet(memberSet);
+    }
+
+    @Override
+    public Set<Member> getMemberSet() {
+        return calculate.getMemberSet();
     }
 }

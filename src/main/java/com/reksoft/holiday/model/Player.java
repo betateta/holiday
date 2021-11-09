@@ -6,8 +6,8 @@ import lombok.Setter;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,7 +35,7 @@ public class Player {
     @OneToMany(fetch = FetchType.EAGER,
             mappedBy = "player",
             cascade = CascadeType.ALL)
-    private List<Member> memberList;
+    private Set<Member> memberSet;
 
     @Override
     public boolean equals(Object o) {

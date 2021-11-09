@@ -57,7 +57,7 @@ public class PlayersImpl implements PlayersInterface {
     public void setPlayerIsFree(Player player){
           for (Player item: playersSet) {
                 if (item.equals(player)){
-                    item.setIsBusy(true);
+                    item.setIsBusy(false);
                 }
             }
     }
@@ -65,7 +65,7 @@ public class PlayersImpl implements PlayersInterface {
     public void setPlayerIsBusy(Player player){
         for (Player item: playersSet) {
             if (item.equals(player)){
-                item.setIsBusy(false);
+                item.setIsBusy(true);
             }
         }
     }

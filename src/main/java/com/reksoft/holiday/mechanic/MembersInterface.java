@@ -4,20 +4,20 @@ import com.reksoft.holiday.model.Member;
 import com.reksoft.holiday.model.Player;
 
 import java.time.Instant;
-import java.util.List;
+import java.util.Set;
 
 public interface MembersInterface {
-    void setMemberList(List<Member> memberList);
+    void setMemberSet(Set<Member> memberSet);
 
     void addMember(Player player, Instant inputTime);
 
     void addMemberAsOrganizator(Player player, Instant inputTime);
 
-    List<Member> getAll();
+    Set<Member> getAll();
 
-    List<Member> getOrganizators();
+    Set<Member> getOrganizators();
 
-    List<Member> getAllWithoutOrganizators();
+    Set<Member> getAllWithoutOrganizators();
 
     Integer getPointsForPeriod(Member member);
 
@@ -25,7 +25,7 @@ public interface MembersInterface {
 
     boolean findPlayer(Player player);
 
-    List<Member> getMemberList();
+    Set<Member> getMemberSet();
 
     com.reksoft.holiday.model.Calculate getCalculate();
 }

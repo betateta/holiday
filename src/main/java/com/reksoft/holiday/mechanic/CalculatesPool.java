@@ -5,10 +5,7 @@ import com.reksoft.holiday.service.HolidayService;
 import lombok.Getter;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 public class CalculatesPool {
@@ -18,12 +15,12 @@ public class CalculatesPool {
     private final HolidayService holidayService;
 
 
-    private final PlayersInterface playersImpl;
+    private final PlayersInterface playersPool;
     private final int org_points = 1500;
 
-    public CalculatesPool(SessionGame sessionGame, PlayersInterface playersImpl, HolidayService holidayService) {
+    public CalculatesPool(SessionGame sessionGame, PlayersInterface playersPool, HolidayService holidayService) {
         this.sessionGame = sessionGame;
-        this.playersImpl = playersImpl;
+        this.playersPool = playersPool;
         this.holidayService = holidayService;
         this.completedCalculateList = new ArrayList<>();
         this.currentCalculateList = new ArrayList<>();
@@ -38,7 +35,7 @@ public class CalculatesPool {
         HashMap<String,Integer> holidayWithoutDinnerDiceMap = (HashMap<String, Integer>) holidayFullDiceMap.clone();
         holidayWithoutDinnerDiceMap.remove("dinner");
 
-        Integer freePlayers = playersImpl.getNumberFreePlayers();
+        Integer freePlayers = playersPool.getNumberFreePlayers();
         String holidayName = "";
         if (freePlayers > 1) {
             holidayName = new Dice().getMultiEventResult(holidayFullDiceMap);
@@ -49,14 +46,14 @@ public class CalculatesPool {
         if (!holidayName.isBlank() && !holidayName.isEmpty() && !holidayName.equals("eventMiss")) {
 
             Calculate calculate = new Calculate();
-            calculate.setMemberList(new ArrayList<>());
-            MembersInterface membersImpl = new MembersImpl(calculate);
+            calculate.setMemberSet(new HashSet<>());
+            MembersInterface membersImpl = new MembersImpl(calculate, playersPool);
 
             if (holidayName.equals("dinner")) {
-                membersImpl.addMemberAsOrganizator(playersImpl.getFreePlayer(),currentTime);
-                membersImpl.addMemberAsOrganizator(playersImpl.getFreePlayer(),currentTime);
+                membersImpl.addMemberAsOrganizator(playersPool.getFreePlayer(),currentTime);
+                membersImpl.addMemberAsOrganizator(playersPool.getFreePlayer(),currentTime);
             } else {
-                membersImpl.addMemberAsOrganizator(playersImpl.getFreePlayer(),currentTime);
+                membersImpl.addMemberAsOrganizator(playersPool.getFreePlayer(),currentTime);
             }
             calculate.setNumberOfPlayers(0);
             calculate.setHoliday(holidayService.findByName(holidayName));
@@ -65,7 +62,7 @@ public class CalculatesPool {
             calculate.setStartTime(currentTime);
             calculate.setPoints(0);
             calculate.setUniqPlayersNumber(0);
-            calculate.setMemberList(membersImpl.getMemberList());
+            calculate.setMemberSet(membersImpl.getMemberSet());
             currentCalculateList.add(calculate);
         }
     }
@@ -85,7 +82,7 @@ public class CalculatesPool {
         /*
             Kick chance
          */
-        Player player = playersImpl.getFreePlayerWithShots();
+        Player player = playersPool.getFreePlayerWithShots();
         List<Calculate> calculatesWithoutPlaces = new ArrayList<>();
         HashMap<String,Integer> kick_map = new HashMap<>();
         kick_map.put("enter",sessionGame.getHolidayFillChance());
@@ -98,20 +95,20 @@ public class CalculatesPool {
         }
         for (Calculate calc: calculatesWithoutPlaces
         ) {
-            player = playersImpl.getFreePlayerWithShots();
+            player = playersPool.getFreePlayerWithShots();
             if(player != null){
                 player.setShots(player.getShots()-1);
                 if(new Dice().getMultiEventResult(kick_map).equals("enter")){
                         /*
                         kick player from holiday and calc his points
                          */
-                    List<Member> memberList = calc.getMemberList();
-                    MembersImpl membersImpl = new MembersImpl(calc);
+                    Set<Member> memberList = calc.getMemberSet();
+                    MembersImpl membersImpl = new MembersImpl(calc, playersPool);
                     Member member = memberList.iterator().next();
                     Player kick_player= member.getPlayer();
 
                     member.setOutputTime(currentTime);
-                    playersImpl.setPlayerIsFree(kick_player);
+                    playersPool.setPlayerIsFree(kick_player);
                     member.setHolidayPoints(member.getHolidayPoints()+ membersImpl.getPointsForPeriod(member));
                         /*
                         add new player
@@ -119,7 +116,7 @@ public class CalculatesPool {
                     if (!membersImpl.findMember(member)) {
                         calc.setUniqPlayersNumber(calc.getUniqPlayersNumber()+1);
                     }
-                    playersImpl.setPlayerIsBusy(member.getPlayer());
+                    playersPool.setPlayerIsBusy(member.getPlayer());
                     membersImpl.addMember(player,currentTime);
 
                 }
@@ -132,10 +129,9 @@ public class CalculatesPool {
        - list of free players with shots >0
     */
     private void addPlayersToHolidays(Instant currentTime){
-        Player player = playersImpl.getFreePlayerWithShots();
+        Player player = playersPool.getFreePlayerWithShots();
         if(!currentCalculateList.isEmpty() && (player != null)) {
             List<Calculate> calculatesWithPlaces = new ArrayList<>();
-
             for (Calculate calc:currentCalculateList
             ) {
                 if((calc.getCapacity()-calc.getNumberOfPlayers()) > 0){
@@ -149,12 +145,12 @@ public class CalculatesPool {
             fill_map.put("enter",sessionGame.getHolidayFillChance());
             for (Calculate calc: calculatesWithPlaces
                  ) {
-                player = playersImpl.getFreePlayerWithShots();
+                player = playersPool.getFreePlayerWithShots();
                 if(player != null){
                     player.setShots(player.getShots()-1);
                     if(new Dice().getMultiEventResult(fill_map).equals("enter")){
-                        player.setIsBusy(true);
-                        MembersInterface membersImpl = new MembersImpl(calc);
+                        playersPool.setPlayerIsBusy(player);
+                        MembersInterface membersImpl = new MembersImpl(calc, playersPool);
                         membersImpl.addMember(player,currentTime);
                         calc.setNumberOfPlayers(calc.getNumberOfPlayers()+1);
                         if (!membersImpl.findPlayer(player)) {
@@ -171,10 +167,10 @@ public class CalculatesPool {
             // complete  holiday by time expiration
             if (currentTime.isAfter(calc.getStartTime().plusSeconds(calc.getHoliday().getDuration() * 3600))) {
                 calc.setStopTime(currentTime);
-                MembersInterface membersImpl = new MembersImpl(calc);
+                MembersInterface membersImpl = new MembersImpl(calc, playersPool);
 
-                List<Member> organizators = membersImpl.getOrganizators();
-                List<Member> players = membersImpl.getAllWithoutOrganizators();
+                Set<Member> organizators = membersImpl.getOrganizators();
+                Set<Member> players = membersImpl.getAllWithoutOrganizators();
                 int total_players_points = 0;
                 if (players!= null) {
                     calc.setUniqPlayersNumber(players.size());
@@ -194,16 +190,16 @@ public class CalculatesPool {
                             member.setHolidayPoints(member.getHolidayPoints() + points);
                             total_players_points += member.getHolidayPoints();
 
-                            playersImpl.setPlayerIsFree(member.getPlayer());
+                            playersPool.setPlayerIsFree(member.getPlayer());
                         }
                     }
                 }
                 int points=0;
                 for (Member org: organizators
                      ) {
-                    playersImpl.setPlayerIsFree(org.getPlayer());
+                    playersPool.setPlayerIsFree(org.getPlayer());
                     org.setOutputTime(currentTime);
-                    points+=org_points;
+                    points+= org_points;
                     org.setHolidayPoints(org_points + total_players_points);
                 }
                 /* total holiday points */
