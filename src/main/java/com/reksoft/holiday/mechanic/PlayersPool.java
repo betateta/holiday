@@ -4,10 +4,7 @@ import com.reksoft.holiday.dto.SessionParameters;
 import com.reksoft.holiday.model.Player;
 import lombok.Getter;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 public class PlayersPool {
@@ -20,11 +17,13 @@ public class PlayersPool {
     }
 
     public Set<Player> createNewPlayersSet(){
+        final int std_shots = 5;
+
         if (sessionParameters!=null) {
             for (int i = 1; i <= sessionParameters.getSessionPlayers(); i++) {
                 playersSet.add(new Player("player_" + i,
                         0,
-                        5, 0,
+                        0,
                         false));
             }
         /*
@@ -44,7 +43,7 @@ public class PlayersPool {
                         if (iterator.hasNext()) {
                             bonus_addshots = new Dice().getRandFromRange(sessionParameters.getPlayersAddshotMin(),
                                     sessionParameters.getPlayersAddshotMax());
-                            iterator.next().setBonusShots(bonus_addshots);
+                            iterator.next().setShots(bonus_addshots + std_shots);
                         }
                     }
                 }
@@ -86,5 +85,43 @@ public class PlayersPool {
         }
         return null;
     }
-
+    public Player getFreePlayerWithShots(){
+        for (Player item:playersSet
+        ) {
+            if (!item.getIsBusy() && (item.getShots() > 0)){
+                return item;
+            }
+        }
+        return null;
+    }
+    public List<Player> getAllFreePlayer(){
+        List<Player> players = new ArrayList<>();
+        for (Player item:playersSet
+        ) {
+            if (!item.getIsBusy()){
+                players.add(item);
+            }
+        }
+        return players;
+    }
+    public List<Player> getAllBusyPlayer(){
+        List<Player> players = new ArrayList<>();
+        for (Player item:playersSet
+        ) {
+            if (item.getIsBusy()){
+                players.add(item);
+            }
+        }
+        return players;
+    }
+    public List<Player> getAllFreePlayerWithShots(){
+        List<Player> players = new ArrayList<>();
+        for (Player item:playersSet
+        ) {
+            if (!item.getIsBusy() && (item.getShots()>0)){
+                players.add(item);
+            }
+        }
+        return players;
+    }
 }

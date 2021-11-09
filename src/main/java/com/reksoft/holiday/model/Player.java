@@ -26,11 +26,8 @@ public class Player {
     @Column(name = "session_points")
     private Integer sessionPoints;
 
-    @Column(name = "std_shots")
-    private Integer stdShots;
-
-    @Column(name = "bonus_shots")
-    private Integer bonusShots;
+    @Column(name = "shots")
+    private Integer shots;
 
     @Transient
     private Boolean isBusy;
@@ -55,12 +52,11 @@ public class Player {
 
     public Player(String name,
                   Integer sessionPoints,
-                  Integer stdShots, Integer bonusShots,
+                  Integer shots,
                   Boolean isBusy) {
         this.name = name;
         this.sessionPoints = sessionPoints;
-        this.stdShots = stdShots;
-        this.bonusShots = bonusShots;
+        this.shots = shots;
         this.isBusy = isBusy;
     }
 

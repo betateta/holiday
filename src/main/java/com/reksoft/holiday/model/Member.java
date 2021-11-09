@@ -33,13 +33,13 @@ public class Member {
     private Instant outputTime;
 
     @Column(name = "duration")
-    private long duration;
+    private long duration=0;
 
     @Column(name = "holiday_points")
-    private Integer holidayPoints;
+    private Integer holidayPoints=0;
 
     @Column(name = "is_organizator")
-    private Boolean isOrganizator;
+    private Boolean isOrganizator=false;
 
     public Member(Player player, Calculate calculate) {
         this.player = player;

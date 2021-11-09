@@ -11,25 +11,26 @@ import java.util.List;
 
 @Getter
 public class MembersPool {
-
     private List<Member> memberList;
     private Calculate calculate;
 
     public void setMemberList (List<Member> memberList){
-        this.memberList=memberList;
+        this.calculate.setMemberList(memberList);
     }
     public void addMember (Player player,Instant inputTime){
-        memberList.add(new Member(player, calculate, inputTime, false));
+        calculate.getMemberList().add(new Member(player, calculate, inputTime, false));
     }
     public void addMemberAsOrganizator (Player player, Instant inputTime){
-        memberList.add(new Member(player, calculate,inputTime,true));
+        calculate.getMemberList().add(new Member(player, calculate,inputTime,true));
     }
-    public List<Member> getAll(){
-        return memberList;
+    public List<Member> getAll()
+    {
+        return calculate.getMemberList();
+
     };
     public List<Member> getOrganizators(){
         List<Member> org = new ArrayList<>();
-        for (Member item:memberList
+        for (Member item:calculate.getMemberList()
              ) {
             if (item.getIsOrganizator()){
                 org.add(item);
@@ -39,18 +40,43 @@ public class MembersPool {
     };
     public List<Member> getAllWithoutOrganizators(){
         List<Member> org = new ArrayList<>();
-        for (Member item:memberList
+        for (Member item:calculate.getMemberList()
         ) {
             if (!item.getIsOrganizator()){
                 org.add(item);
             }
         }
         return org;
-    };
+    }
+    public Integer getPointsForPeriod (Member member){
+        /*duration of last period*/
+        if (member.getOutputTime().isAfter(member.getInputTime())){
+            long duration = member.getOutputTime().getEpochSecond() - member.getInputTime().getEpochSecond();
+        /* points of last period*/
+            int points = ((int) duration) * calculate.getHoliday().getPointsRate().intValue();
+            return points;
+        }
+       return 0;
+    }
+    public boolean findMember (Member member){
+        if (calculate.getMemberList().contains(member)) {
+            return true;
+        }
+        return false;
+    }
+    public boolean findPlayer(Player player){
+        for (Member member: calculate.getMemberList()
+             ) {
+            if (member.getPlayer().equals(player)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-    public MembersPool(Calculate calculate, List<Member> memberList) {
+    public MembersPool(Calculate calculate) {
         this.calculate = calculate;
-        this.memberList = memberList;
+        this.memberList = calculate.getMemberList();
 
     }
 }

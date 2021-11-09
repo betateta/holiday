@@ -44,6 +44,9 @@ public class Calculate {
 
     @Column(name = "points")
     private Integer points;
+
+    @Transient
+    private Integer numberOfPlayers;
 /*
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable (name="players_calculates",
