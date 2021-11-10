@@ -14,9 +14,8 @@ public class CalculatesPool {
     private List<Calculate> completedCalculateList;
     private final SessionGame sessionGame;
     private final HolidayService holidayService;
-
-
     private final PlayersInterface playersPool;
+
     private final int org_points = 1500;
     private static final Logger log = Logger.getLogger(CalculatesPool.class);
 

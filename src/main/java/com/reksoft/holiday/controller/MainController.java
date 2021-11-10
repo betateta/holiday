@@ -7,6 +7,7 @@ import com.reksoft.holiday.model.SessionGame;
 import com.reksoft.holiday.model.User;
 import com.reksoft.holiday.service.SessionService;
 import com.reksoft.holiday.service.UserService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,6 +34,7 @@ public class MainController {
     private SessionGame session;
     private SessionParameters sessionParameters;
     private User user;
+    private static final Logger log = Logger.getLogger(MainController.class);
 
     @GetMapping(value = "/")
     public String view_auth_user (Model model){
@@ -65,13 +67,15 @@ public class MainController {
     @GetMapping(value = "/session")
     public String create_session (Model model){
         model.addAttribute("parameters", sessionParameters);
+        session = sessionServiceImpl.setSessionParameters(session,sessionParameters);
+        sessionServiceImpl.save(session);
         return "session";
     }
     @PostMapping(value = "/save")
     public String save(@ModelAttribute("parameters") @Valid SessionParameters parameters,
                        BindingResult errors) throws ValidationException {
         if (errors.hasErrors()) {
-            System.out.println("Debug:  "+ errors.getFieldError());
+            log.warn("Invalid session parameters: "+ errors.getFieldError());
             return "session";
         }
         try {
@@ -88,14 +92,5 @@ public class MainController {
         sessionServiceImpl.save(calculateSession.getSessionGame());
         return "start_session";
     }
-/*
-    public void setUserServiceImpl(UserServiceImpl userServiceImpl) {
-        this.userServiceImpl = userServiceImpl;
-    }
 
-    public void setSessionServiceImpl(SessionServiceImpl sessionServiceImpl) {
-        this.sessionServiceImpl = sessionServiceImpl;
-    }
-
- */
 }
