@@ -96,7 +96,7 @@ public class Dice {
         }
         eventName=keys[index];
 
-        log.info("rand="+rand+" index="+index+" eventName="+keys[index]+" dice: "+chanceHit);
+        log.debug("rand="+rand+" index="+index+" eventName="+keys[index]+" dice: "+chanceHit);
 
         return eventName;
     }

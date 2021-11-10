@@ -26,11 +26,17 @@ public class Player {
     @Column(name = "session_points")
     private Integer sessionPoints = 0;
 
-    @Column(name = "shots")
-    private Integer shots;
+    @Column(name = "std_shots")
+    private Integer stdShots = 0;
+
+    @Column(name = "bonus_shots")
+    private Integer bonusShots = 0;
 
     @Transient
-    private Boolean isBusy;
+    private Integer shots = 0;
+
+    @Transient
+    private Boolean isBusy=false;
 
     @OneToMany(fetch = FetchType.EAGER,
             mappedBy = "player",
@@ -50,14 +56,16 @@ public class Player {
         return 0;
     }
 
+
     public Player(String name,
                   Integer sessionPoints,
-                  Integer shots,
+                  Integer stdShots, Integer bonusShots, Integer shots,
                   Boolean isBusy) {
         this.name = name;
         this.sessionPoints = sessionPoints;
+        this.stdShots = stdShots;
+        this.bonusShots = bonusShots;
         this.shots = shots;
         this.isBusy = isBusy;
     }
-
 }

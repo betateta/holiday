@@ -1,5 +1,6 @@
 package com.reksoft.holiday.mechanic;
 
+import com.reksoft.holiday.model.Player;
 import com.reksoft.holiday.model.SessionGame;
 import com.reksoft.holiday.service.*;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @NoArgsConstructor
 @Component
@@ -28,7 +30,7 @@ public class CalculateSession {
 
     private SessionGame sessionGame;
     private Instant currentTime;
-    private PlayersInterface playersImpl;
+    private PlayersInterface playersPool;
     private CalculatesPool calculatesPool;
     private static final Logger log = Logger.getLogger(CalculateSession.class);
 
@@ -52,17 +54,30 @@ public class CalculateSession {
         playerService.deleteAll();
         memberService.deleteAll();
 
-        playersImpl = new PlayersImpl(sessionService.getSessionParameters(sessionGame));
-        playersImpl.createNewPlayersSet();
-        calculatesPool =new CalculatesPool(sessionGame, playersImpl, holidayService);
+        playersPool = new PlayersImpl(sessionService.getSessionParameters(sessionGame));
+        playersPool.createNewPlayersSet();
+        calculatesPool =new CalculatesPool(sessionGame, playersPool, holidayService);
     }
     private void runSession(){
         log.info("runSession");
         //Session duration in min
         Integer timeTick = sessionGame.getHolidaySampleFreq()*60;
-
+        Integer dayCount = 1;
+        Instant dayStamp = sessionGame.getStartTime().plus(dayCount, ChronoUnit.DAYS);
+        log.info("new day of gaming session : "+dayCount);
         /*  Session cycle      */
         while (currentTime.isBefore(sessionGame.getStopTime())){
+            if (currentTime.isAfter(dayStamp)){
+                dayCount++;
+                dayStamp = sessionGame.getStartTime().plus(dayCount, ChronoUnit.DAYS);
+                log.info("new day of gaming session : "+dayCount);
+
+                for (Player player: playersPool.getPlayersSet()
+                     ) {
+                    player.setStdShots(5);
+                    player.setShots(player.getBonusShots()+player.getStdShots());
+                }
+            }
             calculatesPool.createCalculate(currentTime);
             calculatesPool.updateCalculates(currentTime);
             currentTime = currentTime.plusSeconds(timeTick);
@@ -71,7 +86,7 @@ public class CalculateSession {
 
     private void saveResults(){
         log.info("saveResults");
-        playerService.saveAll(playersImpl.getPlayersSet());
+        playerService.saveAll(playersPool.getPlayersSet());
         calculateService.saveAll(calculatesPool.getCompletedCalculateList());
 
     }

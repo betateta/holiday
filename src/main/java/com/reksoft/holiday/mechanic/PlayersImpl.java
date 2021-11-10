@@ -22,20 +22,17 @@ public class PlayersImpl implements PlayersInterface {
     public Set<Player> createNewPlayersSet(){
         log.info("createNewPlayersSet");
         final int std_shots = 5;
-
         if (sessionParameters!=null) {
             for (int i = 1; i <= sessionParameters.getSessionPlayers(); i++) {
                 playersSet.add(new Player("player_" + i,
                         0,
-                        0,
+                        std_shots,0,5,
                         false));
             }
         /*
         Fill players profile
          */
-
             Integer playersNumberAddshot = sessionParameters.getPlayersNumberAddshot();
-
             HashMap<String, Integer> addShotMap = new HashMap<>();
             addShotMap.put("addshots", sessionParameters.getPlayersAddshotChance());
 
@@ -47,11 +44,16 @@ public class PlayersImpl implements PlayersInterface {
                         if (iterator.hasNext()) {
                             bonus_addshots = new Dice().getRandFromRange(sessionParameters.getPlayersAddshotMin(),
                                     sessionParameters.getPlayersAddshotMax());
-                            iterator.next().setShots(bonus_addshots + std_shots);
+                            iterator.next().setBonusShots(bonus_addshots);
                         }
                     }
                 }
             }
+            for (Player player:playersSet
+                 ) {
+                player.setShots(std_shots+player.getBonusShots());
+            }
+
             return playersSet;
         }
         return null;

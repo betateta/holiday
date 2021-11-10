@@ -105,8 +105,8 @@ public class CalculatesPool {
         ) {
             player = playersPool.getFreePlayerWithShots();
             if(player != null){
-                player.setShots(player.getShots()-1);
                 if(new Dice().getMultiEventResult(kick_map).equals("enter")){
+                    player.setShots(player.getShots()-1);
                         /*
                         kick player from holiday and calc his points
                          */
@@ -156,8 +156,8 @@ public class CalculatesPool {
                  ) {
                 player = playersPool.getFreePlayerWithShots();
                 if(player != null){
-                    player.setShots(player.getShots()-1);
                     if(new Dice().getMultiEventResult(fill_map).equals("enter")){
+                        player.setShots(player.getShots()-1);
                         playersPool.setPlayerIsBusy(player);
                         MembersInterface membersImpl = new MembersImpl(calc, playersPool);
                         membersImpl.addMember(player,currentTime);
