@@ -71,6 +71,11 @@ public class MainController {
         sessionServiceImpl.save(session);
         return "session";
     }
+    @GetMapping(value = "/backtomain")
+    public String returnToUser (){
+        return "redirect:/";
+    }
+
     @PostMapping(value = "/save")
     public String save(@ModelAttribute("parameters") @Valid SessionParameters parameters,
                        BindingResult errors) throws ValidationException {
@@ -81,8 +86,8 @@ public class MainController {
         try {
             sessionServiceImpl.validateParameters(parameters);
         } catch (ValidationException validationException) {return "session";}
-
-        session = sessionServiceImpl.setSessionParameters(session,parameters);
+        sessionParameters=parameters;
+        session = sessionServiceImpl.setSessionParameters(session,sessionParameters);
         sessionServiceImpl.save(session);
         return "session";
     }
@@ -91,6 +96,10 @@ public class MainController {
         calculateSession.setSessionGame(session);
         sessionServiceImpl.save(calculateSession.getSessionGame());
         return "start_session";
+    }
+    @GetMapping(value = "back")
+    public String returnToSession (){
+        return "redirect:/session";
     }
 
 }

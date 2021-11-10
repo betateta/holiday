@@ -1,5 +1,6 @@
 package com.reksoft.holiday.mechanic;
 
+import com.reksoft.holiday.model.Calculate;
 import com.reksoft.holiday.model.Player;
 import com.reksoft.holiday.model.SessionGame;
 import com.reksoft.holiday.service.*;
@@ -82,13 +83,24 @@ public class CalculateSession {
             calculatesPool.updateCalculates(currentTime);
             currentTime = currentTime.plusSeconds(timeTick);
         }
+        log.debug("mark incompleted calculates");
+        for (Calculate calc : calculatesPool.getCurrentCalculateList()
+                ) {
+            calc.setCorrectStop(false);
+        }
+        sessionGame.setNumberOfIncompleteHolidays(calculatesPool.getCurrentCalculateList().size());
+        sessionGame.setNumberOfHolidays(
+                calculatesPool.getCompletedCalculateList().size()+
+                calculatesPool.getCurrentCalculateList().size());
+        log.debug("adding session points");
+        sessionGame.setPoints(calculatesPool.getPoints());
     }
 
     private void saveResults(){
         log.info("saveResults");
+        sessionService.save(sessionGame);
         playerService.saveAll(playersPool.getPlayersSet());
         calculateService.saveAll(calculatesPool.getCompletedCalculateList());
-
     }
 }
 

@@ -1,11 +1,12 @@
 package com.reksoft.holiday.model;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-
-
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -36,6 +37,9 @@ public class SessionGame {
 
     @Column(name = "number_of_holidays")
     private Integer numberOfHolidays;
+
+    @Column(name = "number_of_incomplete_holidays")
+    private Integer numberOfIncompleteHolidays;
 
     @Column(name = "session_players")
     private Integer sessionPlayers;

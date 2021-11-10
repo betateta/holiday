@@ -50,18 +50,21 @@
 
                         <input type="hidden" name="${_csrf.parameterName}"value="${_csrf.token}" />
                     <div>
-                      <p>  <input type="submit" value="Сохранить параметры" /> </p>
+                      <p> <input type="submit" value="Сохранить параметры" /> </p>
                     </div>
                 </form>
+                 <form action="backtomain" method="GET">
+                    <input type="submit" value="<-Назад" />
+                 </form>
             </fieldset>
         </div>
         <div>
-                    <fieldset>
-                        <legend><h3>Новая сессия</h3></legend>
-                        <form name="parameters" action="start_session" method="GET">
-                            <input type="submit" value="Начать новую сессию" />
-                        </form>
-                    </fieldset>
-                </div>
+            <fieldset>
+                <legend><h3>Новая сессия</h3></legend>
+                    <form name="parameters" action="start_session" method="GET">
+                        <input type="submit" value="Начать новую сессию" />
+                    </form>
+                </fieldset>
+        </div>
    </body>
 </html>

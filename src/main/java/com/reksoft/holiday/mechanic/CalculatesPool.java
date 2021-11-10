@@ -84,6 +84,14 @@ public class CalculatesPool {
         addPlayersToHolidays(currentTime);
         kickPlayerFromHoliday(currentTime);
     }
+    public Integer getPoints(){
+        Integer count=0;
+        for (Calculate calc: completedCalculateList
+             ) {
+            count+=calc.getPoints();
+        }
+        return count;
+    }
     private void kickPlayerFromHoliday(Instant currentTime){
         /*
             Kick chance
@@ -228,6 +236,7 @@ public class CalculatesPool {
                     }
                     player.setSessionPoints(player.getSessionPoints()+points);
                 }
+                calc.setCorrectStop(true);
                 completedCalculateList.add(calc);
             }
         }

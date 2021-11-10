@@ -45,13 +45,16 @@ public class Calculate {
     @Column(name = "points")
     private Integer points;
 
-    @Transient
-    private Integer numberOfPlayers;
+    @Column(name = "is_correct_stop")
+    private boolean isCorrectStop;
 
     @OneToMany(fetch = FetchType.EAGER,
             mappedBy = "calculate",
             cascade = CascadeType.ALL)
     private Set<Member> memberSet;
+
+    @Transient
+    private Integer numberOfPlayers = 0;
 
     @Override
     public boolean equals(Object o) {
