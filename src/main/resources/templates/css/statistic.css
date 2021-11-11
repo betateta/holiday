@@ -1,0 +1,51 @@
+<style type="text/css">
+
+
+/* скрываем чекбоксы и блоки с содержанием */
+.hide, .hide + label ~ div {
+    display: none;
+}
+/* вид текста label */
+.hide + label,
+.hide:checked + label {
+    padding: 0;
+    color: green;
+    cursor: pointer;
+    border-bottom: 1px dotted green;
+}
+/* вид текста label при активном переключателе */
+.hide:checked + label {
+    color: blue;
+    border-bottom: 0;
+}
+/* когда чекбокс активен показываем блоки с содержанием  */
+.hide:checked + label + div {
+    display: block;
+    background: #efefef;
+    -moz-box-shadow: inset 3px 3px 10px #7d8e8f;
+    -webkit-box-shadow: inset 3px 3px 10px #7d8e8f;
+    box-shadow: inset 3px 3px 10px #7d8e8f;
+    padding: 10px;
+}
+ .container {
+    min-width: 800px; /* Минимальная ширина контейнера */
+   }
+ .layer1 {
+    /*background-color: #fc0;*/ /* Цвет фона слоя */
+    padding: 5px; /* Поля вокруг текста */
+    float: left; /* Обтекание по правому краю */
+    width: 20%; /* Ширина слоя */
+   }
+.layer2 {
+    /*background-color: #c0c0c0;*/ /* Цвет фона слоя */
+    padding: 5px; /* Поля вокруг текста */
+    width: 20%; /* Ширина слоя */
+    float: left; /* Обтекание по правому краю */
+   }
+.layer3 {
+    /*background-color: #c0c0c0;*/ /* Цвет фона слоя */
+    padding: 5px; /* Поля вокруг текста */
+    width: 30%; /* Ширина слоя */
+    float: left; /* Обтекание по правому краю */
+   }
+</style>

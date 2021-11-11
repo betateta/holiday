@@ -45,4 +45,9 @@ public class SessionServiceImpl implements SessionService{
             throw new ValidationException("Players number < 3");
         }
     }
+
+    @Override
+    public void delete(SessionGame session) {
+        sessionRepository.delete(session);
+    }
 }

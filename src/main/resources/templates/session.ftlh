@@ -53,18 +53,18 @@
                       <p> <input type="submit" value="Сохранить параметры" /> </p>
                     </div>
                 </form>
+                <div>
+                    <form name="parameters" action="start_session" method="GET">
+                    <p><input type="submit" value="Начать новую сессию" /> </p>
+                    </form>
+                 </div>
+                <div>
                  <form action="backtomain" method="GET">
-                    <input type="submit" value="<-Назад" />
+                    <p><input type="submit" value="<-Назад" /></p>
                  </form>
+                 </div>
             </fieldset>
         </div>
-        <div>
-            <fieldset>
-                <legend><h3>Новая сессия</h3></legend>
-                    <form name="parameters" action="start_session" method="GET">
-                        <input type="submit" value="Начать новую сессию" />
-                    </form>
-                </fieldset>
-        </div>
+
    </body>
 </html>

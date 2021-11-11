@@ -77,8 +77,7 @@ public class SessionGame {
     @Column(name = "holiday_dinner_chance")
     private Integer holidayDinnerChance;
 
-
-    @OneToMany(fetch = FetchType.LAZY,
+    @OneToMany(fetch = FetchType.EAGER,
             mappedBy = "session",
             cascade = CascadeType.ALL)
     @ToString.Exclude

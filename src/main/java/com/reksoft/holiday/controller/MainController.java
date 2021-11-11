@@ -5,6 +5,7 @@ import com.reksoft.holiday.exception.ValidationException;
 import com.reksoft.holiday.mechanic.CalculateSession;
 import com.reksoft.holiday.model.SessionGame;
 import com.reksoft.holiday.model.User;
+import com.reksoft.holiday.service.PlayerService;
 import com.reksoft.holiday.service.SessionService;
 import com.reksoft.holiday.service.UserService;
 import org.apache.log4j.Logger;
@@ -29,6 +30,8 @@ public class MainController {
     @Autowired
     private SessionService sessionServiceImpl;
     @Autowired
+    private PlayerService playerService;
+    @Autowired
     private CalculateSession calculateSession;
 
     private SessionGame session;
@@ -44,11 +47,15 @@ public class MainController {
         session = sessionServiceImpl.findByUser(user);
         if (session != null) {
             sessionParameters = sessionServiceImpl.getSessionParameters(session);
+            sessionServiceImpl.delete(session);
         } else {
-            session = new SessionGame();
             sessionParameters = new SessionParameters();
-            session.setUser(user);
         }
+
+        session = new SessionGame();
+        session.setUser(user);
+        sessionServiceImpl.setSessionParameters(session,sessionParameters);
+
         model.addAttribute("id",user.getId());
         model.addAttribute("name",user.getUsername());
         model.addAttribute("roles", user.getRoles());
@@ -93,13 +100,19 @@ public class MainController {
     }
     @GetMapping(value = "start_session")
     public String startNewSession (Model model){
-        calculateSession.setSessionGame(session);
-        sessionServiceImpl.save(calculateSession.getSessionGame());
-        return "start_session";
+        session = calculateSession.buildSessionGame(session);
+
+        model.addAttribute("user",session.getUser());
+        model.addAttribute("session",session);
+        model.addAttribute("parameters",sessionParameters);
+        model.addAttribute("calculates",session.getCalculateList());
+        model.addAttribute("players",playerService.getAll());
+        return "statistic";
     }
     @GetMapping(value = "back")
     public String returnToSession (){
         return "redirect:/session";
     }
+
 
 }

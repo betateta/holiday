@@ -20,12 +20,11 @@ public class Calculate {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    //@OneToOne(cascade=CascadeType.ALL)
     @OneToOne
     @JoinColumn(name="holiday_id")
     private Holiday holiday;
 
-    @ManyToOne(fetch=FetchType.LAZY,cascade = CascadeType.MERGE)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn (name="session_id")
     @ToString.Exclude
     private SessionGame session;

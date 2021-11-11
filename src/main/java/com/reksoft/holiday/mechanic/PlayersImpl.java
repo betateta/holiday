@@ -138,4 +138,13 @@ public class PlayersImpl implements PlayersInterface {
         }
         return players;
     }
+    @Override
+    public Integer getPoints(){
+        Integer count=0;
+        for (Player player: playersSet
+        ) {
+            count+=player.getSessionPoints();
+        }
+        return count;
+    }
 }

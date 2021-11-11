@@ -26,5 +26,7 @@ public interface PlayersInterface {
 
     Set<Player> getPlayersSet();
 
+    Integer getPoints();
+
     com.reksoft.holiday.dto.SessionParameters getSessionParameters();
 }

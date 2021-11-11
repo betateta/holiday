@@ -18,11 +18,11 @@ public class Member {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch=FetchType.LAZY,cascade = CascadeType.MERGE)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "player_id")
     private Player player;
 
-    @ManyToOne(fetch=FetchType.LAZY,cascade = CascadeType.MERGE)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "calculate_id")
     private Calculate calculate;
 

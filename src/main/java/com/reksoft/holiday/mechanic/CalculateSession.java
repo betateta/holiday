@@ -35,25 +35,31 @@ public class CalculateSession {
     private CalculatesPool calculatesPool;
     private static final Logger log = Logger.getLogger(CalculateSession.class);
 
-    public SessionGame getSessionGame(){
+    public SessionGame buildSessionGame(SessionGame sessionGame){
+        this.sessionGame = sessionGame;
         initSession();
         runSession();
         saveResults();
         return sessionGame;
     }
-
-    public void setSessionGame(SessionGame sessionGame) {
-        this.sessionGame = sessionGame;
+    public SessionGame getSessionGame(){
+        return sessionGame;
     }
 
     private void initSession(){
         log.info("initSession");
-        sessionGame.setStartTime(Instant.now());
-        sessionGame.setStopTime(sessionGame.getStartTime().plusSeconds(sessionGame.getSessionDuration()*24*3600));
+
+        Instant time = Instant.now();
+        time = time.plusSeconds(3*3600);
+        log.info("init time: "+time);
+
+        sessionGame.setStartTime(time.truncatedTo(ChronoUnit.SECONDS));
+        sessionGame.setStopTime(sessionGame.getStartTime().plusSeconds(sessionGame.getSessionDuration()*24*3600).
+                truncatedTo(ChronoUnit.SECONDS));
         currentTime = sessionGame.getStartTime();
+
         calculateService.deleteAll();
         playerService.deleteAll();
-        memberService.deleteAll();
 
         playersPool = new PlayersImpl(sessionService.getSessionParameters(sessionGame));
         playersPool.createNewPlayersSet();
@@ -93,14 +99,14 @@ public class CalculateSession {
                 calculatesPool.getCompletedCalculateList().size()+
                 calculatesPool.getCurrentCalculateList().size());
         log.debug("adding session points");
-        sessionGame.setPoints(calculatesPool.getPoints());
+        sessionGame.setPoints(playersPool.getPoints());
+        sessionGame.setCalculateList(calculatesPool.getCompletedCalculateList());
     }
 
     private void saveResults(){
         log.info("saveResults");
-        sessionService.save(sessionGame);
         playerService.saveAll(playersPool.getPlayersSet());
-        calculateService.saveAll(calculatesPool.getCompletedCalculateList());
+        sessionService.save(sessionGame);
     }
 }
 

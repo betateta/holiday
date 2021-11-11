@@ -3,8 +3,10 @@ package com.reksoft.holiday.service;
 import com.reksoft.holiday.model.Player;
 import com.reksoft.holiday.repository.PlayerRepository;
 import lombok.AllArgsConstructor;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -12,6 +14,7 @@ import java.util.Set;
 public class PlayerServiceImpl implements PlayerService {
 
     private final PlayerRepository playerRepository;
+    private static final Logger log = Logger.getLogger(PlayerServiceImpl.class);
 
     @Override
     public boolean savePlayer(Player player){
@@ -28,7 +31,12 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public void saveAll(Set<Player> playerSet){
+        log.debug("save all players");
         playerRepository.saveAllAndFlush(playerSet);
     }
 
+    @Override
+    public List<Player> getAll() {
+        return playerRepository.findAll();
+    }
 }
