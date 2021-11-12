@@ -1,5 +1,6 @@
 package com.reksoft.holiday.controller;
 
+import com.reksoft.holiday.dto.SessionGameMapper;
 import com.reksoft.holiday.dto.SessionParameters;
 import com.reksoft.holiday.exception.ValidationException;
 import com.reksoft.holiday.mechanic.CalculateSession;
@@ -33,6 +34,8 @@ public class MainController {
     private PlayerService playerService;
     @Autowired
     private CalculateSession calculateSession;
+    @Autowired
+    private SessionGameMapper sessionGameMapper;
 
     private SessionGame session;
     private SessionParameters sessionParameters;
@@ -45,16 +48,23 @@ public class MainController {
         String authUserName = auth.getName();
         user = (User) userServiceImpl.loadUserByUsername(authUserName);
         session = sessionServiceImpl.findByUser(user);
+
         if (session != null) {
-            sessionParameters = sessionServiceImpl.getSessionParameters(session);
+            /* used Mapstruct instead of this */
+            //sessionParameters = sessionServiceImpl.getSessionParameters(session);
+            sessionParameters = sessionGameMapper.sessionToParameters(session);
+
             sessionServiceImpl.delete(session);
         } else {
             sessionParameters = new SessionParameters();
+            sessionParameters.setUser(user);
         }
 
         session = new SessionGame();
         session.setUser(user);
-        sessionServiceImpl.setSessionParameters(session,sessionParameters);
+        /* used Mapstruct instead of this */
+        //sessionServiceImpl.setSessionParameters(session,sessionParameters);
+        session = sessionGameMapper.parametersToSession(sessionParameters);
 
         model.addAttribute("id",user.getId());
         model.addAttribute("name",user.getUsername());
@@ -74,8 +84,9 @@ public class MainController {
     @GetMapping(value = "/session")
     public String create_session (Model model){
         model.addAttribute("parameters", sessionParameters);
-        session = sessionServiceImpl.setSessionParameters(session,sessionParameters);
-        sessionServiceImpl.save(session);
+        /* used Mapstruct instead of this */
+        //session = sessionServiceImpl.setSessionParameters(session,sessionParameters);
+        session = sessionGameMapper.parametersToSession(sessionParameters);
         return "session";
     }
     @GetMapping(value = "/backtomain")
@@ -93,20 +104,25 @@ public class MainController {
         try {
             sessionServiceImpl.validateParameters(parameters);
         } catch (ValidationException validationException) {return "session";}
+
+        parameters.setUser(user);
         sessionParameters=parameters;
-        session = sessionServiceImpl.setSessionParameters(session,sessionParameters);
-        sessionServiceImpl.save(session);
+
+        /* used Mapstruct instead of this */
+        //session = sessionServiceImpl.setSessionParameters(session,sessionParameters);
+        session = sessionGameMapper.parametersToSession(sessionParameters);
         return "session";
     }
     @GetMapping(value = "start_session")
     public String startNewSession (Model model){
         session = calculateSession.buildSessionGame(session);
-
+        sessionServiceImpl.save(session);
         model.addAttribute("user",session.getUser());
         model.addAttribute("session",session);
         model.addAttribute("parameters",sessionParameters);
         model.addAttribute("calculates",session.getCalculateList());
         model.addAttribute("players",playerService.getAll());
+
         return "statistic";
     }
     @GetMapping(value = "back")

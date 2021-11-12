@@ -1,6 +1,7 @@
 package com.reksoft.holiday.dto;
 
 
+import com.reksoft.holiday.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,8 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Builder
 public class SessionParameters {
+
+    private User user;
 
     @NotNull
     @Range(min = 3,max = 500)

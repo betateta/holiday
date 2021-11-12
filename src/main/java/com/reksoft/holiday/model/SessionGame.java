@@ -1,7 +1,6 @@
 package com.reksoft.holiday.model;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
@@ -13,7 +12,7 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@NoArgsConstructor
+//@NoArgsConstructor
 @Table(name = "sessions")
 @Entity
 public class SessionGame {
@@ -89,6 +88,9 @@ public class SessionGame {
 
     public SessionGame(User user) {
         this.user = user;
+    }
+
+    public SessionGame() {
     }
 
     @Override
