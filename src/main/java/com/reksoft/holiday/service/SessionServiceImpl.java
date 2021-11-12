@@ -8,6 +8,8 @@ import com.reksoft.holiday.repository.SessionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static java.util.Objects.isNull;
 
 @Service
@@ -15,26 +17,15 @@ import static java.util.Objects.isNull;
 public class SessionServiceImpl implements SessionService{
 
     private final SessionRepository sessionRepository;
-    private final SessionConfig sessionConfig;
 
     @Override
-    public SessionGame findByUser(User user) {
+    public List<SessionGame> findByUser(User user) {
         return sessionRepository.findByUser(user);
     }
 
     @Override
     public void save(SessionGame session) {
         sessionRepository.saveAndFlush(session);
-    }
-
-    @Override
-    public SessionGame setSessionParameters(SessionGame sessionGame, SessionParameters sessionParameters) {
-        return sessionConfig.setSessionParameters(sessionGame,sessionParameters);
-    }
-
-    @Override
-    public SessionParameters getSessionParameters(SessionGame sessionGame) {
-        return sessionConfig.getSessionParameters(sessionGame);
     }
 
     @Override

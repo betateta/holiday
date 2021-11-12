@@ -47,13 +47,15 @@ public class MainController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authUserName = auth.getName();
         user = (User) userServiceImpl.loadUserByUsername(authUserName);
-        session = sessionServiceImpl.findByUser(user);
+        List<SessionGame> sessionGameList = sessionServiceImpl.findByUser(user);
+
+        /*get last session*/
+        if (sessionGameList.size()!=0){
+            session = sessionGameList.get(sessionGameList.size()-1);
+        }
 
         if (session != null) {
-            /* used Mapstruct instead of this */
-            //sessionParameters = sessionServiceImpl.getSessionParameters(session);
             sessionParameters = sessionGameMapper.sessionToParameters(session);
-
             sessionServiceImpl.delete(session);
         } else {
             sessionParameters = new SessionParameters();
@@ -62,8 +64,6 @@ public class MainController {
 
         session = new SessionGame();
         session.setUser(user);
-        /* used Mapstruct instead of this */
-        //sessionServiceImpl.setSessionParameters(session,sessionParameters);
         session = sessionGameMapper.parametersToSession(sessionParameters);
 
         model.addAttribute("id",user.getId());
@@ -84,8 +84,6 @@ public class MainController {
     @GetMapping(value = "/session")
     public String create_session (Model model){
         model.addAttribute("parameters", sessionParameters);
-        /* used Mapstruct instead of this */
-        //session = sessionServiceImpl.setSessionParameters(session,sessionParameters);
         session = sessionGameMapper.parametersToSession(sessionParameters);
         return "session";
     }
@@ -107,9 +105,6 @@ public class MainController {
 
         parameters.setUser(user);
         sessionParameters=parameters;
-
-        /* used Mapstruct instead of this */
-        //session = sessionServiceImpl.setSessionParameters(session,sessionParameters);
         session = sessionGameMapper.parametersToSession(sessionParameters);
         return "session";
     }

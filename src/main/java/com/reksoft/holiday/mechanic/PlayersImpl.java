@@ -85,23 +85,22 @@ public class PlayersImpl implements PlayersInterface {
         }
         return count;
     }
+
+    /*Random select for free player*/
     @Override
     public Player getFreePlayer(){
-        for (Player item:playersSet
-             ) {
-            if (!item.getIsBusy()){
-                return item;
-            }
+        List<Player> playerList = getAllFreePlayer();
+        if(playerList.size()!=0){
+            return playerList.get(new Dice().getRandFromRange(0,playerList.size()-1));
         }
         return null;
     }
+    /*Random select for free player with shots*/
     @Override
     public Player getFreePlayerWithShots(){
-        for (Player item:playersSet
-        ) {
-            if (!item.getIsBusy() && (item.getShots() > 0)){
-                return item;
-            }
+        List<Player> playerList = getAllFreePlayerWithShots();
+        if(playerList.size()!=0){
+            return playerList.get(new Dice().getRandFromRange(0,playerList.size()-1));
         }
         return null;
     }

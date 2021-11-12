@@ -1,5 +1,6 @@
 package com.reksoft.holiday.mechanic;
 
+import com.reksoft.holiday.dto.SessionGameMapper;
 import com.reksoft.holiday.model.Calculate;
 import com.reksoft.holiday.model.Player;
 import com.reksoft.holiday.model.SessionGame;
@@ -28,6 +29,8 @@ public class CalculateSession {
     private SessionService sessionService;
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private SessionGameMapper sessionGameMapper;
 
     private SessionGame sessionGame;
     private Instant currentTime;
@@ -61,7 +64,7 @@ public class CalculateSession {
         calculateService.deleteAll();
         playerService.deleteAll();
 
-        playersPool = new PlayersImpl(sessionService.getSessionParameters(sessionGame));
+        playersPool = new PlayersImpl(sessionGameMapper.sessionToParameters(sessionGame));
         playersPool.createNewPlayersSet();
         calculatesPool =new CalculatesPool(sessionGame, playersPool, holidayService);
     }
