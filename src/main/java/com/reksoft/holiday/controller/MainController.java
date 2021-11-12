@@ -56,7 +56,7 @@ public class MainController {
 
         if (session != null) {
             sessionParameters = sessionGameMapper.sessionToParameters(session);
-            sessionServiceImpl.delete(session);
+            //sessionServiceImpl.delete(session);
         } else {
             sessionParameters = new SessionParameters();
             sessionParameters.setUser(user);
@@ -69,9 +69,8 @@ public class MainController {
         model.addAttribute("id",user.getId());
         model.addAttribute("name",user.getUsername());
         model.addAttribute("roles", user.getRoles());
-        if (sessionServiceImpl.findByUser(user) != null){
-            model.addAttribute("session_id", session.getId());
-        }
+        model.addAttribute("sessions", sessionGameList);
+
         return "index";
     }
     @GetMapping(value = "/userslist")

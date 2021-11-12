@@ -4,6 +4,7 @@
 <html>
    <head>
       <meta charset="UTF-8" />
+        <#include "css/style.css">
       <title>User information</title>
    </head>
    <body>
@@ -23,8 +24,32 @@
                              </td>
                          </tr>
                        <tr>
-                            <td>Идентификатор сессии</td>
-                            <td>${session_id ! 0}</td>
+                            <td colspan="2">
+                                <input class="hide" id="hd-1" type="checkbox">
+                                <label for="hd-1">Показать список сессий</label>
+                                <div>
+                                    <table border="1px" cellspacing="1" border="1" cellpadding="5">
+                                        <tr>
+                                            <th>Время начала</th>
+                                            <th>Время конца</th>
+                                            <th>Длительность</th>
+                                            <th>Игроков</th>
+                                            <th>Праздников</th>
+                                            <th>Очков</th>
+                                        </tr>
+                                        <#list sessions as session>
+                                            <tr>
+                                                <td>${session.startTime}</td>
+                                                <td>${session.stopTime}</td>
+                                                <td>${session.sessionDuration}</td>
+                                                <td>${session.sessionPlayers}</td>
+                                                <td>${session.numberOfHolidays}</td>
+                                                <td>${session.points}</td>
+                                            </tr>
+                                        </#list>
+                                    </table>
+                                </div>
+                            </td>
                         </tr>
                  </table>
          </div>

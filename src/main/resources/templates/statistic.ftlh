@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <#include "css/statistic.css">
+    <#include "css/style.css">
     <title>start session page</title>
 </head>
 <body>
