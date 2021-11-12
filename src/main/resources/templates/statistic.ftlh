@@ -18,31 +18,31 @@
              <table border="1px" cellspacing="2" border="1" cellpadding="5">
              <caption><h3>Параметры сессии</h3></caption>
                 <tr>
-                    <td>Пользователь</td>
+                    <td><b>Пользователь</b></td>
                     <td>${user.username}</td>
                 </tr>
                 <tr>
-                    <td>Дата начала</td>
+                    <td><b>Дата начала</b></td>
                     <td>${session.startTime}</td>
                 </tr>
                 <tr>
-                    <td>Дата завершения</td>
+                    <td><b>Дата завершения</b></td>
                     <td>${session.stopTime}</td>
                 </tr>
                 <tr>
-                    <td>Всего игроков</td>
+                    <td><b>Всего игроков</b></td>
                     <td>${session.sessionPlayers}</td>
                 </tr>
                 <tr>
-                    <td>Всего праздников</td>
+                    <td><b>Всего праздников</b></td>
                     <td>${session.numberOfHolidays}</td>
                 </tr>
                 <tr>
-                    <td>Незаконченных праздников</td>
+                    <td><b>Незаконченных праздников</b></td>
                     <td>${session.numberOfIncompleteHolidays}</td>
                 </tr>
                 <tr>
-                    <td>Набранных очков</td>
+                    <td><b>Набранных очков</b></td>
                     <td>${session.points}</td>
                 </tr>
                 <tr>
@@ -101,8 +101,8 @@
             <table border="1px" cellspacing="2" border="1" cellpadding="5">
             <caption><h3>Список игроков</h3></caption>
                  <tr>
-                    <td>Имя игрока</td>
-                    <td>Количество очков</td>
+                    <th>Имя игрока</th>
+                    <th>Количество очков</th>
                 </tr>
                 <#list players as player>
                     <tr>
@@ -116,12 +116,12 @@
             <table border="1px" cellspacing="2" border="1" cellpadding="5">
             <caption><h3>Список праздников</h3></caption>
                  <tr>
-                    <td>Время начала</td>
-                    <td>Время конца</td>
-                    <td>Тип праздника</td>
-                    <td>Вместимость</td>
-                    <td>Количество очков</td>
-                    <td>Уникальных посетителей</td>
+                    <th>Время начала</th>
+                    <th>Время конца</th>
+                    <th>Тип праздника</th>
+                    <th>Вместимость</th>
+                    <th>Количество очков</th>
+                    <th>Уникальных посетителей</th>
                 </tr>
                 <#list calculates as calculate>
                     <tr>

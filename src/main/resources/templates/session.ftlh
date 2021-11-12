@@ -55,12 +55,12 @@
                 </form>
                 <div>
                     <form name="parameters" action="start_session" method="GET">
-                    <p><input type="submit" value="Начать новую сессию" /> </p>
+                    <p><input type="submit" value="Начать новую сессию ->" /> </p>
                     </form>
                  </div>
                 <div>
                  <form action="backtomain" method="GET">
-                    <p><input type="submit" value="<-Назад" /></p>
+                    <p><input type="submit" value="<- Назад" /></p>
                  </form>
                  </div>
             </fieldset>

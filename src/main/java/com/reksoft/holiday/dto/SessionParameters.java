@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 public class SessionParameters {
 
     @NotNull
-    @Range(min = 3,max = 100)
+    @Range(min = 3,max = 500)
     private Integer sessionPlayers = 10;
 
     @NotNull
@@ -36,7 +36,7 @@ public class SessionParameters {
     private Integer playersAddshotMax = 10;
 
     @NotNull
-    @Range(min = 0,max = 100)
+    @Range(min = 0,max = 500)
     private Integer playersNumberAddshot = 8;
 
     @NotNull

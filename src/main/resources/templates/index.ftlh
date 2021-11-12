@@ -35,7 +35,7 @@
          </div>
          <div>
             <form name="session" action="session" method="GET">
-                <p> <input type="submit" value="Создать новую сессию" /> </p>
+                <p> <input type="submit" value="Создать новую сессию ->" /> </p>
             </form>
          </div>
    </body>

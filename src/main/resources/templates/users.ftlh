@@ -11,7 +11,7 @@
                             <td>Идентификатор</td>
                             <td>Имя пользователя</td>
                         </tr>
-                             <#list users as player>
+                             <#list users as user>
                                 <tr>
                                   <td>${user.id}</td>
                                   <td>${user.username}</td>

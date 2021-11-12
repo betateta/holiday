@@ -184,11 +184,11 @@ public class CalculatesPool {
             // complete  holiday by time expiration
             if (currentTime.isAfter(calc.getStartTime().plusSeconds(calc.getHoliday().getDuration() * 3600))) {
                 calc.setStopTime(currentTime);
-                MembersInterface membersImpl = new MembersImpl(calc, playersPool);
+                int total_players_points = 0;
 
+                MembersInterface membersImpl = new MembersImpl(calc, playersPool);
                 Set<Member> organizators = membersImpl.getOrganizators();
                 Set<Member> players = membersImpl.getAllWithoutOrganizators();
-                int total_players_points = 0;
                 if (players!= null) {
                     calc.setUniqPlayersNumber(players.size());
                     // freeing players and calc points
@@ -220,7 +220,14 @@ public class CalculatesPool {
                     org.setHolidayPoints(org_points + total_players_points);
                 }
                 /* total holiday points */
-                calc.setPoints(total_players_points+points);
+                Set<Member> allMembers = membersImpl.getAll();
+                for (Member member: allMembers
+                     ) {
+                    if(member.getCalculate().equals(calc)){
+                        calc.setPoints(calc.getPoints()+member.getHolidayPoints());
+                    }
+                }
+                //calc.setPoints(total_players_points+points);
                 /*
                 points for each player
                  */
@@ -242,7 +249,6 @@ public class CalculatesPool {
         }
         excludeCompletedFromCurrent();
     }
-   
     private void excludeCompletedFromCurrent(){
         log.debug("call excludeCompletedFromCurrent");
         for (Calculate item: completedCalculateList
@@ -277,6 +283,10 @@ public class CalculatesPool {
             }
         }
         return holidayFullDiceMap;
+    }
+    private Integer calculatePointsForCurrentHoliday(Calculate calculate){
+
+    return 0;
     }
 
 }
