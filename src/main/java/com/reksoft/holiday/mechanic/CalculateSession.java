@@ -66,7 +66,7 @@ public class CalculateSession {
 
         playersPool = new PlayersImpl(sessionGameMapper.sessionToParameters(sessionGame));
         playersPool.createNewPlayersSet();
-        calculatesPool =new CalculatesPool(sessionGame, playersPool, holidayService);
+        calculatesPool = new CalculatesPool(sessionGame, playersPool, holidayService);
     }
     private void runSession(){
         log.info("runSession");

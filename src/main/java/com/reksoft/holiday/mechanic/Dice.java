@@ -1,22 +1,21 @@
 package com.reksoft.holiday.mechanic;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
-@Setter
-@Getter
-public class Dice {
+@Component
+public class Dice implements DiceInterface {
     private String eventName="";
     private final String eventMiss= "eventMiss";
     private static final Logger log = Logger.getLogger(Dice.class);
 
-    public String getMultiEventResult (HashMap<String,Integer> map){
+    @Override
+    public String getMultiEventResult(HashMap<String, Integer> map){
         log.debug("call getMultiEventResult" );
 
         eventName="";
@@ -95,14 +94,23 @@ public class Dice {
             chanceHit = false;
         }
         eventName=keys[index];
-
+        log.debug("map size = "+mapSize);
         log.debug("rand="+rand+" index="+index+" eventName="+keys[index]+" dice: "+chanceHit);
 
         return eventName;
     }
-    public Integer getRandFromRange (Integer min, Integer max) {
-        log.debug("call getRandFromRange" );
+    @Override
+    public Integer getRandFromRange(Integer min, Integer max) {
+        log.debug("call getRandFromRange");
+        log.debug("range["+min+":"+max+"]");
         max -= min;
-        return (int) ((Math.random()* (++max)) + min);
+        int res= (int) ((Math.random()* (++max)) + min);
+        log.debug("res = "+res);
+        return res;
+    }
+
+    @Override
+    public String getEventName() {
+        return eventName;
     }
 }

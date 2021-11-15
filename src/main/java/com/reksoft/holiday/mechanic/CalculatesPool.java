@@ -10,12 +10,12 @@ import java.util.*;
 
 @Getter
 public class CalculatesPool {
+    private DiceInterface diceInterface;
     private List<Calculate> currentCalculateList;
     private List<Calculate> completedCalculateList;
     private final SessionGame sessionGame;
     private final HolidayService holidayService;
     private final PlayersInterface playersPool;
-
     private final int org_points = 1500;
     private static final Logger log = Logger.getLogger(CalculatesPool.class);
 
@@ -25,6 +25,8 @@ public class CalculatesPool {
         this.holidayService = holidayService;
         this.completedCalculateList = new ArrayList<>();
         this.currentCalculateList = new ArrayList<>();
+        this.diceInterface = new Dice();
+
     }
 
     /*
@@ -41,9 +43,9 @@ public class CalculatesPool {
         Integer freePlayers = playersPool.getNumberFreePlayers();
         String holidayName = "";
         if (freePlayers > 1) {
-            holidayName = new Dice().getMultiEventResult(holidayFullDiceMap);
+            holidayName = diceInterface.getMultiEventResult(holidayFullDiceMap);
         } else if (freePlayers == 1) {
-            holidayName = new Dice().getMultiEventResult(holidayWithoutDinnerDiceMap);
+            holidayName = diceInterface.getMultiEventResult(holidayWithoutDinnerDiceMap);
         }
 
         if (!holidayName.isBlank() && !holidayName.isEmpty() && !holidayName.equals("eventMiss")) {
@@ -112,7 +114,7 @@ public class CalculatesPool {
         ) {
             player = playersPool.getFreePlayerWithShots();
             if(player != null){
-                if(new Dice().getMultiEventResult(kick_map).equals("enter")){
+                if(diceInterface.getMultiEventResult(kick_map).equals("enter")){
                     player.setShots(player.getShots()-1);
                         /*
                         kick player from holiday and calc his points
@@ -163,7 +165,7 @@ public class CalculatesPool {
                  ) {
                 player = playersPool.getFreePlayerWithShots();
                 if(player != null){
-                    if(new Dice().getMultiEventResult(fill_map).equals("enter")){
+                    if(diceInterface.getMultiEventResult(fill_map).equals("enter")){
                         player.setShots(player.getShots()-1);
                         playersPool.setPlayerIsBusy(player);
                         MembersInterface membersImpl = new MembersImpl(calc, playersPool);
@@ -260,7 +262,7 @@ public class CalculatesPool {
     }
     private Integer getHolidayCapacity(Holiday holiday){
         log.debug("call getHolidayCapacity");
-        return new Dice().getRandFromRange(holiday.getMinCapacity(),holiday.getMaxCapacity());
+        return diceInterface.getRandFromRange(holiday.getMinCapacity(),holiday.getMaxCapacity());
     }
     private HashMap<String,Integer> getHolidayDiceMap(Set<Holiday> holidaySet){
         log.debug("call getHolidayDiceMap");
@@ -283,10 +285,6 @@ public class CalculatesPool {
             }
         }
         return holidayFullDiceMap;
-    }
-    private Integer calculatePointsForCurrentHoliday(Calculate calculate){
-
-    return 0;
     }
 
 }

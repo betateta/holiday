@@ -11,11 +11,13 @@ import java.util.*;
 public class PlayersImpl implements PlayersInterface {
     private Set<Player> playersSet;
     private SessionParameters sessionParameters;
+    private DiceInterface diceInterface;
     private static final Logger log = Logger.getLogger(PlayersImpl .class);
 
     public PlayersImpl(SessionParameters sessionParameters) {
         this.sessionParameters = sessionParameters;
         this.playersSet = new HashSet<>();
+        this.diceInterface = new Dice();
     }
 
     @Override
@@ -40,9 +42,9 @@ public class PlayersImpl implements PlayersInterface {
             Integer bonus_addshots = 0;
             if (sessionParameters.getSessionPlayers() >= playersNumberAddshot) {
                 for (int i = 0; i < playersNumberAddshot; i++) {
-                    if (new Dice().getMultiEventResult(addShotMap).equals("addshots")) {
+                    if (diceInterface.getMultiEventResult(addShotMap).equals("addshots")) {
                         if (iterator.hasNext()) {
-                            bonus_addshots = new Dice().getRandFromRange(sessionParameters.getPlayersAddshotMin(),
+                            bonus_addshots = diceInterface.getRandFromRange(sessionParameters.getPlayersAddshotMin(),
                                     sessionParameters.getPlayersAddshotMax());
                             iterator.next().setBonusShots(bonus_addshots);
                         }
@@ -91,7 +93,7 @@ public class PlayersImpl implements PlayersInterface {
     public Player getFreePlayer(){
         List<Player> playerList = getAllFreePlayer();
         if(playerList.size()!=0){
-            return playerList.get(new Dice().getRandFromRange(0,playerList.size()-1));
+            return playerList.get(diceInterface.getRandFromRange(0,playerList.size()-1));
         }
         return null;
     }
@@ -100,7 +102,7 @@ public class PlayersImpl implements PlayersInterface {
     public Player getFreePlayerWithShots(){
         List<Player> playerList = getAllFreePlayerWithShots();
         if(playerList.size()!=0){
-            return playerList.get(new Dice().getRandFromRange(0,playerList.size()-1));
+            return playerList.get(diceInterface.getRandFromRange(0,playerList.size()-1));
         }
         return null;
     }
