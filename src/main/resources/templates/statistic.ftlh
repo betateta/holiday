@@ -30,6 +30,10 @@
                     <td>${session.stopTime}</td>
                 </tr>
                 <tr>
+                    <td><b>Длительность, суток</b></td>
+                    <td>${session.sessionDuration}</td>
+                </tr>
+                <tr>
                     <td><b>Всего игроков</b></td>
                     <td>${session.sessionPlayers}</td>
                 </tr>
@@ -103,11 +107,13 @@
                  <tr>
                     <th>Имя игрока</th>
                     <th>Количество очков</th>
+                    <th>Количество доп. попыток</th>
                 </tr>
                 <#list players as player>
                     <tr>
                         <td>${player.name}</td>
                         <td>${player.sessionPoints}</td>
+                        <td>${player.bonusShots}</td>
                     </tr>
                 </#list>
             </table>
