@@ -8,10 +8,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
 
-@SpringBootTest
 @Component
 public class PlayersImplTest {
     private static final Logger log = Logger.getLogger(PlayersImplTest.class);
@@ -26,20 +24,7 @@ public class PlayersImplTest {
     void setUpParameters(){
         parameters= new SessionParameters();
         parameters.setUser(new User());
-        parameters.setSessionPlayers(diceInterface.getRandFromRange(minPlayers,maxPlayers));
-        parameters.setSessionDuration(diceInterface.getRandFromRange(1,20));
-        parameters.setPlayersAddshotChance(diceInterface.getRandFromRange(0,100));
-        parameters.setPlayersAddshotMin(diceInterface.getRandFromRange(0,10));
-        parameters.setPlayersAddshotMax(diceInterface.getRandFromRange(parameters.getPlayersAddshotMin(),
-                parameters.getPlayersAddshotMin()+10));
-        parameters.setPlayersNumberAddshot(diceInterface.getRandFromRange(0,
-                parameters.getSessionPlayers()));
-        parameters.setHolidaySampleFreq(diceInterface.getRandFromRange(1,100));
-        parameters.setHolidayFillChance(diceInterface.getRandFromRange(0,100));
-        parameters.setHolidayPushChance(diceInterface.getRandFromRange(0,100));
-        parameters.setHolidayBanquetChance(diceInterface.getRandFromRange(0,100));
-        parameters.setHolidayDinnerChance(diceInterface.getRandFromRange(0,100));
-        parameters.setHolidaySimpleChance(diceInterface.getRandFromRange(0,100));
+        parameters.setUpRandomParameters();
         log.info(parameters);
         players = new PlayersImpl(parameters);
         players.createNewPlayersSet();

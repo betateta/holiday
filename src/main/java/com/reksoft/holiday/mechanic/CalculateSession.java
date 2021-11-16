@@ -1,6 +1,7 @@
 package com.reksoft.holiday.mechanic;
 
 import com.reksoft.holiday.dto.SessionGameMapper;
+import com.reksoft.holiday.exception.CalculateException;
 import com.reksoft.holiday.model.Calculate;
 import com.reksoft.holiday.model.Player;
 import com.reksoft.holiday.model.SessionGame;
@@ -88,7 +89,13 @@ public class CalculateSession {
                     player.setShots(player.getBonusShots()+player.getStdShots());
                 }
             }
-            calculatesPool.createCalculate(currentTime);
+            try {
+                calculatesPool.createCalculate(currentTime);
+            }
+            catch (CalculateException ex) {
+                log.debug(ex.getMessage());
+            }
+
             calculatesPool.updateCalculates(currentTime);
             currentTime = currentTime.plusSeconds(timeTick);
         }

@@ -32,8 +32,8 @@ public class SessionServiceImpl implements SessionService{
     public void validateParameters(SessionParameters sessionParameters) throws ValidationException {
         if (isNull(sessionParameters)) {
             throw new ValidationException("sessionParameters object is null");
-        } else if (sessionParameters.getSessionPlayers() < 3) {
-            throw new ValidationException("Players number < 3");
+        } else if (sessionParameters.getSessionPlayers() < sessionParameters.getPlayersNumberAddshot()) {
+            throw new ValidationException("Number of players smaller the number of players with add shot chance");
         }
     }
 

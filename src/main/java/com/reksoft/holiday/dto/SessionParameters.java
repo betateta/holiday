@@ -1,6 +1,8 @@
 package com.reksoft.holiday.dto;
 
 
+import com.reksoft.holiday.mechanic.Dice;
+import com.reksoft.holiday.mechanic.DiceInterface;
 import com.reksoft.holiday.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -65,4 +67,28 @@ public class SessionParameters {
     @NotNull
     @Range(min = 0,max = 100)
     private Integer holidayDinnerChance = 50;
+
+    public void setUpRandomParameters() {
+        DiceInterface diceInterface = new Dice();
+        final Integer minPlayers = 3;
+        final Integer maxPlayers = 200;
+
+        setSessionPlayers(diceInterface.getRandFromRange(minPlayers,maxPlayers));
+        setSessionDuration(diceInterface.getRandFromRange(1,10));
+        setPlayersAddshotChance(diceInterface.getRandFromRange(0,100));
+        setPlayersAddshotMin(diceInterface.getRandFromRange(0,10));
+        setPlayersAddshotMax(diceInterface.getRandFromRange(getPlayersAddshotMin(),
+                getPlayersAddshotMin()+10));
+        setPlayersNumberAddshot(diceInterface.getRandFromRange(0,
+                getSessionPlayers()));
+        setHolidaySampleFreq(diceInterface.getRandFromRange(1,100));
+        setHolidayFillChance(diceInterface.getRandFromRange(0,100));
+        setHolidayPushChance(diceInterface.getRandFromRange(0,100));
+
+        while (getHolidaySimpleChance()!=0 || getHolidayBanquetChance()!=0 || getHolidayDinnerChance()!=0){
+            setHolidayBanquetChance(diceInterface.getRandFromRange(0,100));
+            setHolidayDinnerChance(diceInterface.getRandFromRange(0,100));
+            setHolidaySimpleChance(diceInterface.getRandFromRange(0,100));
+        }
+    }
 }

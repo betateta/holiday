@@ -17,8 +17,10 @@ public class DiceTest {
         testDice(map);
         map.put("name1",100);
         Assertions.assertEquals(diceInterface.getMultiEventResult(map),"name1");
+        Assertions.assertEquals(diceInterface.getEventName(),"name1");
         map.put("name1",0);
         Assertions.assertEquals(diceInterface.getMultiEventResult(map),eventMiss);
+        Assertions.assertEquals(diceInterface.getEventName(),eventMiss);
         map.put("name1",70);
         map.put("name2",60);
         testDice(map);

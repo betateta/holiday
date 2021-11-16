@@ -100,7 +100,11 @@ public class MainController {
         }
         try {
             sessionServiceImpl.validateParameters(parameters);
-        } catch (ValidationException validationException) {return "session";}
+        } catch (ValidationException validationException) {
+            errors.rejectValue("playersNumberAddshot","errors.SessionParameters",
+                    "Значение поля должно быть меньше или равно количеству игроков");
+            return "session";
+        }
 
         parameters.setUser(user);
         sessionParameters=parameters;

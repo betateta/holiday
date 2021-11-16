@@ -1,5 +1,6 @@
 package com.reksoft.holiday.mechanic;
 
+import com.reksoft.holiday.exception.CalculateException;
 import com.reksoft.holiday.model.*;
 import com.reksoft.holiday.service.HolidayService;
 import lombok.Getter;
@@ -32,7 +33,7 @@ public class CalculatesPool {
     /*
     Method creates new Calculate and adding to current list
      */
-    public void createCalculate (Instant currentTime) {
+    public void createCalculate (Instant currentTime) throws CalculateException {
         log.info("create Calculate");
 
         Set<Holiday> holidaySet = holidayService.getAllSet();
@@ -46,7 +47,7 @@ public class CalculatesPool {
             holidayName = diceInterface.getMultiEventResult(holidayFullDiceMap);
         } else if (freePlayers == 1) {
             holidayName = diceInterface.getMultiEventResult(holidayWithoutDinnerDiceMap);
-        }
+        } else throw new CalculateException ("No free plyers for holiday begin");
 
         if (!holidayName.isBlank() && !holidayName.isEmpty() && !holidayName.equals("eventMiss")) {
 
@@ -70,7 +71,8 @@ public class CalculatesPool {
             calculate.setMemberSet(membersImpl.getMemberSet());
             log.debug("add Calculate to current list");
             currentCalculateList.add(calculate);
-        }
+        } else throw new CalculateException("Holiday name : "+holidayName);
+
     }
     /*
     method include checks:
