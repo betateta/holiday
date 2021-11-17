@@ -103,4 +103,16 @@ public class MembersImpl implements MembersInterface {
     public Set<Member> getMemberSet() {
         return calculate.getMemberSet();
     }
+
+    @Override
+    public Set<Member> getActiveMembers() {
+        Set<Member> memberSet = calculate.getMemberSet();
+        for (Member item: memberSet
+             ) {
+            if (item.getOutputTime()==null){
+                memberSet.add(item);
+            }
+        }
+        return memberSet;
+    }
 }

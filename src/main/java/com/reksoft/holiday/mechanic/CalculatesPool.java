@@ -86,8 +86,12 @@ public class CalculatesPool {
 
         checkHolidaysExpiration(currentTime);
         addPlayersToHolidays(currentTime);
-        kickPlayerFromHoliday(currentTime);
+        try {
+            kickPlayerFromHoliday(currentTime);
+        } catch (CalculateException ce) {log.error(ce);}
+
     }
+    /*
     public Integer getPoints(){
         Integer count=0;
         for (Calculate calc: completedCalculateList
@@ -96,48 +100,68 @@ public class CalculatesPool {
         }
         return count;
     }
-    private void kickPlayerFromHoliday(Instant currentTime){
+
+     */
+    private void kickPlayerFromHoliday(Instant currentTime) throws CalculateException {
         /*
             Kick chance
          */
         log.debug("call kickPlayerFromHoliday");
-        Player player = playersPool.getFreePlayerWithShots();
         List<Calculate> calculatesWithoutPlaces = new ArrayList<>();
         HashMap<String,Integer> kick_map = new HashMap<>();
-        kick_map.put("enter",sessionGame.getHolidayFillChance());
+        kick_map.put("kick",sessionGame.getHolidayPushChance());
 
         for (Calculate calc:currentCalculateList
         ) {
+            log.debug("calc_capacity = "+calc.getCapacity()+" players = "+calc.getNumberOfPlayers());
             if((calc.getCapacity()-calc.getNumberOfPlayers()) == 0){
                 calculatesWithoutPlaces.add(calc);
+                log.debug("calc was not free places");
             }
         }
         for (Calculate calc: calculatesWithoutPlaces
         ) {
-            player = playersPool.getFreePlayerWithShots();
-            if(player != null){
-                if(diceInterface.getMultiEventResult(kick_map).equals("enter")){
-                    player.setShots(player.getShots()-1);
+            Player addingPlayer = playersPool.getFreePlayerWithShots();
+            if(addingPlayer != null){
+                if(diceInterface.getMultiEventResult(kick_map).equals("kick")){
+                    //minus 1 shots
+                    addingPlayer.setShots(addingPlayer.getShots()-1);
                         /*
                         kick player from holiday and calc his points
                          */
-                    Set<Member> memberList = calc.getMemberSet();
                     MembersImpl membersImpl = new MembersImpl(calc, playersPool);
-                    Member member = memberList.iterator().next();
-                    Player kick_player= member.getPlayer();
+                    /*
+                       We need find active member (without output time, not organisation)
+                     */
+                    Set<Member> memberSet= calc.getMemberSet();
+                    Member activeMember = new Member();
+                    
+                    /* Check output time*/
+                    for (Member item: memberSet
+                         ) {
+                        if ((item.getOutputTime() == null) && !item.getIsOrganizator()){
+                            activeMember = item;
+                            break;
+                        }
+                    }
+                    if (activeMember != null){
+                        Player kick_player= activeMember.getPlayer();
 
-                    member.setOutputTime(currentTime);
-                    playersPool.setPlayerIsFree(kick_player);
-                    member.setHolidayPoints(member.getHolidayPoints()+ membersImpl.getPointsForPeriod(member));
-                        /*
+                        activeMember.setOutputTime(currentTime);
+                        playersPool.setPlayerIsFree(kick_player);
+                        activeMember.setHolidayPoints(activeMember.getHolidayPoints() +
+                                membersImpl.getPointsForPeriod(activeMember));
+                          /*
                         add new player
                          */
-                    if (!membersImpl.findMember(member)) {
-                        calc.setUniqPlayersNumber(calc.getUniqPlayersNumber()+1);
+                        playersPool.setPlayerIsBusy(addingPlayer);
+                        membersImpl.addMember(addingPlayer,currentTime);
+                        if (!membersImpl.findPlayer(addingPlayer)) {
+                            calc.setUniqPlayersNumber(calc.getUniqPlayersNumber()+1);
+                        }
+                    } else {
+                        throw new CalculateException("Error: was no active members for holiday without free places");
                     }
-                    playersPool.setPlayerIsBusy(member.getPlayer());
-                    membersImpl.addMember(player,currentTime);
-
                 }
             }
         }

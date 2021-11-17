@@ -12,5 +12,6 @@ public interface SessionService {
     void save(SessionGame session);
     void delete(SessionGame session);
     void validateParameters (SessionParameters sessionParameters) throws ValidationException;
+    SessionGame findLast(User user);
 
 }

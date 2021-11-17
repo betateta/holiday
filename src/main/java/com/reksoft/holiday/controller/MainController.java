@@ -50,9 +50,8 @@ public class MainController {
         List<SessionGame> sessionGameList = sessionServiceImpl.findByUser(user);
 
         /*get last session*/
-        if (sessionGameList.size()!=0){
-            session = sessionGameList.get(sessionGameList.size()-1);
-        }
+        session = sessionServiceImpl.findLast(user);
+        log.info("last session date = "+session.getStopTime());
 
         if (session != null) {
             sessionParameters = sessionGameMapper.sessionToParameters(session);

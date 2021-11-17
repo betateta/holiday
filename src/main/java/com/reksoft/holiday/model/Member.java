@@ -27,10 +27,10 @@ public class Member {
     private Calculate calculate;
 
     @Column(name = "input_time")
-    private Instant inputTime;
+    private Instant inputTime = null;
 
     @Column(name = "output_time")
-    private Instant outputTime;
+    private Instant outputTime = null;
 
     @Column(name = "duration")
     private long duration=0;

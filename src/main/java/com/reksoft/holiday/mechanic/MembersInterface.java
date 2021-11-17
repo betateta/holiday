@@ -26,6 +26,7 @@ public interface MembersInterface {
     boolean findPlayer(Player player);
 
     Set<Member> getMemberSet();
+    Set<Member> getActiveMembers();
 
     com.reksoft.holiday.model.Calculate getCalculate();
 }

@@ -41,4 +41,13 @@ public class SessionServiceImpl implements SessionService{
     public void delete(SessionGame session) {
         sessionRepository.delete(session);
     }
+
+    @Override
+    public SessionGame findLast(User user) {
+        List<SessionGame> sessionGameList = findByUser(user);
+        SessionGame lastSession = sessionGameList.stream().reduce((acc,y) -> {
+            if (acc.getStopTime().isAfter(y.getStopTime())) {return acc;}
+            else return y;}).get();
+        return lastSession;
+    }
 }
