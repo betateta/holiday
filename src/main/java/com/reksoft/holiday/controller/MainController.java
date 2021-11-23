@@ -4,10 +4,12 @@ import com.reksoft.holiday.dto.SessionGameMapper;
 import com.reksoft.holiday.dto.SessionParameters;
 import com.reksoft.holiday.exception.ValidationException;
 import com.reksoft.holiday.mechanic.CalculateSession;
+import com.reksoft.holiday.mechanic.ProgressBar;
 import com.reksoft.holiday.model.SessionGame;
 import com.reksoft.holiday.model.User;
 import com.reksoft.holiday.service.PlayerService;
 import com.reksoft.holiday.service.SessionService;
+import com.reksoft.holiday.service.SseService;
 import com.reksoft.holiday.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class MainController {
@@ -36,6 +41,11 @@ public class MainController {
     private CalculateSession calculateSession;
     @Autowired
     private SessionGameMapper sessionGameMapper;
+
+    @Autowired
+    private SseService sseService;
+    @Autowired
+    private ProgressBar progressBar;
 
     private SessionGame session;
     private SessionParameters sessionParameters;
@@ -55,7 +65,6 @@ public class MainController {
 
         if (session != null) {
             sessionParameters = sessionGameMapper.sessionToParameters(session);
-            //sessionServiceImpl.delete(session);
         } else {
             sessionParameters = new SessionParameters();
             sessionParameters.setUser(user);
@@ -111,20 +120,61 @@ public class MainController {
         return "session";
     }
     @GetMapping(value = "start_session")
-    public String startNewSession (Model model){
-        session = calculateSession.buildSessionGame(session);
-        sessionServiceImpl.save(session);
-        model.addAttribute("user",session.getUser());
-        model.addAttribute("session",session);
-        model.addAttribute("parameters",sessionParameters);
-        model.addAttribute("calculates",session.getCalculateList());
+    public String startCalc (Model model){
+        calculateSession.buildSessionGame(session);
+        ExecutorService executor = Executors
+                .newSingleThreadExecutor();
+        executor.execute(calculateSession);
+         return "sse";
+    }
+
+    @GetMapping(value = "get_statistic")
+    public String getStatistic (Model model){
+        SessionGame currentSession = sessionServiceImpl.findLast(user);
+
+        model.addAttribute("user",currentSession.getUser());
+        model.addAttribute("session",currentSession);
+        model.addAttribute("parameters",
+                sessionGameMapper.sessionToParameters(currentSession));
+        model.addAttribute("calculates",currentSession.getCalculateList());
         model.addAttribute("players",playerService.getAll());
 
         return "statistic";
     }
+
     @GetMapping(value = "back")
     public String returnToSession (){
         return "redirect:/session";
+    }
+
+    @GetMapping("/test_sse")
+    public String testSse (Model model){
+        calculateSession.buildSessionGame(session);
+        ExecutorService executor = Executors
+                .newCachedThreadPool();
+        executor.execute(calculateSession);
+
+        //Executor shutdown
+
+        try {
+            System.out.println("attempt to shutdown executor");
+            executor.shutdown();
+            executor.awaitTermination(5, TimeUnit.SECONDS);
+        }
+        catch (InterruptedException e) {
+            System.err.println("tasks interrupted");
+        }
+        finally {
+            if (!executor.isTerminated()) {
+                System.err.println("cancel non-finished tasks");
+            }
+            executor.shutdownNow();
+            System.out.println("shutdown finished");
+        }
+
+
+
+        return "sse";
     }
 
 

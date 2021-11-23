@@ -46,7 +46,7 @@ public class SessionServiceImpl implements SessionService{
     public SessionGame findLast(User user) {
         List<SessionGame> sessionGameList = findByUser(user);
         SessionGame lastSession = sessionGameList.stream().reduce((acc,y) -> {
-            if (acc.getStopTime().isAfter(y.getStopTime())) {return acc;}
+            if (acc.getStartTime().isAfter(y.getStartTime())) {return acc;}
             else return y;}).get();
         return lastSession;
     }

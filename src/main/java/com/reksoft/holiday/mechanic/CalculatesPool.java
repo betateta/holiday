@@ -91,17 +91,7 @@ public class CalculatesPool {
         } catch (CalculateException ce) {log.error(ce);}
 
     }
-    /*
-    public Integer getPoints(){
-        Integer count=0;
-        for (Calculate calc: completedCalculateList
-             ) {
-            count+=calc.getPoints();
-        }
-        return count;
-    }
 
-     */
     private void kickPlayerFromHoliday(Instant currentTime) throws CalculateException {
         /*
             Kick chance

@@ -18,7 +18,7 @@ import java.time.temporal.ChronoUnit;
 @NoArgsConstructor
 @Component
 @Validated
-public class CalculateSession {
+public class CalculateSession implements Runnable{
 
     @Autowired
     private PlayerService playerService;
@@ -32,20 +32,29 @@ public class CalculateSession {
     private MemberService memberService;
     @Autowired
     private SessionGameMapper sessionGameMapper;
+    @Autowired
+    private ProgressBar progressBar;
 
     private SessionGame sessionGame;
     private Instant currentTime;
     private PlayersInterface playersPool;
     private CalculatesPool calculatesPool;
+    private Integer percentCounter = 0;
+
     private static final Logger log = Logger.getLogger(CalculateSession.class);
 
-    public SessionGame buildSessionGame(SessionGame sessionGame){
-        this.sessionGame = sessionGame;
+    @Override
+    public void run() {
         initSession();
-        runSession();
+        calc();
         saveResults();
-        return sessionGame;
     }
+
+    public void buildSessionGame(SessionGame sessionGame){
+        this.sessionGame = sessionGame;
+
+    }
+
     public SessionGame getSessionGame(){
         return sessionGame;
     }
@@ -69,11 +78,21 @@ public class CalculateSession {
         playersPool.createNewPlayersSet();
         calculatesPool = new CalculatesPool(sessionGame, playersPool, holidayService);
     }
-    private void runSession(){
+
+    private void calc(){
         log.info("runSession");
-        //Session duration in min
+        //Time tick in sec
         Integer timeTick = sessionGame.getHolidaySampleFreq()*60;
         Integer dayCount = 1;
+
+        double coefficient = 100.0/((sessionGame.getSessionDuration()*24*60*60) / timeTick);
+        Integer tickCount = 0;
+        percentCounter = 0;
+        progressBar.setProgress(percentCounter);
+        log.info("duration = "+sessionGame.getSessionDuration()*24*60*60
+                +" timetick = "+timeTick
+                +" coef : "+coefficient);
+
         Instant dayStamp = sessionGame.getStartTime().plus(dayCount, ChronoUnit.DAYS);
         log.info("new day of gaming session : "+dayCount);
         /*  Session cycle      */
@@ -84,22 +103,70 @@ public class CalculateSession {
                 log.info("new day of gaming session : "+dayCount);
 
                 for (Player player: playersPool.getPlayersSet()
-                     ) {
+                ) {
                     player.setStdShots(5);
                     player.setShots(player.getBonusShots()+player.getStdShots());
                 }
             }
+
             try {
                 calculatesPool.createCalculate(currentTime);
             }
             catch (CalculateException ex) {
                 log.debug(ex.getMessage());
             }
-
             calculatesPool.updateCalculates(currentTime);
             currentTime = currentTime.plusSeconds(timeTick);
+
+            /*
+            Integer finalPercentCounter = percentCounter;
+            Callable<Integer> task = ()->{
+                try {
+                    calculatesPool.createCalculate(currentTime);
+                }
+                catch (CalculateException ex) {
+                    log.debug(ex.getMessage());
+                }
+                calculatesPool.updateCalculates(currentTime);
+                currentTime = currentTime.plusSeconds(timeTick);
+                System.out.println("percents = "+ finalPercentCounter);
+                return finalPercentCounter;
+            };
+            ExecutorService executor = Executors.newFixedThreadPool(1);
+            calcFuture = executor.submit(task);
+            //Executor shutdown
+
+            try {
+                System.out.println("attempt to shutdown executor");
+                executor.shutdown();
+                executor.awaitTermination(5, TimeUnit.SECONDS);
+            }
+            catch (InterruptedException e) {
+                System.err.println("tasks interrupted");
+            }
+            finally {
+                if (!executor.isTerminated()) {
+                    System.err.println("cancel non-finished tasks");
+                }
+                executor.shutdownNow();
+                System.out.println("shutdown finished");
+            }
+
+             */
+
+            tickCount++;
+            percentCounter = Math.toIntExact(Math.round(tickCount * coefficient));
+            progressBar.setProgress(percentCounter);
+            log.info("percents of calculates = "+percentCounter);
+
+            try {
+                Thread.sleep(5);
+            } catch (Exception ex) {System.out.println(ex);}
         }
-        log.debug("mark incompleted calculates");
+        percentCounter = 100;
+        progressBar.setProgress(percentCounter);
+
+        log.debug("mark uncompleted calculates");
         for (Calculate calc : calculatesPool.getCurrentCalculateList()
                 ) {
             calc.setCorrectStop(false);
@@ -111,6 +178,7 @@ public class CalculateSession {
         log.debug("adding session points");
         sessionGame.setPoints(playersPool.getPoints());
         sessionGame.setCalculateList(calculatesPool.getCompletedCalculateList());
+
     }
 
     private void saveResults(){
@@ -118,5 +186,5 @@ public class CalculateSession {
         playerService.saveAll(playersPool.getPlayersSet());
         sessionService.save(sessionGame);
     }
-}
 
+}

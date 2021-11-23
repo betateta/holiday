@@ -63,5 +63,10 @@
                 <p> <input type="submit" value="Создать новую сессию ->" /> </p>
             </form>
          </div>
+          <div>
+                     <form name="test" action="test_sse" method="GET">
+                         <p> <input type="submit" value="Тест SSE" /> </p>
+                     </form>
+                  </div>
    </body>
 </html>
