@@ -77,6 +77,8 @@ public class CalculateSession implements Runnable{
         playersPool = new PlayersImpl(sessionGameMapper.sessionToParameters(sessionGame));
         playersPool.createNewPlayersSet();
         calculatesPool = new CalculatesPool(sessionGame, playersPool, holidayService);
+
+
     }
 
     private void calc(){
@@ -118,45 +120,14 @@ public class CalculateSession implements Runnable{
             calculatesPool.updateCalculates(currentTime);
             currentTime = currentTime.plusSeconds(timeTick);
 
-            /*
-            Integer finalPercentCounter = percentCounter;
-            Callable<Integer> task = ()->{
-                try {
-                    calculatesPool.createCalculate(currentTime);
-                }
-                catch (CalculateException ex) {
-                    log.debug(ex.getMessage());
-                }
-                calculatesPool.updateCalculates(currentTime);
-                currentTime = currentTime.plusSeconds(timeTick);
-                System.out.println("percents = "+ finalPercentCounter);
-                return finalPercentCounter;
-            };
-            ExecutorService executor = Executors.newFixedThreadPool(1);
-            calcFuture = executor.submit(task);
-            //Executor shutdown
-
-            try {
-                System.out.println("attempt to shutdown executor");
-                executor.shutdown();
-                executor.awaitTermination(5, TimeUnit.SECONDS);
-            }
-            catch (InterruptedException e) {
-                System.err.println("tasks interrupted");
-            }
-            finally {
-                if (!executor.isTerminated()) {
-                    System.err.println("cancel non-finished tasks");
-                }
-                executor.shutdownNow();
-                System.out.println("shutdown finished");
-            }
-
-             */
-
             tickCount++;
-            percentCounter = Math.toIntExact(Math.round(tickCount * coefficient));
-            progressBar.setProgress(percentCounter);
+            int count =(Math.toIntExact(Math.round(tickCount * coefficient)));
+            if ((count-percentCounter)>=1) {
+                percentCounter = count;
+                progressBar.setProgress(percentCounter);
+
+            }
+
             log.info("percents of calculates = "+percentCounter);
 
             try {

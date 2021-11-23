@@ -26,7 +26,6 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 @Controller
 public class MainController {
@@ -150,16 +149,25 @@ public class MainController {
     @GetMapping("/test_sse")
     public String testSse (Model model){
         calculateSession.buildSessionGame(session);
+
         ExecutorService executor = Executors
                 .newCachedThreadPool();
         executor.execute(calculateSession);
 
-        //Executor shutdown
+        executor.shutdown();
+        /*
+        ScheduledExecutorService executor = Executors
+                .newScheduledThreadPool(4);
 
+        executor.scheduleWithFixedDelay(calculateSession,100,20,TimeUnit.MILLISECONDS);
+
+         */
+        //Executor shutdown
+/*
         try {
             System.out.println("attempt to shutdown executor");
             executor.shutdown();
-            executor.awaitTermination(5, TimeUnit.SECONDS);
+            executor.awaitTermination(1, TimeUnit.SECONDS);
         }
         catch (InterruptedException e) {
             System.err.println("tasks interrupted");
@@ -172,7 +180,7 @@ public class MainController {
             System.out.println("shutdown finished");
         }
 
-
+ */
 
         return "sse";
     }
