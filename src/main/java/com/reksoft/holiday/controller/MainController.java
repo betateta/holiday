@@ -155,32 +155,6 @@ public class MainController {
         executor.execute(calculateSession);
 
         executor.shutdown();
-        /*
-        ScheduledExecutorService executor = Executors
-                .newScheduledThreadPool(4);
-
-        executor.scheduleWithFixedDelay(calculateSession,100,20,TimeUnit.MILLISECONDS);
-
-         */
-        //Executor shutdown
-/*
-        try {
-            System.out.println("attempt to shutdown executor");
-            executor.shutdown();
-            executor.awaitTermination(1, TimeUnit.SECONDS);
-        }
-        catch (InterruptedException e) {
-            System.err.println("tasks interrupted");
-        }
-        finally {
-            if (!executor.isTerminated()) {
-                System.err.println("cancel non-finished tasks");
-            }
-            executor.shutdownNow();
-            System.out.println("shutdown finished");
-        }
-
- */
 
         return "sse";
     }

@@ -7,18 +7,16 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 public class ProgressBar {
-    private  Integer progress = 0;
+    private volatile Integer progress = 0;
     private static final Logger log = Logger.getLogger(ProgressBar.class);
 
-    public synchronized  void setProgress(Integer progress) {
+    public void setProgress(Integer progress) {
         this.progress = progress;
         log.info("progressSet: "+progress);
         System.out.println("progressSet: "+progress);
-
-
     }
 
-    public synchronized Integer getProgress() {
+    public Integer getProgress() {
         log.info("progressGet: "+progress);
         System.out.println("progressGet: "+progress);
         return progress;

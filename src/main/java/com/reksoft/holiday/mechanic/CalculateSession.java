@@ -45,6 +45,7 @@ public class CalculateSession implements Runnable{
 
     @Override
     public void run() {
+        Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
         initSession();
         calc();
         saveResults();
@@ -52,7 +53,6 @@ public class CalculateSession implements Runnable{
 
     public void buildSessionGame(SessionGame sessionGame){
         this.sessionGame = sessionGame;
-
     }
 
     public SessionGame getSessionGame(){
@@ -77,7 +77,6 @@ public class CalculateSession implements Runnable{
         playersPool = new PlayersImpl(sessionGameMapper.sessionToParameters(sessionGame));
         playersPool.createNewPlayersSet();
         calculatesPool = new CalculatesPool(sessionGame, playersPool, holidayService);
-
 
     }
 
@@ -122,16 +121,16 @@ public class CalculateSession implements Runnable{
 
             tickCount++;
             int count =(Math.toIntExact(Math.round(tickCount * coefficient)));
-            if ((count-percentCounter)>=1) {
+
+            if ((count-percentCounter) >= 1) {
                 percentCounter = count;
                 progressBar.setProgress(percentCounter);
-
             }
 
             log.info("percents of calculates = "+percentCounter);
 
             try {
-                Thread.sleep(5);
+                Thread.sleep(1);
             } catch (Exception ex) {System.out.println(ex);}
         }
         percentCounter = 100;

@@ -1,5 +1,6 @@
 package com.reksoft.holiday.service;
 
+import com.reksoft.holiday.model.CalcMembers;
 import com.reksoft.holiday.model.Calculate;
 import com.reksoft.holiday.repository.CalculateRepository;
 import lombok.AllArgsConstructor;
@@ -18,4 +19,14 @@ public class CalculateServiceImpl implements CalculateService {
     }
     @Override
     public void saveAll(List<Calculate> calculateList) {calculateRepository.saveAllAndFlush(calculateList);}
+
+    @Override
+    public CalcMembers getOneGroupMembers(Calculate calculate) {
+        return null;
+    }
+
+    @Override
+    public List<CalcMembers> getAllGroupMembers(List<Calculate> calculateList) {
+        return null;
+    }
 }

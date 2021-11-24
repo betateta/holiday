@@ -1,6 +1,5 @@
 <style type="text/css">
 
-
 /* скрываем чекбоксы и блоки с содержанием */
 .hide, .hide + label ~ div {
     display: none;
@@ -28,7 +27,7 @@
     padding: 10px;
 }
  .container {
-    min-width: 1000px; /* Минимальная ширина контейнера */
+    min-width: 1100px; /* Минимальная ширина контейнера */
    }
  .layer1 {
     /*background-color: #fc0;*/ /* Цвет фона слоя */

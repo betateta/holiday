@@ -17,37 +17,39 @@ public class SseService {
     @Autowired
     private ProgressBar progressBar;
 
-
     public SseEmitter getHandleSse (Integer percentage){
         SseEmitter emitter = new SseEmitter();
+
         ExecutorService nonBlockingService = Executors
                 .newSingleThreadExecutor();
         nonBlockingService.execute(() -> {
+            Integer progress = progressBar.getProgress();
             try {
-                switch (progressBar.getProgress()) {
+                switch (progress) {
                     case (0) : {
                         SseEmitter.SseEventBuilder event = SseEmitter.event()
-                                .data(progressBar.getProgress())
-                                .id(String.valueOf(progressBar.getProgress()))
+                                .data(progress)
+                                .id(String.valueOf(progress))
                                 .name(START_EVENT_NAME);
                         emitter.send(event);
                         break;
                     }
                     case (100):{
                         SseEmitter.SseEventBuilder event = SseEmitter.event()
-                                .data(progressBar.getProgress())
-                                .id(String.valueOf(progressBar.getProgress()))
+                                .data(progress)
+                                .id(String.valueOf(progress))
                                 .name(COMPLETE_EVENT_NAME);
                         emitter.send(event);
-                        //emitter.complete();
+                        progressBar.setProgress(0);
                         break;
                     }
                     default:{
                         SseEmitter.SseEventBuilder event = SseEmitter.event()
-                                .data(progressBar.getProgress())
-                                .id(String.valueOf(progressBar.getProgress()))
+                                .data(progress)
+                                .id(String.valueOf(progress))
                                 .name(CONTINUE_EVENT_NAME);
                         emitter.send(event);
+                        progress = progressBar.getProgress();
                         break;
                     }
                 }
