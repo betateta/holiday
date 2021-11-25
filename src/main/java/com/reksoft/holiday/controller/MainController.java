@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +22,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Controller
+@Transactional
 public class MainController {
 
     @Autowired
@@ -61,11 +66,16 @@ public class MainController {
         List<SessionGame> sessionGameList = sessionServiceImpl.findByUser(user);
 
         /*get last session*/
-        session = sessionServiceImpl.findLast(user);
-        log.info("last session date = "+session.getStopTime());
+        if(!user.equals(null)) {
+            try {
+                session = sessionServiceImpl.findLast(user);
+            } catch (NoSuchElementException ex){log.info("Прошлая сессия пользователя не найдейна");}
+
+        }
 
         if (session != null) {
             sessionParameters = sessionGameMapper.sessionToParameters(session);
+            log.info("last session date = "+session.getStopTime());
         } else {
             sessionParameters = new SessionParameters();
             sessionParameters.setUser(user);
@@ -126,28 +136,24 @@ public class MainController {
         ExecutorService executor = Executors
                 .newSingleThreadExecutor();
         executor.execute(calculateSession);
+        executor.shutdown();
          return "sse";
     }
 
     @GetMapping(value = "get_statistic")
     public String getStatistic (Model model){
+        log.info("get mapping:statistic page");
         SessionGame currentSession = sessionServiceImpl.findLast(user);
-        List<Calculate> calculateList = currentSession.getCalculateList();
-        System.out.println("session id:"+currentSession.getId());
-        System.out.println("get mapping:statistic page");
-        for (Calculate item: calculateList
-        ) {
-          // System.out.println("calc id:"+item.getId());
-            item.setMemberList(memberService.getMemberListByCalculate(item));
-
-        }
+        /*
+        TODO: После чтения связанного списка удаляются дубликаты. Причина появления оных - не выяснена
+        */
+        Set<Calculate> calculateSet = new HashSet<>(currentSession.getCalculateList());
 
         model.addAttribute("user",currentSession.getUser());
         model.addAttribute("session",currentSession);
         model.addAttribute("parameters",
                 sessionGameMapper.sessionToParameters(currentSession));
-        model.addAttribute("calculates",calculateList);
-
+        model.addAttribute("calculates",calculateSet);
         model.addAttribute("players",playerService.getAll());
 
         return "statistic";
@@ -161,13 +167,10 @@ public class MainController {
     @GetMapping("/test_sse")
     public String testSse (Model model){
         calculateSession.buildSessionGame(session);
-
         ExecutorService executor = Executors
-                .newCachedThreadPool();
+                .newSingleThreadExecutor();
         executor.execute(calculateSession);
-
         executor.shutdown();
-
         return "sse";
     }
 

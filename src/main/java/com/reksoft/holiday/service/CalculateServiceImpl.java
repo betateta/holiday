@@ -19,13 +19,12 @@ public class CalculateServiceImpl implements CalculateService {
 
     @Override
     public void deleteAll(){
-
         calculateRepository.deleteAll();
     }
     @Override
     public void saveAndFlushAll(List<Calculate> calculateList) {
-        calculateRepository.saveAllAndFlush(calculateList);}
-
+        calculateRepository.saveAllAndFlush(calculateList);
+    }
     @Override
     public void saveAll(List<Calculate> calculateList) {
         calculateRepository.saveAll(calculateList);

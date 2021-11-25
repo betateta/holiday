@@ -17,12 +17,12 @@ public class SseService {
     @Autowired
     private ProgressBar progressBar;
 
+
     public SseEmitter getHandleSse (Integer percentage){
         SseEmitter emitter = new SseEmitter();
-
-        ExecutorService nonBlockingService = Executors
+        ExecutorService sseExecutor = Executors
                 .newSingleThreadExecutor();
-        nonBlockingService.execute(() -> {
+        sseExecutor.execute(() -> {
             Integer progress = progressBar.getProgress();
             try {
                 switch (progress) {
@@ -60,7 +60,7 @@ public class SseService {
                 emitter.completeWithError(ex);
             }
         });
-        nonBlockingService.shutdown();
+        sseExecutor.shutdown();
         return emitter;
     }
 

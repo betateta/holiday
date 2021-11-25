@@ -36,10 +36,10 @@ public class Member {
     private long duration=0;
 
     @Column(name = "holiday_points")
-    private Integer holidayPoints=0;
+    private Integer holidayPoints = 0;
 
     @Column(name = "is_organizator")
-    private Boolean isOrganizator=false;
+    private Boolean isOrganizator = false;
 
     public Member(Player player, Calculate calculate) {
         this.player = player;

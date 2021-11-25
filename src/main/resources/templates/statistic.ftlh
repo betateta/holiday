@@ -49,10 +49,11 @@
                     <td><b>Набранных очков</b></td>
                     <td>${session.points}</td>
                 </tr>
+
                 <tr>
                     <td colspan="2">
                         <input class="hide" id="hd-1" type="checkbox">
-                        <label for="hd-1">Показать детали</label>
+                        <label for="hd-1">Установочные параметры</label>
                         <div>
                             <table border="1px" cellspacing="1" border="1" cellpadding="5">
                               <tr>
@@ -141,28 +142,28 @@
                         <td>${calculate.uniqPlayersNumber}</td>
                         <tr>
                             <td colspan="2">
-                                <input class="hide" id="hd-2" type="checkbox">
-                                <label for="hd-2">Показать детали</label>
+                                <input class="hide" id="hc-${calculate.id}" type="checkbox">
+                                <label for="hc-${calculate.id}">Список участников</label>
                                 <div>
                                     <table border="1px" cellspacing="1" border="1" cellpadding="5">
                                         <tr>
-                                            <th>ID игрока</th>
+                                            <th>Имя игрока</th>
                                             <th>Вход</th>
                                             <th>Выход</th>
                                             <th>Время пребывания, сек</th>
                                             <th>Очков</th>
-                                            <th>Организатор?</th>
+                                            <th>Организатор</th>
                                         </tr>
-
+                                        <#list calculate.memberSet as member>
                                             <tr>
-                                             <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+                                                <td>${member.player.name}</td>
+                                                <td>${member.inputTime}</td>
+                                                <td>${member.outputTime}</td>
+                                                <td>${member.duration}</td>
+                                                <td>${member.holidayPoints}</td>
+                                                <td>${member.isOrganizator?string('да', 'нет')}</td>
                                             </tr>
-
+                                        </#list>
                                     </table>
                                 </div>
                             </td>

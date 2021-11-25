@@ -7,6 +7,7 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -80,7 +81,7 @@ public class SessionGame {
             mappedBy = "session",
             cascade = CascadeType.ALL)
     @ToString.Exclude
-    private List<Calculate> calculateList;
+    private List<Calculate> calculateList = new ArrayList<>();
 
     public SessionGame(Integer id) {
         this.id = id;
