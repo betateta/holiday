@@ -122,6 +122,7 @@
             <table border="1px" cellspacing="2" border="1" cellpadding="5">
             <caption><h3>Список праздников</h3></caption>
                  <tr>
+                    <th>ID</th>
                     <th>Время начала</th>
                     <th>Время конца</th>
                     <th>Тип праздника</th>
@@ -131,13 +132,41 @@
                 </tr>
                 <#list calculates as calculate>
                     <tr>
+                        <td>${calculate.id}</td>
                         <td>${calculate.startTime}</td>
                         <td>${calculate.stopTime}</td>
                         <td>${calculate.holiday.name}</td>
                         <td>${calculate.capacity}</td>
                         <td>${calculate.points}</td>
                         <td>${calculate.uniqPlayersNumber}</td>
+                        <tr>
+                            <td colspan="2">
+                                <input class="hide" id="hd-2" type="checkbox">
+                                <label for="hd-2">Показать детали</label>
+                                <div>
+                                    <table border="1px" cellspacing="1" border="1" cellpadding="5">
+                                        <tr>
+                                            <th>ID игрока</th>
+                                            <th>Вход</th>
+                                            <th>Выход</th>
+                                            <th>Время пребывания, сек</th>
+                                            <th>Очков</th>
+                                            <th>Организатор?</th>
+                                        </tr>
 
+                                            <tr>
+                                             <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
                     </tr>
                 </#list>
             </table>

@@ -32,6 +32,11 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public void saveAll(Set<Player> playerSet){
         log.debug("save all players");
+        playerRepository.saveAll(playerSet);
+    }
+
+    @Override
+    public void saveAndFlushAll(Set<Player> playerSet) {
         playerRepository.saveAllAndFlush(playerSet);
     }
 

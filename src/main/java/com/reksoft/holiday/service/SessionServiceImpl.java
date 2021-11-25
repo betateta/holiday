@@ -20,12 +20,20 @@ public class SessionServiceImpl implements SessionService{
 
     @Override
     public List<SessionGame> findByUser(User user) {
-        return sessionRepository.findByUser(user);
+        List<SessionGame> sessionGameList = sessionRepository.findByUser(user);
+        System.out.println("Sessions for current user: "+ sessionGameList.size());
+        return sessionGameList;
     }
 
     @Override
     public void save(SessionGame session) {
         sessionRepository.saveAndFlush(session);
+    }
+
+    @Override
+    public void saveAndFlush(SessionGame sessionGame) {
+        sessionRepository.saveAndFlush(sessionGame);
+
     }
 
     @Override

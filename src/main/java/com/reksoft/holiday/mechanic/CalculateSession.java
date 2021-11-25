@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @NoArgsConstructor
 @Component
@@ -40,6 +41,7 @@ public class CalculateSession implements Runnable{
     private PlayersInterface playersPool;
     private CalculatesPool calculatesPool;
     private Integer percentCounter = 0;
+    private final boolean debug = true;
 
     private static final Logger log = Logger.getLogger(CalculateSession.class);
 
@@ -76,6 +78,7 @@ public class CalculateSession implements Runnable{
 
         playersPool = new PlayersImpl(sessionGameMapper.sessionToParameters(sessionGame));
         playersPool.createNewPlayersSet();
+        playerService.saveAndFlushAll(playersPool.getPlayersSet());
         calculatesPool = new CalculatesPool(sessionGame, playersPool, holidayService);
 
     }
@@ -147,14 +150,35 @@ public class CalculateSession implements Runnable{
                 calculatesPool.getCurrentCalculateList().size());
         log.debug("adding session points");
         sessionGame.setPoints(playersPool.getPoints());
-        sessionGame.setCalculateList(calculatesPool.getCompletedCalculateList());
+        /*
+        Setting groups of members
+         */
+        List<Calculate> calculateList = calculatesPool.getCompletedCalculateList();
 
+        sessionGame.setCalculateList(calculateList);
+        if (debug){
+            System.out.println("Completed list of Calculates");
+            System.out.println("size: "+calculateList.size());
+        }
     }
 
     private void saveResults(){
         log.info("saveResults");
-        playerService.saveAll(playersPool.getPlayersSet());
-        sessionService.save(sessionGame);
+        sessionService.saveAndFlush(sessionGame);
+       // sessionService.save(sessionGame);
+        if (debug){
+            List<Calculate> calculateList = sessionService.findLast(sessionGame.getUser()).getCalculateList();
+            System.out.println("Completed list of Calculates after save and flush");
+            System.out.println("size:"+calculateList.size());
+            /*
+            for (Calculate item: calculateList
+            ) {
+                System.out.println(item.getId());
+            }
+
+             */
+        }
+
     }
 
 }

@@ -10,7 +10,8 @@ import java.util.List;
 public interface SessionService {
     List<SessionGame> findByUser (User user);
     void save(SessionGame session);
-    void delete(SessionGame session);
+    void delete(SessionGame sessionGame);
+    void saveAndFlush(SessionGame sessionGame);
     void validateParameters (SessionParameters sessionParameters) throws ValidationException;
     SessionGame findLast(User user);
 

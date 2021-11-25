@@ -5,12 +5,10 @@ import com.reksoft.holiday.dto.SessionParameters;
 import com.reksoft.holiday.exception.ValidationException;
 import com.reksoft.holiday.mechanic.CalculateSession;
 import com.reksoft.holiday.mechanic.ProgressBar;
+import com.reksoft.holiday.model.Calculate;
 import com.reksoft.holiday.model.SessionGame;
 import com.reksoft.holiday.model.User;
-import com.reksoft.holiday.service.PlayerService;
-import com.reksoft.holiday.service.SessionService;
-import com.reksoft.holiday.service.SseService;
-import com.reksoft.holiday.service.UserService;
+import com.reksoft.holiday.service.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -37,9 +35,13 @@ public class MainController {
     @Autowired
     private PlayerService playerService;
     @Autowired
+    private MemberService memberService;
+    @Autowired
     private CalculateSession calculateSession;
     @Autowired
     private SessionGameMapper sessionGameMapper;
+    @Autowired
+    private CalculateService calculateService;
 
     @Autowired
     private SseService sseService;
@@ -130,12 +132,22 @@ public class MainController {
     @GetMapping(value = "get_statistic")
     public String getStatistic (Model model){
         SessionGame currentSession = sessionServiceImpl.findLast(user);
+        List<Calculate> calculateList = currentSession.getCalculateList();
+        System.out.println("session id:"+currentSession.getId());
+        System.out.println("get mapping:statistic page");
+        for (Calculate item: calculateList
+        ) {
+          // System.out.println("calc id:"+item.getId());
+            item.setMemberList(memberService.getMemberListByCalculate(item));
+
+        }
 
         model.addAttribute("user",currentSession.getUser());
         model.addAttribute("session",currentSession);
         model.addAttribute("parameters",
                 sessionGameMapper.sessionToParameters(currentSession));
-        model.addAttribute("calculates",currentSession.getCalculateList());
+        model.addAttribute("calculates",calculateList);
+
         model.addAttribute("players",playerService.getAll());
 
         return "statistic";

@@ -19,6 +19,7 @@ public class CalculatesPool {
     private final PlayersInterface playersPool;
     private final int org_points = 1500;
     private static final Logger log = Logger.getLogger(CalculatesPool.class);
+    private final boolean debug = true;
 
     public CalculatesPool(SessionGame sessionGame, PlayersInterface playersPool, HolidayService holidayService) {
         this.sessionGame = sessionGame;
@@ -262,7 +263,7 @@ public class CalculatesPool {
                     player.setSessionPoints(player.getSessionPoints()+points);
                 }
                 calc.setCorrectStop(true);
-                completedCalculateList.add(calc);
+                addToCompleteList(calc);
             }
         }
         excludeCompletedFromCurrent();
@@ -301,6 +302,12 @@ public class CalculatesPool {
             }
         }
         return holidayFullDiceMap;
+    }
+    private void addToCompleteList(Calculate calculate){
+        if(debug){
+           // System.out.println("Calculate pool: adding to complete list");
+        }
+        completedCalculateList.add(calculate);
     }
 
 }
