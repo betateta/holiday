@@ -66,7 +66,7 @@ public class MainController {
         List<SessionGame> sessionGameList = sessionServiceImpl.findByUser(user);
 
         /*get last session*/
-        if(!user.equals(null)) {
+        if(user!=null) {
             try {
                 session = sessionServiceImpl.findLast(user);
             } catch (NoSuchElementException ex){log.info("Прошлая сессия пользователя не найдейна");}
@@ -134,7 +134,7 @@ public class MainController {
     public String startCalc (Model model){
         calculateSession.buildSessionGame(session);
         ExecutorService executor = Executors
-                .newSingleThreadExecutor();
+                .newCachedThreadPool();
         executor.execute(calculateSession);
         executor.shutdown();
          return "sse";
@@ -168,7 +168,7 @@ public class MainController {
     public String testSse (Model model){
         calculateSession.buildSessionGame(session);
         ExecutorService executor = Executors
-                .newSingleThreadExecutor();
+                .newCachedThreadPool();
         executor.execute(calculateSession);
         executor.shutdown();
         return "sse";

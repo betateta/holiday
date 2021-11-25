@@ -49,7 +49,29 @@
                     <td><b>Набранных очков</b></td>
                     <td>${session.points}</td>
                 </tr>
-
+                <tr>
+                    <td colspan="2">
+                            <input class="hide" id="hd-2" type="checkbox">
+                            <label for="hd-2">Список игроков</label>
+                            <div>
+                                <table border="1px" cellspacing="2" border="1" cellpadding="5">
+                                <caption><h3>Список игроков</h3></caption>
+                                     <tr>
+                                        <th>Имя игрока</th>
+                                        <th>Количество очков</th>
+                                        <th>Количество доп. попыток</th>
+                                    </tr>
+                                    <#list players as player>
+                                        <tr>
+                                            <td>${player.name}</td>
+                                            <td>${player.sessionPoints}</td>
+                                            <td>${player.bonusShots}</td>
+                                        </tr>
+                                    </#list>
+                                </table>
+                            </div>
+                    </td>
+                </tr>
                 <tr>
                     <td colspan="2">
                         <input class="hide" id="hd-1" type="checkbox">
@@ -102,23 +124,7 @@
                 </tr>
              </table>
         </div>
-        <div class="layer2">
-            <table border="1px" cellspacing="2" border="1" cellpadding="5">
-            <caption><h3>Список игроков</h3></caption>
-                 <tr>
-                    <th>Имя игрока</th>
-                    <th>Количество очков</th>
-                    <th>Количество доп. попыток</th>
-                </tr>
-                <#list players as player>
-                    <tr>
-                        <td>${player.name}</td>
-                        <td>${player.sessionPoints}</td>
-                        <td>${player.bonusShots}</td>
-                    </tr>
-                </#list>
-            </table>
-        </div>
+
         <div class="layer3">
             <table border="1px" cellspacing="2" border="1" cellpadding="5">
             <caption><h3>Список праздников</h3></caption>
