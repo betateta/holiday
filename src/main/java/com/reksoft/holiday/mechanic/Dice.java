@@ -10,14 +10,14 @@ import java.util.Map;
 @NoArgsConstructor
 @Component
 public class Dice implements DiceInterface {
-    private String eventName="";
+    private String eventName = "";
+    private Integer rand = 0;
+    private boolean debug = false;
     private final String eventMiss= "eventMiss";
     private static final Logger log = Logger.getLogger(Dice.class);
 
     @Override
     public String getMultiEventResult(HashMap<String, Integer> map){
-        log.debug("call getMultiEventResult" );
-
         eventName="";
         boolean chanceHit = false;
         Integer index=0;
@@ -36,11 +36,11 @@ public class Dice implements DiceInterface {
                 If sum(values) < 100 then [n-1] = 100, else, [n-1] = 0;
         [n] - always 100;
          */
-        Integer[] a = new Integer[arraySize];
+        Integer[] segments = new Integer[arraySize];
 
-        a[0] = 0;
-        a[mapSize+1] = 0;
-        a[mapSize+2] = 100;
+        segments[0] = 0;
+        segments[mapSize+1] = 0;
+        segments[mapSize+2] = 100;
         values[0] = 0;
         keys[0] = "start";
         values[mapSize+1] = 0;
@@ -79,29 +79,37 @@ public class Dice implements DiceInterface {
         Filling array
          */
         for (int i = 1; i <= mapSize+1; i++){
-            a[i] = a[i-1]+values[i];
+            segments[i] = segments[i-1]+values[i];
         }
         /*
         rand = [0:100]
          */
-        Integer rand = (int) (Math.random()*100);
+        if(!debug){
+            rand = (int) (Math.random()*100);
+        }
         index = 1;
-        while (a[index]<rand) {
+        while ((segments[index] < rand) || segments[index] == 0) {
             index++;
         }
         chanceHit = true;
         if (index == (arraySize-2)) {
             chanceHit = false;
         }
-        eventName=keys[index];
+        eventName = keys[index];
         log.debug("map size = "+mapSize);
         log.debug("rand="+rand+" index="+index+" eventName="+keys[index]+" dice: "+chanceHit);
-
+        if(debug){
+            System.out.println("map size = "+mapSize);
+            System.out.println("segments:");
+            for (int i = 0; i < arraySize; i++) {
+                System.out.println("["+i+"] = "+segments[i]+" key:"+keys[i]+" value:"+values[i]);
+            }
+            System.out.println("rand="+rand+" index="+index+" eventName="+keys[index]+" dice: "+chanceHit);
+        }
         return eventName;
     }
     @Override
     public Integer getRandFromRange(Integer min, Integer max) {
-        log.debug("call getRandFromRange");
         log.debug("range["+min+":"+max+"]");
         max -= min;
         int res= (int) ((Math.random()* (++max)) + min);
@@ -112,5 +120,15 @@ public class Dice implements DiceInterface {
     @Override
     public String getEventName() {
         return eventName;
+    }
+
+    @Override
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+
+    @Override
+    public void setRand(Integer rand) {
+        this.rand = rand;
     }
 }

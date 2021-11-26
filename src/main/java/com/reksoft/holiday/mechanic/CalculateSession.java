@@ -37,6 +37,8 @@ public class CalculateSession implements Runnable{
     private SessionGameMapper sessionGameMapper;
     @Autowired
     private ProgressBar progressBar;
+    @Autowired
+    private DiceInterface diceInterface;
 
     private SessionGame sessionGame;
     private Instant currentTime;
@@ -114,14 +116,28 @@ public class CalculateSession implements Runnable{
                     player.setShots(player.getBonusShots()+player.getStdShots());
                 }
             }
-
-            try {
-                calculatesPool.createCalculate(currentTime);
+            /*
+                For more effective, change algorithm create-update of calculates with random.
+                What be first: create or update.
+             */
+            if (diceInterface.getRandFromRange(0,100) < 50){
+                try {
+                    calculatesPool.createCalculate(currentTime);
+                }
+                catch (CalculateException ex) {
+                    log.debug(ex.getMessage());
+                }
+                calculatesPool.updateCalculates(currentTime);
             }
-            catch (CalculateException ex) {
-                log.debug(ex.getMessage());
+            else {
+                calculatesPool.updateCalculates(currentTime);
+                try {
+                    calculatesPool.createCalculate(currentTime);
+                }
+                catch (CalculateException ex) {
+                    log.debug(ex.getMessage());
+                }
             }
-            calculatesPool.updateCalculates(currentTime);
             currentTime = currentTime.plusSeconds(timeTick);
 
             tickCount++;
@@ -132,7 +148,7 @@ public class CalculateSession implements Runnable{
                 progressBar.setProgress(percentCounter);
             }
 
-            log.info("percents of calculates = "+percentCounter);
+            log.debug("percents of calculates = "+percentCounter);
 
             try {
                 Thread.sleep(1);

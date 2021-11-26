@@ -26,7 +26,7 @@
 
 <body>
 <main>
-    <h2>Progress Bar</h2>
+    <h2>Расчет сессии...</h2>
     <div id="progressbar"></div>
 </main>
 </body>

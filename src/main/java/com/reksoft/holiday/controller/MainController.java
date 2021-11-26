@@ -124,9 +124,8 @@ public class MainController {
                     "Значение поля должно быть меньше или равно количеству игроков");
             return "session";
         }
-
         parameters.setUser(user);
-        sessionParameters=parameters;
+        sessionParameters = parameters;
         session = sessionGameMapper.parametersToSession(sessionParameters);
         return "session";
     }

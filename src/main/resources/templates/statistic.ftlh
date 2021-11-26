@@ -147,7 +147,7 @@
                         <td>${calculate.points}</td>
                         <td>${calculate.uniqPlayersNumber}</td>
                         <tr>
-                            <td colspan="2">
+                            <td colspan="7">
                                 <input class="hide" id="hc-${calculate.id}" type="checkbox">
                                 <label for="hc-${calculate.id}">Список участников</label>
                                 <div>
@@ -167,7 +167,12 @@
                                                 <td>${member.outputTime}</td>
                                                 <td>${member.duration}</td>
                                                 <td>${member.holidayPoints}</td>
-                                                <td>${member.isOrganizator?string('да', 'нет')}</td>
+                                                <#if member.isOrganizator == true>
+                                                    <td bgcolor="green">${member.isOrganizator?string('да', 'нет')}</td>
+                                                <#else>
+                                                    <td> ${member.isOrganizator?string('да', 'нет')}</td>
+                                                </#if>
+
                                             </tr>
                                         </#list>
                                     </table>

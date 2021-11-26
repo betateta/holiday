@@ -6,11 +6,9 @@ import com.reksoft.holiday.exception.CalculateException;
 import com.reksoft.holiday.model.Calculate;
 import com.reksoft.holiday.model.SessionGame;
 import com.reksoft.holiday.service.HolidayService;
-import com.reksoft.holiday.service.SessionService;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
@@ -22,8 +20,6 @@ import java.time.Instant;
 public class CalculatesPoolTest {
     @Autowired
     private HolidayService holidayService;
-    @Autowired
-    private SessionService sessionService;
     @Autowired
     private SessionGameMapper sessionGameMapper;
 
@@ -44,7 +40,7 @@ public class CalculatesPoolTest {
         playersInterface.createNewPlayersSet();
         calculatesPool = new CalculatesPool(sessionGame,playersInterface,holidayService);
     }
-    @Test
+   // @Test
     void createCalculateTest(){
         Assertions.assertNotNull(calculatesPool);
         Assertions.assertNotNull(calculatesPool.getCurrentCalculateList());

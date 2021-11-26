@@ -112,10 +112,10 @@
                 <p> <input type="submit" value="Создать новую сессию ->" /> </p>
             </form>
          </div>
-          <div>
-                     <form name="test" action="test_sse" method="GET">
-                         <p> <input type="submit" value="Быстрое создание сессии ->" /> </p>
-                     </form>
-                  </div>
+         <div>
+            <form name="test" action="test_sse" method="GET">
+                <p> <input type="submit" value="Быстрое создание сессии ->" /> </p>
+            </form>
+         </div>
    </body>
 </html>

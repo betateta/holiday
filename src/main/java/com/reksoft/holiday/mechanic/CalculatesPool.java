@@ -38,6 +38,7 @@ public class CalculatesPool {
         log.info("create Calculate");
 
         Set<Holiday> holidaySet = holidayService.getAllSet();
+
         HashMap<String,Integer> holidayFullDiceMap = getHolidayDiceMap(holidaySet);
         HashMap<String,Integer> holidayWithoutDinnerDiceMap = (HashMap<String, Integer>) holidayFullDiceMap.clone();
         holidayWithoutDinnerDiceMap.remove("dinner");
@@ -48,7 +49,7 @@ public class CalculatesPool {
             holidayName = diceInterface.getMultiEventResult(holidayFullDiceMap);
         } else if (freePlayers == 1) {
             holidayName = diceInterface.getMultiEventResult(holidayWithoutDinnerDiceMap);
-        } else throw new CalculateException ("No free plyers for holiday begin");
+        } else throw new CalculateException ("No free players for holiday begin");
 
         if (!holidayName.isBlank() && !holidayName.isEmpty() && !holidayName.equals("eventMiss")) {
 
