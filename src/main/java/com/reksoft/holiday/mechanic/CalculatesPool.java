@@ -140,6 +140,11 @@ public class CalculatesPool {
                         Player kick_player= activeMember.getPlayer();
 
                         activeMember.setOutputTime(currentTime);
+
+                        /*duration of last period*/
+                        long duration = currentTime.getEpochSecond() - activeMember.getInputTime().getEpochSecond();
+                        activeMember.setDuration(activeMember.getDuration() + duration);
+
                         playersPool.setPlayerIsFree(kick_player);
                         activeMember.setHolidayPoints(activeMember.getHolidayPoints() +
                                 membersImpl.getPointsForPeriod(activeMember));
@@ -221,7 +226,12 @@ public class CalculatesPool {
                             /*duration of last period*/
                             long duration = currentTime.getEpochSecond() - member.getInputTime().getEpochSecond();
                             member.setDuration(member.getDuration() + duration);
-
+                            if(!member.getIsOrganizator()){
+                                System.out.println("calc_id:"+member.getCalculate().getId()
+                                        +"member_name:"+member.getPlayer().getName()
+                                        +" all_duration:"+member.getDuration()
+                                        +" last_period:"+duration);
+                            }
                             /* points of last period*/
                             int points = membersImpl.getPointsForPeriod(member);
                             member.setHolidayPoints(member.getHolidayPoints() + points);
