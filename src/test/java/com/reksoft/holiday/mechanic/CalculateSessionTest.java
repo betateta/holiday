@@ -2,10 +2,7 @@ package com.reksoft.holiday.mechanic;
 
 import com.reksoft.holiday.dto.SessionGameMapper;
 import com.reksoft.holiday.dto.SessionParameters;
-import com.reksoft.holiday.model.Calculate;
-import com.reksoft.holiday.model.Member;
-import com.reksoft.holiday.model.SessionGame;
-import com.reksoft.holiday.model.User;
+import com.reksoft.holiday.model.*;
 import com.reksoft.holiday.service.HolidayService;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
@@ -14,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @SpringBootTest
 @Component
@@ -214,6 +213,78 @@ public class CalculateSessionTest {
             Assertions.assertTrue(item.getHoliday().getName().equals("dinner"));
             Assertions.assertTrue(item.getMemberSet()
                     .stream().filter(Member::getIsOrganizator).count() == 2);
+        }
+    }
+
+    @Test
+    void checkCalcPoints(){
+        sessionParameters = new SessionParameters(
+                new User(),
+                50,
+                1,
+                70,
+                5,
+                10,
+                8,
+                sampleFreq,
+                50,
+                50,
+                34,
+                12,
+                20
+        );
+
+        log.info(sessionParameters);
+        sessionGame = sessionGameMapper.parametersToSession(sessionParameters);
+        calculateSession.buildSessionGame(sessionGame);
+        calculateSession.run();
+        sessionGame = calculateSession.getSessionGame();
+
+        Optional<Integer> calculatesPoints = sessionGame.getCalculateList().stream()
+                .map(Calculate::getPoints)
+                .reduce((calculate, calculate2) -> calculate+calculate2);
+        Optional<Integer> playersPoints = calculateSession.getPlayersPool().getPlayersSet().stream()
+                .map(Player::getSessionPoints)
+                .reduce((calculate, calculate2) -> calculate+calculate2);
+
+
+        log.info("Calculates points = "+ calculatesPoints.get());
+        log.info("Players points = "+ playersPoints.get());
+
+        Assertions.assertTrue(calculatesPoints.get().equals(playersPoints.get()));
+    }
+    @Test
+    void checkMemberPoints(){
+        sessionParameters = new SessionParameters(
+                new User(),
+                50,
+                1,
+                70,
+                5,
+                10,
+                8,
+                sampleFreq,
+                50,
+                50,
+                34,
+                12,
+                20
+        );
+
+        log.info(sessionParameters);
+        sessionGame = sessionGameMapper.parametersToSession(sessionParameters);
+        calculateSession.buildSessionGame(sessionGame);
+        calculateSession.run();
+        sessionGame = calculateSession.getSessionGame();
+
+        for (Calculate calc: sessionGame.getCalculateList()
+             ) {
+            Optional<Integer> membersPoints = calc.getMemberSet().stream()
+                    .map(Member::getHolidayPoints)
+                    .reduce((member1,member2)->member1+member2);
+            log.debug("Members points = "+ membersPoints.get());
+            log.debug("Calculate points = "+ calc.getPoints());
+            Assertions.assertTrue(calc.getPoints().equals(membersPoints.get()));
         }
     }
 }

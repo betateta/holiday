@@ -53,11 +53,11 @@ public class CalculateSession implements Runnable{
     @Override
     public void run() {
         System.out.println("Calculate session..."
-                +" duration (days):"+sessionGame.getSessionDuration()
-                +" sample frequency (min):"+sessionGame.getHolidaySampleFreq());
+                +" days:"+sessionGame.getSessionDuration()
+                +" sample_frequency (min):"+sessionGame.getHolidaySampleFreq());
         log.info("Calculate session..."
-                +" duration (days):"+sessionGame.getSessionDuration()
-                +" sample frequency (min):"+sessionGame.getHolidaySampleFreq());
+                +" days:"+sessionGame.getSessionDuration()
+                +" sample_frequency (min):"+sessionGame.getHolidaySampleFreq());
         initSession();
         calc();
         if(!testMode){
@@ -85,10 +85,8 @@ public class CalculateSession implements Runnable{
                 truncatedTo(ChronoUnit.SECONDS));
         currentTime = sessionGame.getStartTime();
 
-        if(!testMode){
-            calculateService.deleteAll();
-            playerService.deleteAll();
-        }
+        calculateService.deleteAll();
+        playerService.deleteAll();
 
         playersPool = new PlayersImpl(sessionGameMapper.sessionToParameters(sessionGame));
         playersPool.createNewPlayersSet();
@@ -194,5 +192,9 @@ public class CalculateSession implements Runnable{
 
     public void setTestMode(boolean testMode) {
         this.testMode = testMode;
+    }
+
+    public PlayersInterface getPlayersPool() {
+        return playersPool;
     }
 }
