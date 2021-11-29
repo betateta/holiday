@@ -6,6 +6,7 @@ import com.reksoft.holiday.model.User;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,15 +22,28 @@ public class PlayersImplTest {
     private final Integer maxPlayers = 500;
     @BeforeEach
     void setUpParameters(){
-        parameters= new SessionParameters();
-        parameters.setUser(new User());
-        parameters.setUpRandomParameters();
+        log.info("Start " + this.getClass().getName());
+        parameters = new SessionParameters(
+                new User(),
+                100,
+                5,
+                70,
+                5,
+                10,
+                8,
+                10,
+                50,
+                50,
+                30,
+                30,
+                30
+                );
         log.info(parameters);
         players = new PlayersImpl(parameters);
         players.createNewPlayersSet();
     }
 
-  //  @Test
+    @Test
     void createNewPlayersSet(){
         Assertions.assertEquals(parameters.getSessionPlayers(),players.getPlayersSet().size());
         Assertions.assertTrue(players.getAllFreePlayer().size() >= minPlayers);
@@ -41,7 +55,7 @@ public class PlayersImplTest {
 
 
     }
-   // @Test
+    @Test
     void playerFreeOrBusy(){
         Player player = players.getPlayersSet().iterator().next();
         players.setPlayerIsBusy(player);

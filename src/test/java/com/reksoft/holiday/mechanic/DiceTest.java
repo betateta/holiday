@@ -105,7 +105,7 @@ public class DiceTest {
         log.info(diceInterface.getEventName());
     }
     private void testDiceFullRange(LinkedHashMap<String,Integer> map, Set<String> expectedEventsList){
-        diceInterface.setDebug(true);
+        diceInterface.setDebug(false);
         String event="";
         List<String> eventsStringList = new ArrayList<>(expectedEventsList);
         for (int i = 0; i <= 100 ; i++) {
@@ -120,14 +120,14 @@ public class DiceTest {
                 case 2:{
                     Assertions.assertTrue(event.equals(eventMiss)
                             || event.equals(eventsStringList.get(0))
-                            ||event.equals(eventsStringList.get(1)));
+                            || event.equals(eventsStringList.get(1)));
                     break;
                 }
                 case 3:{
                     Assertions.assertTrue(event.equals(eventMiss)
                             || event.equals(eventsStringList.get(0))
-                            ||event.equals(eventsStringList.get(1))
-                            ||event.equals(eventsStringList.get(2)));
+                            || event.equals(eventsStringList.get(1))
+                            || event.equals(eventsStringList.get(2)));
                     break;
                 }
                 default:{

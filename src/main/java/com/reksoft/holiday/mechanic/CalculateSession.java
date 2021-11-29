@@ -45,16 +45,24 @@ public class CalculateSession implements Runnable{
     private PlayersInterface playersPool;
     private CalculatesPool calculatesPool;
     private Integer percentCounter = 0;
-    private final boolean debug = false;
+    private boolean debug = false;
+    private boolean testMode = false;
 
     private static final Logger log = Logger.getLogger(CalculateSession.class);
 
     @Override
     public void run() {
-        System.out.println("Calculate session for current user");
+        System.out.println("Calculate session..."
+                +" duration (days):"+sessionGame.getSessionDuration()
+                +" sample frequency (min):"+sessionGame.getHolidaySampleFreq());
+        log.info("Calculate session..."
+                +" duration (days):"+sessionGame.getSessionDuration()
+                +" sample frequency (min):"+sessionGame.getHolidaySampleFreq());
         initSession();
         calc();
-        saveResults();
+        if(!testMode){
+            saveResults();
+        }
     }
 
     public void buildSessionGame(SessionGame sessionGame){
@@ -77,8 +85,10 @@ public class CalculateSession implements Runnable{
                 truncatedTo(ChronoUnit.SECONDS));
         currentTime = sessionGame.getStartTime();
 
-        calculateService.deleteAll();
-        playerService.deleteAll();
+        if(!testMode){
+            calculateService.deleteAll();
+            playerService.deleteAll();
+        }
 
         playersPool = new PlayersImpl(sessionGameMapper.sessionToParameters(sessionGame));
         playersPool.createNewPlayersSet();
@@ -178,4 +188,11 @@ public class CalculateSession implements Runnable{
         sessionService.saveAndFlush(sessionGame);
     }
 
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+
+    public void setTestMode(boolean testMode) {
+        this.testMode = testMode;
+    }
 }

@@ -19,7 +19,7 @@ public class CalculatesPool {
     private final PlayersInterface playersPool;
     private final int org_points = 1500;
     private static final Logger log = Logger.getLogger(CalculatesPool.class);
-    private final boolean debug = true;
+    private final boolean debug = false;
 
     public CalculatesPool(SessionGame sessionGame, PlayersInterface playersPool, HolidayService holidayService) {
         this.sessionGame = sessionGame;
@@ -226,7 +226,7 @@ public class CalculatesPool {
                             /*duration of last period*/
                             long duration = currentTime.getEpochSecond() - member.getInputTime().getEpochSecond();
                             member.setDuration(member.getDuration() + duration);
-                            if(!member.getIsOrganizator()){
+                            if(!member.getIsOrganizator() && debug){
                                 System.out.println("calc_id:"+member.getCalculate().getId()
                                         +"member_name:"+member.getPlayer().getName()
                                         +" all_duration:"+member.getDuration()
