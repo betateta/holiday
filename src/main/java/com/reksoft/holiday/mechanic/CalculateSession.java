@@ -54,10 +54,10 @@ public class CalculateSession implements Runnable{
     public void run() {
         System.out.println("Calculate session..."
                 +" days:"+sessionGame.getSessionDuration()
-                +" sample_frequency (min):"+sessionGame.getHolidaySampleFreq());
+                +"; frequency(min):"+sessionGame.getHolidaySampleFreq());
         log.info("Calculate session..."
                 +" days:"+sessionGame.getSessionDuration()
-                +" sample_frequency (min):"+sessionGame.getHolidaySampleFreq());
+                +"; frequency(min):"+sessionGame.getHolidaySampleFreq());
         initSession();
         calc();
         if(!testMode){

@@ -124,6 +124,9 @@
                 <tr>
                     <td colspan="2">  <img src="http://localhost:8080/getImgAsBytes/1.jpeg" /> </td>
                 </tr>
+                <tr>
+                    <td colspan="2">  <img src="http://localhost:8080/getImgAsBytes/2.jpeg" /> </td>
+                </tr>
              </table>
         </div>
 
