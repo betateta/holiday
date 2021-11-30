@@ -28,21 +28,12 @@ public class ChartController {
         byte[] media = null;
         try {
             map = chartService.getImages();
-
         } catch (IOException ioException){
             return new ResponseEntity<>(null, headers, HttpStatus.NOT_FOUND);
         }
-        switch (id){
-            case 1:{
-                media = map.get(id);
-                break;
-            }
-            case 2:{
-                media = map.get(id);
-            }
-            default:{
-
-            }
+        media = map.get(id);
+        if(media==null) {
+            return new ResponseEntity<>(null, headers, HttpStatus.NOT_FOUND);
         }
         ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
         return responseEntity;
