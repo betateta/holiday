@@ -60,11 +60,32 @@ public class SessionServiceImpl implements SessionService{
     @Override
     public SessionGame findLast(User user) {
         List<SessionGame> sessionGameList = findByUser(user);
-        SessionGame lastSession = sessionGameList.stream().reduce((acc,y) -> {
-            if (acc.getStartTime().isAfter(y.getStartTime())) {return acc;}
-            else return y;}).get();
+        SessionGame lastSession = sessionGameList.stream()
+                .reduce((acc,sessionGame) -> {
+                    if (acc.getStartTime().isAfter(sessionGame.getStartTime())) {
+                        return acc;
+                    }
+                    else
+                        return sessionGame;})
+                .get();
         System.out.println("Finding last session for current user, id:"+lastSession.getId());
         log.info("Finding last session for current user, id:"+lastSession.getId());
+        return lastSession;
+    }
+
+    @Override
+    public SessionGame findAnyLast() {
+        List<SessionGame> sessionGameList = sessionRepository.findAll();
+        SessionGame lastSession = sessionGameList.stream()
+                .reduce((acc,sessionGame) -> {
+                    if (acc.getStartTime().isAfter(sessionGame.getStartTime())) {
+                        return acc;
+                    }
+                    else
+                        return sessionGame;})
+                .get();
+        System.out.println("Finding last session, id:" + lastSession.getId());
+        log.info("Finding last session, id:" + lastSession.getId());
         return lastSession;
     }
 

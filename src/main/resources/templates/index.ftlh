@@ -46,7 +46,7 @@
                                                 <td>${session.numberOfHolidays}</td>
                                                 <td>${session.points}</td>
                                                 <tr>
-                                                    <td colspan="2">
+                                                    <td colspan="6">
                                                         <input class="hide" id="hd-${session.id}" type="checkbox">
                                                         <label for="hd-${session.id}">Установочные параметры</label>
                                                         <div>
@@ -117,5 +117,6 @@
                 <p> <input type="submit" value="Быстрое создание сессии ->" /> </p>
             </form>
          </div>
+
    </body>
 </html>

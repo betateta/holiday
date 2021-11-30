@@ -173,5 +173,7 @@ public class MainController {
         return "sse";
     }
 
-
+    public User getUser() {
+        return user;
+    }
 }

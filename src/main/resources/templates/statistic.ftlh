@@ -117,13 +117,16 @@
                                 <td>Вероятность ужина ,%</td>
                                 <td>${parameters.holidayDinnerChance}</td>
                               </tr>
-
                             </table>
                         </div>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="2">  <img src="http://localhost:8080/getImgAsBytes/1.jpeg" /> </td>
+                </tr>
              </table>
         </div>
+
 
         <div class="layer3">
             <table border="1px" cellspacing="2" border="1" cellpadding="5">
@@ -172,7 +175,6 @@
                                                 <#else>
                                                     <td> ${member.isOrganizator?string('да', 'нет')}</td>
                                                 </#if>
-
                                             </tr>
                                         </#list>
                                     </table>
@@ -183,9 +185,7 @@
                 </#list>
             </table>
         </div>
-
     </div>
-
 
 </body>
 </html>

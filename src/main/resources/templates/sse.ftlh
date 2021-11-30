@@ -2,7 +2,7 @@
 <html>
 <head>
 
-    <title>Progress Bar: Basic Sample (Javascript)</title>
+    <title>Progress</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width">
     <style type="text/css">
