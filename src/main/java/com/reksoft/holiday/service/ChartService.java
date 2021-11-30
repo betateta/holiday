@@ -89,21 +89,5 @@ public class ChartService {
         map.put("points",dataset1);
         return map;
     }
-    private PieDataset createDataSetAveragePoints(){
-        DefaultPieDataset dataset = new DefaultPieDataset();
-        SessionGame sessionGame = sessionService.findAnyLast();
 
-        Long simpleCount = sessionGame.getCalculateList().stream()
-                .filter(calculate -> calculate.getHoliday().getName().equals("simple")).count();
-        Long banquetCount = sessionGame.getCalculateList().stream()
-                .filter(calculate -> calculate.getHoliday().getName().equals("banquet")).count();
-        Long dinnerCount = sessionGame.getCalculateList().stream()
-                .filter(calculate -> calculate.getHoliday().getName().equals("dinner")).count();
-
-        dataset.setValue("Простой" , simpleCount);
-        dataset.setValue("Банкет", banquetCount);
-        dataset.setValue("Ужин"  , dinnerCount);
-
-        return dataset;
-    }
 }

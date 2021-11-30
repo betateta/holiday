@@ -3,22 +3,20 @@ package com.reksoft.holiday.controller;
 import com.reksoft.holiday.service.ChartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
-
-@Controller
+@RestController
 public class ChartController {
     @Autowired
     private ChartService chartService;
 
-    @RequestMapping(value = "/getImgAsBytes/{id}.jpeg", method = RequestMethod.GET)
+    @GetMapping(value = "/getImgAsBytes/{id}.jpeg")
     public ResponseEntity<byte[]> getImgAsBytes(@PathVariable("id") final Integer id,
                                                 final HttpServletResponse response) {
         HttpHeaders headers = new HttpHeaders();
