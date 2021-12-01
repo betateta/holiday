@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 public class CalculatesPool {
@@ -43,7 +44,7 @@ public class CalculatesPool {
         HashMap<String,Integer> holidayWithoutDinnerDiceMap = (HashMap<String, Integer>) holidayFullDiceMap.clone();
         holidayWithoutDinnerDiceMap.remove("dinner");
 
-        Integer freePlayers = playersPool.getNumberFreePlayers();
+        Integer freePlayers = playersPool.getAllFreePlayerExcludeOrganizers().size();
         String holidayName = "";
         if (freePlayers > 1) {
             holidayName = diceInterface.getMultiEventResult(holidayFullDiceMap);
@@ -58,10 +59,10 @@ public class CalculatesPool {
             MembersInterface membersImpl = new MembersImpl(calculate, playersPool);
 
             if (holidayName.equals("dinner")) {
-                membersImpl.addMemberAsOrganizator(playersPool.getFreePlayer(),currentTime);
-                membersImpl.addMemberAsOrganizator(playersPool.getFreePlayer(),currentTime);
+                membersImpl.addMemberAsOrganizator(playersPool.getNotOrganizerPlayer(),currentTime);
+                membersImpl.addMemberAsOrganizator(playersPool.getNotOrganizerPlayer(),currentTime);
             } else {
-                membersImpl.addMemberAsOrganizator(playersPool.getFreePlayer(),currentTime);
+                membersImpl.addMemberAsOrganizator(playersPool.getNotOrganizerPlayer(),currentTime);
             }
             calculate.setNumberOfPlayers(0);
             calculate.setHoliday(holidayService.findByName(holidayName));
@@ -170,8 +171,10 @@ public class CalculatesPool {
     */
     private void addPlayersToHolidays(Instant currentTime){
         log.debug("call addPlayersToHolidays");
-        Player player = playersPool.getFreePlayerWithShots();
-        if(!currentCalculateList.isEmpty() && (player != null)) {
+        
+        List<Player> playerList = playersPool.getAllFreePlayerWithShots();
+                
+        if(!currentCalculateList.isEmpty() && (playerList.size() != 0)) {
             List<Calculate> calculatesWithPlaces = new ArrayList<>();
             for (Calculate calc:currentCalculateList
             ) {
@@ -184,10 +187,22 @@ public class CalculatesPool {
              */
             HashMap<String,Integer> fill_map = new HashMap<>();
             fill_map.put("enter",sessionGame.getHolidayFillChance());
+            
             for (Calculate calc: calculatesWithPlaces
                  ) {
-                player = playersPool.getFreePlayerWithShots();
-                if(player != null){
+
+                    List<Player> removedPlayers = calc.getMemberSet()
+                        .stream()
+                        .map(member -> member.getPlayer())
+                        .collect(Collectors.toList());
+
+                    List<Player> freePlayers = playerList
+                            .stream()
+                            .filter(player -> !removedPlayers.contains(player))
+                            .collect(Collectors.toList());
+
+                if(freePlayers.size() != 0){
+                    Player player = freePlayers.get(diceInterface.getRandFromRange(0, freePlayers.size()-1));
                     if(diceInterface.getMultiEventResult(fill_map).equals("enter")){
                         player.setShots(player.getShots()-1);
                         playersPool.setPlayerIsBusy(player);
@@ -212,7 +227,7 @@ public class CalculatesPool {
                 int total_players_points = 0;
 
                 MembersInterface membersImpl = new MembersImpl(calc, playersPool);
-                Set<Member> organizators = membersImpl.getOrganizators();
+                Set<Member> organizers = membersImpl.getOrganizators();
                 Set<Member> players = membersImpl.getAllWithoutOrganizators();
                 if (players!= null) {
                     calc.setUniqPlayersNumber(players.size());
@@ -242,9 +257,9 @@ public class CalculatesPool {
                     }
                 }
                 int points=0;
-                for (Member org: organizators
+                for (Member org: organizers
                      ) {
-                    playersPool.setPlayerIsFree(org.getPlayer());
+                    playersPool.setPlayerIsOrganizer(org.getPlayer(),false);
                     org.setOutputTime(currentTime);
                     points+= org_points;
                     org.setHolidayPoints(org_points + total_players_points);

@@ -44,4 +44,9 @@ public class PlayerServiceImpl implements PlayerService {
     public List<Player> getAll() {
         return playerRepository.findAll();
     }
+
+    @Override
+    public void flush() {
+        playerRepository.flush();
+    }
 }

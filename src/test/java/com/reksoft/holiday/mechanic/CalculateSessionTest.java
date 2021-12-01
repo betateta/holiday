@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 @Component
@@ -285,6 +287,50 @@ public class CalculateSessionTest {
             log.debug("Members points = "+ membersPoints.get());
             log.debug("Calculate points = "+ calc.getPoints());
             Assertions.assertTrue(calc.getPoints().equals(membersPoints.get()));
+        }
+    }
+    @Test
+    void checkCalculateConsist(){
+        sessionParameters = new SessionParameters(
+                new User(),
+                50,
+                1,
+                70,
+                5,
+                10,
+                8,
+                sampleFreq,
+                50,
+                50,
+                34,
+                12,
+                20
+        );
+
+        log.info(sessionParameters);
+        sessionGame = sessionGameMapper.parametersToSession(sessionParameters);
+        calculateSession.buildSessionGame(sessionGame);
+        calculateSession.run();
+        sessionGame = calculateSession.getSessionGame();
+
+        for (Calculate calc: sessionGame.getCalculateList()
+        ) {
+            List<Player> currentOrganizers = calc.getMemberSet()
+                    .stream()
+                    .filter(member -> member.getIsOrganizator())
+                    .map(member -> member.getPlayer())
+                    .collect(Collectors.toList());
+            List<Player> currentPlayersNotOrganizer = calc.getMemberSet()
+                    .stream()
+                    .map(member -> member.getPlayer())
+                    .filter(player -> !player.getIsOrganizer())
+                    .collect(Collectors.toList());
+            for (Player player: currentPlayersNotOrganizer
+                 ) {
+                if(currentOrganizers.contains(player)) {
+                    new AssertionError();
+                }
+            }
         }
     }
 }

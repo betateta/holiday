@@ -29,7 +29,7 @@ public class PlayersImpl implements PlayersInterface {
                 playersSet.add(new Player("player_" + i,
                         0,
                         std_shots,0,5,
-                        false));
+                        false,false));
             }
         /*
         Fill players profile
@@ -79,6 +79,15 @@ public class PlayersImpl implements PlayersInterface {
     }
 
     @Override
+    public void setPlayerIsOrganizer(Player player,boolean value){
+        for (Player item: playersSet) {
+            if (item.equals(player)){
+                item.setIsOrganizer(value);
+            }
+        }
+    }
+
+    @Override
     public Integer getNumberFreePlayers(){
         int count = 0;
         for (Player entity : playersSet) {
@@ -98,6 +107,16 @@ public class PlayersImpl implements PlayersInterface {
         }
         return null;
     }
+
+    @Override
+    public Player getNotOrganizerPlayer(){
+        List<Player> playerList = new ArrayList<>(playersSet);
+        if(playerList.size()!=0){
+            return playerList.stream().filter(player -> !player.getIsOrganizer()).findAny().get();
+        }
+        return null;
+    }
+
     /*Random select for free player with shots*/
     @Override
     public Player getFreePlayerWithShots(){
@@ -113,6 +132,29 @@ public class PlayersImpl implements PlayersInterface {
         for (Player item:playersSet
         ) {
             if (!item.getIsBusy()){
+                players.add(item);
+            }
+        }
+        return players;
+    }
+    @Override
+    public List<Player> getAllFreePlayerExcludeOrganizers(){
+        List<Player> players = new ArrayList<>();
+        for (Player item:playersSet
+        ) {
+            if (!item.getIsBusy() && !item.getIsOrganizer()){
+                players.add(item);
+            }
+        }
+        return players;
+    }
+
+    @Override
+    public List<Player> getAllOrganizers(){
+        List<Player> players = new ArrayList<>();
+        for (Player item:playersSet
+        ) {
+            if (item.getIsOrganizer()){
                 players.add(item);
             }
         }

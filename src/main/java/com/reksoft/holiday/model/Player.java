@@ -38,6 +38,9 @@ public class Player {
     @Transient
     private Boolean isBusy=false;
 
+    @Transient
+    private Boolean isOrganizer=false;
+
     @OneToMany(fetch = FetchType.EAGER,
             mappedBy = "player",
             cascade = CascadeType.ALL)
@@ -60,12 +63,13 @@ public class Player {
     public Player(String name,
                   Integer sessionPoints,
                   Integer stdShots, Integer bonusShots, Integer shots,
-                  Boolean isBusy) {
+                  Boolean isBusy,Boolean isOrganizer) {
         this.name = name;
         this.sessionPoints = sessionPoints;
         this.stdShots = stdShots;
         this.bonusShots = bonusShots;
         this.shots = shots;
         this.isBusy = isBusy;
+        this.isOrganizer = isOrganizer;
     }
 }

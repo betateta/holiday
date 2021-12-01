@@ -11,8 +11,11 @@ public interface PlayersInterface {
     void setPlayerIsFree(Player player);
 
     void setPlayerIsBusy(Player player);
+    void setPlayerIsOrganizer(Player player,boolean value);
 
     Integer getNumberFreePlayers();
+    List<Player> getAllOrganizers();
+    Player getNotOrganizerPlayer();
 
     Player getFreePlayer();
 
@@ -27,6 +30,8 @@ public interface PlayersInterface {
     Set<Player> getPlayersSet();
 
     Integer getPoints();
+
+    List<Player> getAllFreePlayerExcludeOrganizers();
 
     com.reksoft.holiday.dto.SessionParameters getSessionParameters();
 }

@@ -11,5 +11,6 @@ public interface PlayerService {
     void deleteAll();
     void saveAll(Set<Player> playerSet);
     void saveAndFlushAll(Set<Player> playerSet);
+    void flush();
     List<Player> getAll();
 }

@@ -33,9 +33,8 @@ public class MembersImpl implements MembersInterface {
     }
     @Override
     public void addMemberAsOrganizator(Player player, Instant inputTime){
-
-        playersPool.setPlayerIsBusy(player);
         Member member = new Member(player, calculate,inputTime,true);
+        playersPool.setPlayerIsOrganizer(member.getPlayer(),true);
         calculate.getMemberSet().add(member);
     }
     @Override
