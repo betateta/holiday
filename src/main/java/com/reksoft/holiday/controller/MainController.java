@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,15 +21,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Controller
-@Transactional
 public class MainController {
 
     @Autowired
@@ -47,7 +42,6 @@ public class MainController {
     private SessionGameMapper sessionGameMapper;
     @Autowired
     private CalculateService calculateService;
-
     @Autowired
     private SseService sseService;
     @Autowired
@@ -63,26 +57,29 @@ public class MainController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authUserName = auth.getName();
         user = (User) userServiceImpl.loadUserByUsername(authUserName);
-        List<SessionGame> sessionGameList = sessionServiceImpl.findByUser(user);
+        List<SessionGame> sessionGameList = new ArrayList<>();
 
-        /*get last session*/
-        if(user!=null) {
+        /*get list of all sessions, and the last session for current user*/
+        if(user != null) {
             try {
                 session = sessionServiceImpl.findLast(user);
-            } catch (NoSuchElementException ex){log.info("Прошлая сессия пользователя не найдейна");}
-
+                sessionGameList = sessionServiceImpl.findByUser(user);
+            } catch (NoSuchElementException ex){
+                System.out.println("Прошлая сессия пользователя не найдейна");
+                log.info("Прошлая сессия пользователя не найдейна");
+            }
         }
-
+        /* if present, get parameters from last session*/
         if (session != null) {
             sessionParameters = sessionGameMapper.sessionToParameters(session);
-            log.info("last session date = "+session.getStopTime());
+            /*
+                else, create new parameters with default values and setting current user
+            */
         } else {
             sessionParameters = new SessionParameters();
-            sessionParameters.setUser(user);
         }
-
+        sessionParameters.setUser(user);
         session = new SessionGame();
-        session.setUser(user);
         session = sessionGameMapper.parametersToSession(sessionParameters);
 
         model.addAttribute("id",user.getId());
@@ -131,12 +128,17 @@ public class MainController {
     }
     @GetMapping(value = "start_session")
     public String startCalc (Model model){
-        calculateSession.buildSessionGame(session);
-        ExecutorService executor = Executors
-                .newCachedThreadPool();
-        executor.execute(calculateSession);
-        executor.shutdown();
-         return "sse";
+        if(sessionParameters!=null) {
+            calculateSession.buildSessionGame(session);
+            ExecutorService executor = Executors
+                    .newCachedThreadPool();
+            executor.execute(calculateSession);
+            executor.shutdown();
+            return "sse";
+        }
+        else {
+            return "redirect:/session";
+        }
     }
 
     @GetMapping(value = "get_statistic")

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestController
 public class ChartController {
@@ -27,6 +28,8 @@ public class ChartController {
         try {
             map = chartService.getImages();
         } catch (IOException ioException){
+            return new ResponseEntity<>(null, headers, HttpStatus.NOT_FOUND);
+        } catch (NoSuchElementException noSuchElementException){
             return new ResponseEntity<>(null, headers, HttpStatus.NOT_FOUND);
         }
         media = map.get(id);

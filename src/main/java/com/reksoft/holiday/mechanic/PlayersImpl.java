@@ -60,6 +60,7 @@ public class PlayersImpl implements PlayersInterface {
         }
         return null;
     }
+
     @Override
     public void setPlayerIsFree(Player player){
           for (Player item: playersSet) {
