@@ -10,7 +10,7 @@
         <div>
             <fieldset>
                 <legend><h3>Установочные параметры сессии</h3></legend>
-                <form name="parameters" action="save" method="POST">
+                <form name="parameters" action="/user/save" method="POST">
                     Количество игроков:<br>
                         <@spring.formInput path="parameters.sessionPlayers" attributes="" fieldType="number"/>
                         <@spring.showErrors "<br>"/> <br>
@@ -54,12 +54,12 @@
                     </div>
                 </form>
                 <div>
-                    <form name="parameters" action="start_session" method="GET">
+                    <form name="parameters" action="/user/start_session" method="GET">
                     <p><input type="submit" value="Начать новую сессию ->" /> </p>
                     </form>
                  </div>
                 <div>
-                 <form action="backtomain" method="GET">
+                 <form action="/user" method="GET">
                     <p><input type="submit" value="<- Назад" /></p>
                  </form>
                  </div>

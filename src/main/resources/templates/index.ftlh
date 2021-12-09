@@ -11,18 +11,7 @@
          <h2>Пользователь : ${name}</h2>
          <div>
                  <table border="1px" cellspacing="2" border="1" cellpadding="5">
-                        <tr>
-                            <td>Идентификатор</td>
-                            <td>${id}</td>
-                        </tr>
-                         <tr>
-                             <td>Права</td>
-                             <td>
-                             <#list roles as role>
-                                ${role.rolename};
-                             </#list>
-                             </td>
-                         </tr>
+
                        <tr>
                             <td colspan="2">
                                 <input class="hide" id="hd-1" type="checkbox">
@@ -102,21 +91,21 @@
                         </tr>
                  </table>
          </div>
+
          <div>
-            <form name="users_list" action="userslist" method="GET">
-                <p> <input type="submit" value="Список пользователей" /> </p>
-            </form>
-         </div>
-         <div>
-            <form name="session" action="session" method="GET">
+            <form name="session" action="/user/session" method="GET">
                 <p> <input type="submit" value="Создать новую сессию ->" /> </p>
             </form>
          </div>
          <div>
-            <form name="test" action="test_sse" method="GET">
+            <form name="test" action="/user/test_sse" method="GET">
                 <p> <input type="submit" value="Быстрое создание сессии ->" /> </p>
             </form>
          </div>
-
+         <div>
+              <p>
+                <a href="/logout">Logout</a>
+              </p>
+         </div>
    </body>
 </html>

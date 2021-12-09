@@ -1,6 +1,7 @@
 package com.reksoft.holiday.model;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -30,15 +31,11 @@ public class Role implements GrantedAuthority {
     public Role() {
 
     }
-
-    public Role(Integer id) {
-        this.id = id;
-    }
-
-    public Role(Integer id, String rolename) {
-        this.id = id;
+    public Role(String rolename) {
         this.rolename = rolename;
     }
+
+
 
     @Override
     public String getAuthority() {

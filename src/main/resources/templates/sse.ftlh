@@ -31,12 +31,12 @@
 </main>
 </body>
 <script>
-    let sse = new EventSource('/sse');
+    let sse = new EventSource('/user/sse');
     let count = 0;
     sse.addEventListener("COMPLETE", function(evt) {
         progressBar.setPercent(100);
         sse.close();
-        document.location.href = "/get_statistic";
+        document.location.href = "/user/get_statistic";
     });
     sse.addEventListener("START", function(evt) {
           progressBar.setPercent(0);

@@ -24,6 +24,7 @@ public interface UserService extends UserDetailsService {
     User findUserById(Integer userId);
 
     boolean saveUser(User user);
+    boolean saveAndFlushUser(User user);
 
     boolean updateUser(User user);
 }

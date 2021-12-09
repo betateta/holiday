@@ -8,7 +8,7 @@
 <body>
     <h2>Статистика расчета</h2>
      <div>
-        <form name="" action="back" method="GET">
+        <form name="" action="/user/session" method="GET">
             <input type="submit" value="<- Создать новую сессию" />
         </form>
      </div>
@@ -122,10 +122,10 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">  <img src="http://localhost:8080/getImgAsBytes/1.jpeg" /> </td>
+                    <td colspan="2">  <img src="/getImgAsBytes/1.jpeg" /> </td>
                 </tr>
                 <tr>
-                    <td colspan="2">  <img src="http://localhost:8080/getImgAsBytes/2.jpeg" /> </td>
+                    <td colspan="2">  <img src="/getImgAsBytes/2.jpeg" /> </td>
                 </tr>
              </table>
         </div>

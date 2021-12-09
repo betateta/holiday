@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,10 +21,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 @Controller
 public class MainController {
@@ -46,17 +53,75 @@ public class MainController {
     private SseService sseService;
     @Autowired
     private ProgressBar progressBar;
+    @Autowired
+    private KeycloakUserAccess keycloakUserAccess;
+    @Autowired
+    private RoleService roleService;
 
     private SessionGame session;
     private SessionParameters sessionParameters;
     private User user;
     private static final Logger log = Logger.getLogger(MainController.class);
 
-    @GetMapping(value = "/")
-    public String view_auth_user (Model model){
+
+    @GetMapping(path = "/logout")
+    public String logout(HttpServletRequest request){
+        try {
+            request.logout();
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+        return "welcome";
+    }
+
+    @GetMapping(path = "/")
+    public String getWelcome(){
+        return "welcome";
+    }
+
+    @GetMapping(path = "/begin")
+    public String begin(Principal principal){
+        Set<String> keycloakUserRoles = keycloakUserAccess.getUserRoles(principal.getName())
+                .stream().filter(s -> (s.equals("USER")||s.equals("ADMIN")))
+                .collect(Collectors.toSet());
+        System.out.println("keycloakUserRoles:"+keycloakUserRoles);
+        String role= keycloakUserRoles.stream().findFirst().get();
+        System.out.println("role:"+role);
+        switch (role){
+            case "USER":{
+                return "redirect:/user";
+            }
+            case "ADMIN":{
+                return "redirect:/admin";
+            }
+            default:{
+                return "welcome";
+
+            }
+        }
+    }
+
+
+
+    @GetMapping(value = "/user")
+    public String view_auth_user (Principal principal,Model model, HttpServletResponse response,HttpSession httpSession ){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String authUserName = auth.getName();
-        user = (User) userServiceImpl.loadUserByUsername(authUserName);
+        System.out.println("keycloak response status:"+response.getStatus());
+        System.out.println("authUserName:"+authUserName );
+        System.out.println("http session:"+httpSession );
+
+        String keycloakUserName= keycloakUserAccess.getUsername(authUserName);;
+        System.out.println("keycloakUserName:"+keycloakUserName);
+
+        try {
+            user = (User) userServiceImpl.loadUserByUsername(keycloakUserName);
+        } catch (UsernameNotFoundException usernameNotFoundException) {
+            user = new User();
+            user.setUsername(keycloakUserName);
+            userServiceImpl.saveAndFlushUser(user);
+        }
+
         List<SessionGame> sessionGameList = new ArrayList<>();
 
         /*get list of all sessions, and the last session for current user*/
@@ -82,32 +147,22 @@ public class MainController {
         session = new SessionGame();
         session = sessionGameMapper.parametersToSession(sessionParameters);
 
-        model.addAttribute("id",user.getId());
         model.addAttribute("name",user.getUsername());
-        model.addAttribute("roles", user.getRoles());
         model.addAttribute("sessions", sessionGameList);
 
         return "index";
     }
-    @GetMapping(value = "/userslist")
-    public String view_users_list (Model model){
-        List<User> allUsers = userServiceImpl.allUsers();
-        model.addAttribute("users", allUsers);
-        return "users";
-    }
 
-    @GetMapping(value = "/session")
+
+    @GetMapping(value = "/user/session")
     public String create_session (Model model){
         model.addAttribute("parameters", sessionParameters);
         session = sessionGameMapper.parametersToSession(sessionParameters);
         return "session";
     }
-    @GetMapping(value = "/backtomain")
-    public String returnToUser (){
-        return "redirect:/";
-    }
 
-    @PostMapping(value = "/save")
+
+    @PostMapping(value = "/user/save")
     public String save(@ModelAttribute("parameters") @Valid SessionParameters parameters,
                        BindingResult errors) throws ValidationException {
         if (errors.hasErrors()) {
@@ -126,7 +181,7 @@ public class MainController {
         session = sessionGameMapper.parametersToSession(sessionParameters);
         return "session";
     }
-    @GetMapping(value = "start_session")
+    @GetMapping(value = "/user/start_session")
     public String startCalc (Model model){
         if(sessionParameters!=null) {
             calculateSession.buildSessionGame(session);
@@ -137,11 +192,11 @@ public class MainController {
             return "sse";
         }
         else {
-            return "redirect:/session";
+            return "redirect:/user/session";
         }
     }
 
-    @GetMapping(value = "get_statistic")
+    @GetMapping(value = "/user/get_statistic")
     public String getStatistic (Model model){
         log.info("get mapping:statistic page");
         SessionGame currentSession = sessionServiceImpl.findLast(user);
@@ -160,12 +215,8 @@ public class MainController {
         return "statistic";
     }
 
-    @GetMapping(value = "back")
-    public String returnToSession (){
-        return "redirect:/session";
-    }
 
-    @GetMapping("/test_sse")
+    @GetMapping("/user/test_sse")
     public String testSse (Model model){
         calculateSession.buildSessionGame(session);
         ExecutorService executor = Executors
@@ -175,7 +226,4 @@ public class MainController {
         return "sse";
     }
 
-    public User getUser() {
-        return user;
-    }
 }

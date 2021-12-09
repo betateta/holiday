@@ -6,10 +6,8 @@ import com.reksoft.holiday.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -24,7 +22,6 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(s);
         if (user == null) throw new UsernameNotFoundException("User not found");
-
         return user;
     }
 
@@ -59,8 +56,17 @@ public class UserServiceImpl implements UserService {
         if (userFromDB != null) {
             return false;
         }
-        user.setRoles(Collections.singleton(new Role(1, "ROLE_USER")));
-        user.setPassword(NoOpPasswordEncoder.getInstance().encode(user.getPassword()));
+        user.setPassword("");
+        userRepository.save(user);
+        return true;
+    }
+    @Override
+    public boolean saveAndFlushUser(User user) {
+        User userFromDB = userRepository.findByUsername(user.getUsername());
+        if (userFromDB != null) {
+            return false;
+        }
+        user.setPassword("");
         user.setEnable(true);
         userRepository.saveAndFlush(user);
         return true;
