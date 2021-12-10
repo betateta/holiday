@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -162,6 +163,7 @@ public class MainController {
     }
 
 
+    @Transactional
     @PostMapping(value = "/user/save")
     public String save(@ModelAttribute("parameters") @Valid SessionParameters parameters,
                        BindingResult errors) throws ValidationException {
@@ -179,14 +181,16 @@ public class MainController {
         parameters.setUser(user);
         sessionParameters = parameters;
         session = sessionGameMapper.parametersToSession(sessionParameters);
+       // sessionServiceImpl.saveAndFlush(session);
         return "session";
     }
+    @Transactional
     @GetMapping(value = "/user/start_session")
     public String startCalc (Model model){
         if(sessionParameters!=null) {
             calculateSession.buildSessionGame(session);
             ExecutorService executor = Executors
-                    .newCachedThreadPool();
+                    .newSingleThreadExecutor();
             executor.execute(calculateSession);
             executor.shutdown();
             return "sse";
@@ -195,7 +199,7 @@ public class MainController {
             return "redirect:/user/session";
         }
     }
-
+    @Transactional
     @GetMapping(value = "/user/get_statistic")
     public String getStatistic (Model model){
         log.info("get mapping:statistic page");
@@ -215,15 +219,16 @@ public class MainController {
         return "statistic";
     }
 
-
+    @Transactional
     @GetMapping("/user/test_sse")
     public String testSse (Model model){
         calculateSession.buildSessionGame(session);
         ExecutorService executor = Executors
-                .newCachedThreadPool();
+                .newSingleThreadExecutor();
         executor.execute(calculateSession);
         executor.shutdown();
         return "sse";
     }
+
 
 }

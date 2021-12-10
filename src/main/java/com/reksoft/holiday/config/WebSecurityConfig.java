@@ -13,23 +13,6 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
-/*
-@Configuration
-@EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    private UserServiceImpl userServiceImpl;
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userServiceImpl)
-                .passwordEncoder(PasswordEncoderFactories.createDelegatingPasswordEncoder());
-    }
-
-}
-
- */
 @KeycloakConfiguration
 //@EnableWebSecurity
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -56,7 +39,6 @@ public class WebSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
     }
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
@@ -68,9 +50,6 @@ public class WebSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                 .antMatchers("/begin").fullyAuthenticated()
                 .antMatchers("/**").permitAll();
 
-
     }
-
-
 }
 

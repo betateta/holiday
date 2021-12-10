@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Error page</title>
+    <title>Test page </title>
 </head>
 <body>
-    <h1>Unknown error</h1>
+    <h1>Test</h1>
 
 </body>
 </html>

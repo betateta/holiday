@@ -19,22 +19,6 @@ services:
     #healtcheck:
     restart: unless-stopped
 
-#  holiday:
-#     container_name: holiday
-#     build:
-#        dockerfile: Dockerfile
-#     image: holiday
-#     ports:
-#         - 8080:8080
-#     depends_on:
-#      - db_app    
-#      - keycloak
-#     environment:
-#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db_app:5432/appdb
-#      - SPRING_DATASOURCE_USERNAME=postgres
-#      - SPRING_DATASOURCE_PASSWORD=postgres
-#      - SERVER_PORT=8080
-
   db_keycloak:
     container_name: db_keycloak
     image: library/postgres:14.1
@@ -64,4 +48,23 @@ services:
       - "8484:8080"
     depends_on:
       - db_keycloak
+
+#  holiday:
+#     container_name: holiday
+#     build:
+#        dockerfile: Dockerfile
+#     image: holiday
+#     ports:
+#         - 8080:8080
+#     depends_on:
+#      - db_app    
+#      - keycloak
+#     environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db_app:5432/appdb
+#      - SPRING_DATASOURCE_USERNAME=postgres
+#      - SPRING_DATASOURCE_PASSWORD=postgres
+#      - SERVER_PORT=8080
+#      - KEYCLOAK_AUTH-SERVER-URL=http://keycloak:8484/auth
+
+   
    
