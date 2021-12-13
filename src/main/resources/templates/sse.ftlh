@@ -45,26 +45,6 @@
               progressBar.setPercent(evt.data);
     });
 
-        var xhr = function(url) {
-            return new Promise(function(resolve, reject) {
-              try {
-                var xmhr = new XMLHttpRequest();
-                //Listen for API Response
-                xmhr.onreadystatechange = function() {
-                  if (xmhr.readyState == XMLHttpRequest.DONE && xmhr.status == 200) return resolve(xmhr.responseText);
-                };
-                //Open connection
-                xmhr.open("GET", url, true);
-                //Additional headers as needed
-                //x.withCredentials = true;
-                //x.setRequestHeader("Accept", "application/json");
-                x.setRequestHeader("Content-Type", "text/plain");
-                //Perform the actual AJAX call
-                xmhr.send();
-              } catch (ex) {
-                reject("Exception: Error of XMLHttpRequest");
-              }
-            });
-          };
+
 </script>
 </html>

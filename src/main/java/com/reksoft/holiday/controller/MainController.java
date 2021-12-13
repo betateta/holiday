@@ -15,7 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +27,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 @Controller
@@ -102,8 +105,6 @@ public class MainController {
         }
     }
 
-
-
     @GetMapping(value = "/user")
     public String view_auth_user (Principal principal,Model model, HttpServletResponse response,HttpSession httpSession ){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -163,7 +164,7 @@ public class MainController {
     }
 
 
-    @Transactional
+
     @PostMapping(value = "/user/save")
     public String save(@ModelAttribute("parameters") @Valid SessionParameters parameters,
                        BindingResult errors) throws ValidationException {
@@ -184,22 +185,9 @@ public class MainController {
        // sessionServiceImpl.saveAndFlush(session);
         return "session";
     }
-    @Transactional
-    @GetMapping(value = "/user/start_session")
-    public String startCalc (Model model){
-        if(sessionParameters!=null) {
-            calculateSession.buildSessionGame(session);
-            ExecutorService executor = Executors
-                    .newSingleThreadExecutor();
-            executor.execute(calculateSession);
-            executor.shutdown();
-            return "sse";
-        }
-        else {
-            return "redirect:/user/session";
-        }
-    }
-    @Transactional
+
+
+
     @GetMapping(value = "/user/get_statistic")
     public String getStatistic (Model model){
         log.info("get mapping:statistic page");
@@ -207,7 +195,7 @@ public class MainController {
         /*
         TODO: После чтения связанного списка удаляются дубликаты. Причина появления оных - не выяснена
         */
-        Set<Calculate> calculateSet = new HashSet<>(currentSession.getCalculateList());
+        Set<Calculate> calculateSet = currentSession.getCalculateSet();
 
         model.addAttribute("user",currentSession.getUser());
         model.addAttribute("session",currentSession);
@@ -219,16 +207,31 @@ public class MainController {
         return "statistic";
     }
 
-    @Transactional
+    @GetMapping(value = "/user/start_session")
+    public String startCalc (Model model){
+        if(sessionParameters!=null) {
+           calculateSession.buildSessionGame(session);
+            ExecutorService executor = Executors
+                    .newSingleThreadExecutor();
+           executor.submit(calculateSession);
+           executor.shutdown();
+           return "sse";
+        }
+        else {
+            return "redirect:/user/session";
+        }
+    }
+
     @GetMapping("/user/test_sse")
     public String testSse (Model model){
-        calculateSession.buildSessionGame(session);
+      calculateSession.buildSessionGame(session);
         ExecutorService executor = Executors
                 .newSingleThreadExecutor();
-        executor.execute(calculateSession);
+        Future<Integer> future = executor.submit(calculateSession);
         executor.shutdown();
-        return "sse";
-    }
+
+       return "sse";
+}
 
 
 }

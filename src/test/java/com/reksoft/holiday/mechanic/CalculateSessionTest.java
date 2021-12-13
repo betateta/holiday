@@ -60,11 +60,11 @@ public class CalculateSessionTest {
         log.info(sessionParameters);
         sessionGame = sessionGameMapper.parametersToSession(sessionParameters);
         calculateSession.buildSessionGame(sessionGame);
-        calculateSession.run();
+        calculateSession.call();
         sessionGame = calculateSession.getSessionGame();
-        log.debug("Holidays number : " + sessionGame.getCalculateList().size());
+        log.debug("Holidays number : " + sessionGame.getCalculateSet().size());
 
-        for (Calculate item : sessionGame.getCalculateList()
+        for (Calculate item : sessionGame.getCalculateSet()
         ) {
             log.debug(item.getHoliday().getName());
             Assertions.assertFalse(item.getHoliday().getName().equals("simple"));
@@ -91,9 +91,9 @@ public class CalculateSessionTest {
             log.info(sessionParameters);
             sessionGame = sessionGameMapper.parametersToSession(sessionParameters);
             calculateSession.buildSessionGame(sessionGame);
-            calculateSession.run();
+            calculateSession.call();
             sessionGame = calculateSession.getSessionGame();
-            for (Calculate item : sessionGame.getCalculateList()
+            for (Calculate item : sessionGame.getCalculateSet()
             ) {
                 Assertions.assertFalse(item.getHoliday().getName().equals("banquet"));
             }
@@ -119,9 +119,9 @@ public class CalculateSessionTest {
             log.info(sessionParameters);
             sessionGame = sessionGameMapper.parametersToSession(sessionParameters);
             calculateSession.buildSessionGame(sessionGame);
-            calculateSession.run();
+            calculateSession.call();
             sessionGame = calculateSession.getSessionGame();
-            for (Calculate item : sessionGame.getCalculateList()
+            for (Calculate item : sessionGame.getCalculateSet()
             ) {
                 Assertions.assertFalse(item.getHoliday().getName().equals("dinner"));
             }
@@ -148,9 +148,9 @@ public class CalculateSessionTest {
         log.info(sessionParameters);
         sessionGame = sessionGameMapper.parametersToSession(sessionParameters);
         calculateSession.buildSessionGame(sessionGame);
-        calculateSession.run();
+        calculateSession.call();
         sessionGame = calculateSession.getSessionGame();
-        for (Calculate item : sessionGame.getCalculateList()
+        for (Calculate item : sessionGame.getCalculateSet()
         ) {
             Assertions.assertTrue(item.getHoliday().getName().equals("simple"));
             Assertions.assertTrue(item.getMemberSet()
@@ -178,9 +178,9 @@ public class CalculateSessionTest {
             log.info(sessionParameters);
             sessionGame = sessionGameMapper.parametersToSession(sessionParameters);
             calculateSession.buildSessionGame(sessionGame);
-            calculateSession.run();
+            calculateSession.call();
             sessionGame = calculateSession.getSessionGame();
-            for (Calculate item : sessionGame.getCalculateList()
+            for (Calculate item : sessionGame.getCalculateSet()
             ) {
                 Assertions.assertTrue(item.getHoliday().getName().equals("banquet"));
                 Assertions.assertTrue(item.getMemberSet()
@@ -208,9 +208,9 @@ public class CalculateSessionTest {
         log.info(sessionParameters);
         sessionGame = sessionGameMapper.parametersToSession(sessionParameters);
         calculateSession.buildSessionGame(sessionGame);
-        calculateSession.run();
+        calculateSession.call();
         sessionGame = calculateSession.getSessionGame();
-        for (Calculate item:sessionGame.getCalculateList()
+        for (Calculate item:sessionGame.getCalculateSet()
         ) {
             Assertions.assertTrue(item.getHoliday().getName().equals("dinner"));
             Assertions.assertTrue(item.getMemberSet()
@@ -239,10 +239,10 @@ public class CalculateSessionTest {
         log.info(sessionParameters);
         sessionGame = sessionGameMapper.parametersToSession(sessionParameters);
         calculateSession.buildSessionGame(sessionGame);
-        calculateSession.run();
+        calculateSession.call();
         sessionGame = calculateSession.getSessionGame();
 
-        Optional<Integer> calculatesPoints = sessionGame.getCalculateList().stream()
+        Optional<Integer> calculatesPoints = sessionGame.getCalculateSet().stream()
                 .map(Calculate::getPoints)
                 .reduce((calculate, calculate2) -> calculate+calculate2);
         Optional<Integer> playersPoints = calculateSession.getPlayersPool().getPlayersSet().stream()
@@ -276,10 +276,10 @@ public class CalculateSessionTest {
         log.info(sessionParameters);
         sessionGame = sessionGameMapper.parametersToSession(sessionParameters);
         calculateSession.buildSessionGame(sessionGame);
-        calculateSession.run();
+        calculateSession.call();
         sessionGame = calculateSession.getSessionGame();
 
-        for (Calculate calc: sessionGame.getCalculateList()
+        for (Calculate calc: sessionGame.getCalculateSet()
              ) {
             Optional<Integer> membersPoints = calc.getMemberSet().stream()
                     .map(Member::getHolidayPoints)
@@ -310,10 +310,10 @@ public class CalculateSessionTest {
         log.info(sessionParameters);
         sessionGame = sessionGameMapper.parametersToSession(sessionParameters);
         calculateSession.buildSessionGame(sessionGame);
-        calculateSession.run();
+        calculateSession.call();
         sessionGame = calculateSession.getSessionGame();
 
-        for (Calculate calc: sessionGame.getCalculateList()
+        for (Calculate calc: sessionGame.getCalculateSet()
         ) {
             List<Player> currentOrganizers = calc.getMemberSet()
                     .stream()

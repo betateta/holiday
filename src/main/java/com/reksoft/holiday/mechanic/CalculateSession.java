@@ -10,18 +10,19 @@ import lombok.NoArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.Callable;
 
 @NoArgsConstructor
 @Component
 @Validated
-@Transactional
-public class CalculateSession implements Runnable{
+//@Transactional
+public class CalculateSession implements Callable {
 
     @Autowired
     private PlayerService playerService;
@@ -51,7 +52,7 @@ public class CalculateSession implements Runnable{
     private static final Logger log = Logger.getLogger(CalculateSession.class);
 
     @Override
-    public void run() {
+    public Integer call() {
         System.out.println("Calculate session..."
                 +" days:"+sessionGame.getSessionDuration()
                 +"; frequency(min):"+sessionGame.getHolidaySampleFreq());
@@ -63,6 +64,7 @@ public class CalculateSession implements Runnable{
         if(!testMode){
             saveResults();
         }
+        return percentCounter;
     }
 
     public void buildSessionGame(SessionGame sessionGame){
@@ -153,7 +155,12 @@ public class CalculateSession implements Runnable{
 
             if ((count-percentCounter) >= 1) {
                 percentCounter = count;
+                if (percentCounter>=100) {
+                    percentCounter=99;
+                }
                 progressBar.setProgress(percentCounter);
+                System.out.println("Thread calculate:"+Thread.currentThread().getName());
+                System.out.println("progress:"+percentCounter);
             }
 
             log.debug("percents of calculates = "+percentCounter);
@@ -162,8 +169,7 @@ public class CalculateSession implements Runnable{
                 Thread.sleep(1);
             } catch (Exception ex) {System.out.println(ex);}
         }
-        percentCounter = 100;
-        progressBar.setProgress(percentCounter);
+
 
         log.debug("mark uncompleted calculates");
         for (Calculate calc : calculatesPool.getCurrentCalculateList()
@@ -177,13 +183,16 @@ public class CalculateSession implements Runnable{
         log.debug("adding session points");
         sessionGame.setPoints(playersPool.getPoints());
 
-        List<Calculate> calculateList = calculatesPool.getCompletedCalculateList();
-        sessionGame.setCalculateList(calculateList);
+        Set<Calculate> calculateSet= new HashSet<>(calculatesPool.getCompletedCalculateList());
+        sessionGame.setCalculateSet(calculateSet);
 
     }
+
     private void saveResults(){
         log.info("saveResults");
         sessionService.saveAndFlush(sessionGame);
+        percentCounter = 100;
+        progressBar.setProgress(percentCounter);
     }
 
     public void setDebug(boolean debug) {

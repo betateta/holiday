@@ -59,20 +59,20 @@ public class ChartService {
 
         SessionGame sessionGame = sessionService.findAnyLast();
 
-        Long simpleCount = sessionGame.getCalculateList().stream()
+        Long simpleCount = sessionGame.getCalculateSet().stream()
                 .filter(calculate -> calculate.getHoliday().getName().equals("simple")).count();
-        Long banquetCount = sessionGame.getCalculateList().stream()
+        Long banquetCount = sessionGame.getCalculateSet().stream()
                 .filter(calculate -> calculate.getHoliday().getName().equals("banquet")).count();
-        Long dinnerCount = sessionGame.getCalculateList().stream()
+        Long dinnerCount = sessionGame.getCalculateSet().stream()
                 .filter(calculate -> calculate.getHoliday().getName().equals("dinner")).count();
 
-        Integer simplePoints = sessionGame.getCalculateList().stream()
+        Integer simplePoints = sessionGame.getCalculateSet().stream()
                 .filter(calculate -> calculate.getHoliday().getName().equals("simple"))
                 .map(calculate -> calculate.getPoints()).reduce((acc,points)->acc+points).get();
-        Integer banquetPoints = sessionGame.getCalculateList().stream()
+        Integer banquetPoints = sessionGame.getCalculateSet().stream()
                 .filter(calculate -> calculate.getHoliday().getName().equals("banquet"))
                 .map(calculate -> calculate.getPoints()).reduce((acc,points)->acc+points).get();
-        Integer dinnerPoints = sessionGame.getCalculateList().stream()
+        Integer dinnerPoints = sessionGame.getCalculateSet().stream()
                 .filter(calculate -> calculate.getHoliday().getName().equals("dinner"))
                 .map(calculate -> calculate.getPoints()).reduce((acc,points)->acc+points).get();
 

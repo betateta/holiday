@@ -16,11 +16,6 @@ public class SseEmitterController {
 
     @GetMapping("/sse")
     public SseEmitter handleSse()  {
-        return sseService.getHandleSse(0);
-    }
-
-    @GetMapping("/sse-stream")
-    public SseEmitter streamSseMvc() {
-        return sseService.getStreamSse(0);
+        return  sseService.getHandleSse();
     }
 }
