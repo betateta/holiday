@@ -99,6 +99,9 @@ public class CalculateSession implements Callable {
 
     private void calc(){
         log.info("runSession");
+        //Used for calculate machine time
+        Instant time = Instant.now();
+
         //Time tick in sec
         Integer timeTick = sessionGame.getHolidaySampleFreq()*60;
         Integer dayCount = 1;
@@ -156,11 +159,11 @@ public class CalculateSession implements Callable {
 
             if ((count-percentCounter) >= 1) {
                 percentCounter = count;
-                if (percentCounter>=100) {
+                if (percentCounter>=99) {
                     percentCounter=99;
                 }
                 progressBar.setProgress(percentCounter);
-                System.out.println("Thread calculate:"+Thread.currentThread().getName());
+               // System.out.println("Thread calculate:"+Thread.currentThread().getName());
                 System.out.println("progress:"+percentCounter);
             }
 
@@ -185,15 +188,19 @@ public class CalculateSession implements Callable {
 
         Set<Calculate> calculateSet= new HashSet<>(calculatesPool.getCompletedCalculateList());
         sessionGame.setCalculateSet(calculateSet);
-
+        System.out.println("Time for calculate,sec:"
+                + Instant.now().minusSeconds(time.getEpochSecond()).getEpochSecond());
     }
 
     private void saveResults(){
         log.info("saveResults");
         System.out.println("Start saving and flush...");
+        Instant time = Instant.now();
         sessionService.saveAndFlush(sessionGame);
         percentCounter = 100;
         progressBar.setProgress(percentCounter);
+        System.out.println("Time for saving,sec:"
+                + Instant.now().minusSeconds(time.getEpochSecond()).getEpochSecond());
     }
 
     public void setDebug(boolean debug) {
