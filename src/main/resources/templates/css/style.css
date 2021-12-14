@@ -47,9 +47,10 @@
     width: 60%; /* Ширина слоя */
     float: left; /* Обтекание по правому краю */
    }
+ input{
+       background-color: Silver;
+        border-radius: 5px;
+       }
 
- .welcome {
-     text-align:  center;
-    }
 
 </style>

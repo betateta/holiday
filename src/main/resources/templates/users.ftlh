@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Users list</title>
+   <#include "css/style.css">
 </head>
 <body>
          <div>
