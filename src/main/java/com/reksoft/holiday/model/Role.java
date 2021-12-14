@@ -3,6 +3,7 @@ package com.reksoft.holiday.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.Immutable;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.Set;
 @Setter
 @Table(name = "role")
 @Entity
+@Immutable
 public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,8 +36,6 @@ public class Role implements GrantedAuthority {
     public Role(String rolename) {
         this.rolename = rolename;
     }
-
-
 
     @Override
     public String getAuthority() {

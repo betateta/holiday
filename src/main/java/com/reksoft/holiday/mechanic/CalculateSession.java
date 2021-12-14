@@ -77,6 +77,9 @@ public class CalculateSession implements Callable {
 
     private void initSession(){
         log.info("initSession");
+        System.out.println("Start init session..");
+        //Used for calculate machine time
+        Instant realTime = Instant.now();
 
         Instant time = Instant.now();
         time = time.plusSeconds(3*3600);
@@ -94,6 +97,8 @@ public class CalculateSession implements Callable {
         playersPool.createNewPlayersSet();
         playerService.saveAndFlushAll(playersPool.getPlayersSet());
         calculatesPool = new CalculatesPool(sessionGame, playersPool, holidayService);
+        System.out.println("Time for init session,sec:"
+                + Instant.now().minusSeconds(realTime.getEpochSecond()).getEpochSecond());
 
     }
 
@@ -159,8 +164,8 @@ public class CalculateSession implements Callable {
 
             if ((count-percentCounter) >= 1) {
                 percentCounter = count;
-                if (percentCounter>=99) {
-                    percentCounter=99;
+                if (percentCounter>=95) {
+                    percentCounter=95;
                 }
                 progressBar.setProgress(percentCounter);
                // System.out.println("Thread calculate:"+Thread.currentThread().getName());

@@ -50,14 +50,13 @@ public class WebSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/begin").fullyAuthenticated()
                 .antMatchers("/**").permitAll();
-
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
         super.configure(web);
-        web.ignoring().antMatchers("/getImgAsBytes/**");
-
+        web.ignoring()
+                .antMatchers("/getImgAsBytes/**");
     }
 }
 
