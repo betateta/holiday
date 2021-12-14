@@ -47,4 +47,9 @@
     width: 60%; /* Ширина слоя */
     float: left; /* Обтекание по правому краю */
    }
+
+ .welcome {
+     text-align:  center;
+    }
+
 </style>

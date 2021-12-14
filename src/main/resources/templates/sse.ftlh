@@ -26,7 +26,7 @@
 
 <body>
 <main>
-    <h2>Расчет сессии...</h2>
+    <h2 id="title" >Расчет сессии...</h2>
     <div id="progressbar"></div>
 </main>
 </body>
@@ -42,6 +42,8 @@
           progressBar.setPercent(0);
     });
     sse.addEventListener("CONTINUE", function(evt) {
+              let elem = document.getElementById('title');
+             // elem.innerHTML.replaceWith("Сохранение результатов");
               progressBar.setPercent(evt.data);
     });
 

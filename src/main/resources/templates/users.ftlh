@@ -10,11 +10,16 @@
                         <tr>
                             <td>Идентификатор</td>
                             <td>Имя пользователя</td>
+                            <td></td>
                         </tr>
                              <#list users as user>
                                 <tr>
                                   <td>${user.id}</td>
                                   <td>${user.username}</td>
+                                  <td><form name="delete" action="delete${user.username}" method="GET">
+                                        <p> <input type="submit" value="Удалить" /> </p>
+                                      </form>
+                                  </td>
                                 </tr>
                              </#list>
                  </table>

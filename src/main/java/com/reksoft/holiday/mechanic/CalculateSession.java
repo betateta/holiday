@@ -106,6 +106,7 @@ public class CalculateSession implements Callable {
         double coefficient = 100.0/((sessionGame.getSessionDuration()*24*60*60) / timeTick);
         Integer tickCount = 0;
         percentCounter = 0;
+
         progressBar.setProgress(percentCounter);
         log.info("duration = "+sessionGame.getSessionDuration()*24*60*60
                 +" timetick = "+timeTick
@@ -164,12 +165,11 @@ public class CalculateSession implements Callable {
             }
 
             log.debug("percents of calculates = "+percentCounter);
-
             try {
                 Thread.sleep(1);
             } catch (Exception ex) {System.out.println(ex);}
-        }
 
+        }
 
         log.debug("mark uncompleted calculates");
         for (Calculate calc : calculatesPool.getCurrentCalculateList()
@@ -190,6 +190,7 @@ public class CalculateSession implements Callable {
 
     private void saveResults(){
         log.info("saveResults");
+        System.out.println("Start saving and flush...");
         sessionService.saveAndFlush(sessionGame);
         percentCounter = 100;
         progressBar.setProgress(percentCounter);

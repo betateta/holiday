@@ -25,6 +25,7 @@ public interface UserService extends UserDetailsService {
 
     boolean saveUser(User user);
     boolean saveAndFlushUser(User user);
-
     boolean updateUser(User user);
+    boolean deleteUser(User user);
+    boolean deleteByUserName(String userName);
 }

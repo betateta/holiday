@@ -82,6 +82,23 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Override
+    public boolean deleteUser(User user) {
+        User userFromDB = userRepository.findByUsername(user.getUsername());
+        if (userFromDB == null) {
+            return false;
+        }
+        userRepository.delete(userFromDB);
+        return true;
+    }
 
-
+    @Override
+    public boolean deleteByUserName(String userName) {
+        User userFromDB = userRepository.findByUsername(userName);
+        if (userFromDB == null) {
+            return false;
+        }
+        userRepository.delete(userFromDB);
+        return true;
+    }
 }
