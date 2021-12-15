@@ -4,7 +4,8 @@ import com.reksoft.holiday.exception.CalculateException;
 import com.reksoft.holiday.model.*;
 import com.reksoft.holiday.service.HolidayService;
 import lombok.Getter;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.Instant;
 import java.util.*;
@@ -19,7 +20,7 @@ public class CalculatesPool {
     private final HolidayService holidayService;
     private final PlayersInterface playersPool;
     private final int org_points = 1500;
-    private static final Logger log = Logger.getLogger(CalculatesPool.class);
+    private static final Logger log = LogManager.getLogger(CalculatesPool.class);
     private final boolean debug = false;
 
     public CalculatesPool(SessionGame sessionGame, PlayersInterface playersPool, HolidayService holidayService) {
@@ -36,7 +37,7 @@ public class CalculatesPool {
     Method creates new Calculate and adding to current list
      */
     public void createCalculate (Instant currentTime) throws CalculateException {
-        log.info("create Calculate");
+        log.debug("create Calculate");
 
         Set<Holiday> holidaySet = holidayService.getAllSet();
 
@@ -85,7 +86,7 @@ public class CalculatesPool {
         - kick players from holiday (calculate)
      */
     public void updateCalculates(Instant currentTime){
-        log.info("call updateCalculates");
+        log.debug("call updateCalculates");
 
         checkHolidaysExpiration(currentTime);
         addPlayersToHolidays(currentTime);

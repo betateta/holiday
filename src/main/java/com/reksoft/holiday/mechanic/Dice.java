@@ -1,7 +1,8 @@
 package com.reksoft.holiday.mechanic;
 
 import lombok.NoArgsConstructor;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -14,7 +15,7 @@ public class Dice implements DiceInterface {
     private Integer rand = 0;
     private boolean debug = false;
     private final String eventMiss= "eventMiss";
-    private static final Logger log = Logger.getLogger(Dice.class);
+    private static final Logger log = LogManager.getLogger(Dice.class);
 
     @Override
     public String getMultiEventResult(HashMap<String, Integer> map){

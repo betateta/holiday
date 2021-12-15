@@ -7,7 +7,8 @@ import com.reksoft.holiday.model.Calculate;
 import com.reksoft.holiday.model.SessionGame;
 import com.reksoft.holiday.model.User;
 import com.reksoft.holiday.service.HolidayService;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ public class CalculatesPoolTest {
     private PlayersInterface playersInterface;
     private SessionGame sessionGame;
     private CalculatesPool calculatesPool;
-    private static final Logger log = Logger.getLogger(CalculatesPoolTest.class);
+    private static final Logger log = LogManager.getLogger(CalculatesPoolTest.class);
 
     @BeforeEach
     void createCalculatePool(){

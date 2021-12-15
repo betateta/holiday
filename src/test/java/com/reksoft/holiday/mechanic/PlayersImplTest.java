@@ -3,7 +3,8 @@ package com.reksoft.holiday.mechanic;
 import com.reksoft.holiday.dto.SessionParameters;
 import com.reksoft.holiday.model.Player;
 import com.reksoft.holiday.model.User;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PlayersImplTest {
-    private static final Logger log = Logger.getLogger(PlayersImplTest.class);
+    private static final Logger log = LogManager.getLogger(PlayersImplTest.class);
     @Autowired
     private DiceInterface diceInterface;
     private SessionParameters parameters;

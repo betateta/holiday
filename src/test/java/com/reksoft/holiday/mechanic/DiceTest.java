@@ -1,6 +1,7 @@
 package com.reksoft.holiday.mechanic;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +12,7 @@ import java.util.Set;
 
 public class DiceTest {
     private DiceInterface diceInterface = new Dice();
-    private static final Logger log = Logger.getLogger(DiceTest.class);
+    private static final Logger log = LogManager.getLogger(DiceTest.class);
     private final String eventMiss= "eventMiss";
     @Test
     public void testMultiEvent(){

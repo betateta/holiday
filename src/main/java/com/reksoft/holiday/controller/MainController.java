@@ -9,7 +9,8 @@ import com.reksoft.holiday.model.Calculate;
 import com.reksoft.holiday.model.SessionGame;
 import com.reksoft.holiday.model.User;
 import com.reksoft.holiday.service.*;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -65,7 +66,7 @@ public class MainController {
     private SessionGame session;
     private SessionParameters sessionParameters;
     private User user;
-    private static final Logger log = Logger.getLogger(MainController.class);
+    private static final Logger log = LogManager.getLogger(MainController.class);
 
 
     @GetMapping(path = "/logout")
@@ -190,7 +191,7 @@ public class MainController {
 
     @GetMapping(value = "/user/get_statistic")
     public String getStatistic (Model model){
-        log.info("get mapping:statistic page");
+        log.debug("get mapping:statistic page");
         SessionGame currentSession = sessionServiceImpl.findLast(user);
         /*
         TODO: После чтения связанного списка удаляются дубликаты. Причина появления оных - не выяснена

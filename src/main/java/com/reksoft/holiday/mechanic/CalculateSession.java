@@ -7,7 +7,8 @@ import com.reksoft.holiday.model.Player;
 import com.reksoft.holiday.model.SessionGame;
 import com.reksoft.holiday.service.*;
 import lombok.NoArgsConstructor;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
@@ -49,14 +50,14 @@ public class CalculateSession implements Callable {
     private boolean debug = false;
     private boolean testMode = false;
 
-    private static final Logger log = Logger.getLogger(CalculateSession.class);
+    private static final Logger log = LogManager.getLogger(CalculateSession.class);
 
     @Override
     public Integer call() {
         System.out.println("Calculate session..."
                 +" days:"+sessionGame.getSessionDuration()
                 +"; frequency(min):"+sessionGame.getHolidaySampleFreq());
-        log.info("Calculate session..."
+        log.debug("Calculate session..."
                 +" days:"+sessionGame.getSessionDuration()
                 +"; frequency(min):"+sessionGame.getHolidaySampleFreq());
         initSession();
@@ -76,14 +77,14 @@ public class CalculateSession implements Callable {
     }
 
     private void initSession(){
-        log.info("initSession");
+        log.debug("initSession");
         System.out.println("Start init session..");
         //Used for calculate machine time
         Instant realTime = Instant.now();
 
         Instant time = Instant.now();
         time = time.plusSeconds(3*3600);
-        log.info("init time: "+time);
+        log.debug("init time: "+time);
 
         sessionGame.setStartTime(time.truncatedTo(ChronoUnit.SECONDS));
         sessionGame.setStopTime(sessionGame.getStartTime().plusSeconds(sessionGame.getSessionDuration()*24*3600).
@@ -103,7 +104,7 @@ public class CalculateSession implements Callable {
     }
 
     private void calc(){
-        log.info("runSession");
+        log.debug("runSession");
         //Used for calculate machine time
         Instant time = Instant.now();
 
@@ -116,18 +117,18 @@ public class CalculateSession implements Callable {
         percentCounter = 0;
 
         progressBar.setProgress(percentCounter);
-        log.info("duration = "+sessionGame.getSessionDuration()*24*60*60
+        log.debug("duration = "+sessionGame.getSessionDuration()*24*60*60
                 +" timetick = "+timeTick
                 +" coef : "+coefficient);
 
         Instant dayStamp = sessionGame.getStartTime().plus(dayCount, ChronoUnit.DAYS);
-        log.info("new day of gaming session : "+dayCount);
+        log.debug("new day of gaming session : "+dayCount);
         /*  Session cycle      */
         while (currentTime.isBefore(sessionGame.getStopTime())){
             if (currentTime.isAfter(dayStamp)){
                 dayCount++;
                 dayStamp = sessionGame.getStartTime().plus(dayCount, ChronoUnit.DAYS);
-                log.info("new day of gaming session : "+dayCount);
+                log.debug("new day of gaming session : "+dayCount);
 
                 for (Player player: playersPool.getPlayersSet()
                 ) {
@@ -198,7 +199,7 @@ public class CalculateSession implements Callable {
     }
 
     private void saveResults(){
-        log.info("saveResults");
+        log.debug("saveResults");
         System.out.println("Start saving and flush...");
         Instant time = Instant.now();
         sessionService.saveAndFlush(sessionGame);

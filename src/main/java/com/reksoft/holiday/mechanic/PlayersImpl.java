@@ -3,7 +3,8 @@ package com.reksoft.holiday.mechanic;
 import com.reksoft.holiday.dto.SessionParameters;
 import com.reksoft.holiday.model.Player;
 import lombok.Getter;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -12,7 +13,7 @@ public class PlayersImpl implements PlayersInterface {
     private Set<Player> playersSet;
     private SessionParameters sessionParameters;
     private DiceInterface diceInterface;
-    private static final Logger log = Logger.getLogger(PlayersImpl .class);
+    private static final Logger log = LogManager.getLogger(PlayersImpl .class);
 
     public PlayersImpl(SessionParameters sessionParameters) {
         this.sessionParameters = sessionParameters;
@@ -22,7 +23,7 @@ public class PlayersImpl implements PlayersInterface {
 
     @Override
     public Set<Player> createNewPlayersSet(){
-        log.info("createNewPlayersSet");
+        log.debug("createNewPlayersSet");
         final int std_shots = 5;
         if (sessionParameters!=null) {
             for (int i = 1; i <= sessionParameters.getSessionPlayers(); i++) {
