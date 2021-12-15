@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
+import javax.transaction.Transactional;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
@@ -22,7 +23,7 @@ import java.util.concurrent.Callable;
 @NoArgsConstructor
 @Component
 @Validated
-//@Transactional
+@Transactional
 public class CalculateSession implements Callable {
 
     @Autowired

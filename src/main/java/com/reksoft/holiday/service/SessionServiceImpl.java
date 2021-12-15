@@ -86,8 +86,8 @@ public class SessionServiceImpl implements SessionService{
                     else
                         return sessionGame;})
                 .get();
-        System.out.println("Finding last session, id:" + lastSession.getId());
-        log.debug("Finding last session, id:" + lastSession.getId()
+        System.out.println("Finding any last session, id:" + lastSession.getId());
+        log.debug("Finding any last session, id:" + lastSession.getId()
                 +"; start time:"+lastSession.getStartTime());
         return lastSession;
     }
