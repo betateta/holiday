@@ -1,0 +1,46 @@
+Configuration:
+#The level of internal Log4j events that should be logged to the console.
+  status: warn
+  Properties:
+    property:
+      -
+        name: "LogDir"
+        value: "target/logs"
+      -
+        name: "DefaultPattern"
+        value: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+  Appenders:
+    Console:
+      name: Console
+      target: SYSTEM_OUT
+      PatternLayout:
+        Pattern: ${DefaultPattern}
+    File:
+    -
+      name: FileAppender
+      fileName: ${LogDir}/CalculateSession.log
+      PatternLayout:
+        Pattern: ${DefaultPattern}
+    -
+      name: FileAppender2
+      fileName: ${LogDir}/CalculatesPool.log
+      PatternLayout:
+        Pattern: ${DefaultPattern}
+  Loggers:
+    logger:
+      -
+        name: com.reksoft.holiday.mechanic.CalculateSession
+        level: debug
+        additivity: false
+        AppenderRef:
+          ref: FileAppender
+      -
+        name: com.reksoft.holiday.mechanic.CalculatesPool
+        level: debug
+        additivity: false
+        AppenderRef:
+           ref: FileAppender2
+    Root:
+      level: info
+      AppenderRef:
+        ref: Console
