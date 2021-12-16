@@ -12,6 +12,4 @@ public class HolidayApplication {
 		application.setBannerMode(Banner.Mode.OFF);
 		application.run(args);
 		}
-
-
 }

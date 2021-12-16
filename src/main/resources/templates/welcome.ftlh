@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Welcome </title>
+    <title>Welcome</title>
       <#include "css/style.css">
     <style>
     body{
@@ -12,10 +12,8 @@
        background-color: RGB(249, 201, 16); /* Цвет фона под заголовком */
        border-radius: 5px;
       }
-
     .welcome {
           text-align:  center;
-
         }
     .text {
         border: 4px outset maroon;
@@ -24,21 +22,16 @@
         color: white;
         background-color: maroon;
        }
-
       </style>
 </head>
 <body>
     <div class ="welcome">
-        <h1> <font color="red"  face="Marker Felt">Добро пожаловать в игру Holidays!</font></h1>
-        <div class = "text"><b>
-            В игре эмулируется проведение праздников с накоплением очков для каждого участника,
-            в зависимости от вклада в праздник и типа праздника. Каждое участие в празднике приносит игрокам очки.
-            Количество игроков и праздников ограниченно, задается предустановками.
-            </b>
+        <h1> <font color="red"  face="Marker Felt">${title}</font></h1>
+        <div class = "text"><b>${text}</b>
         </div>
         <div >
             <form name="welcome" action="begin" method="GET">
-             <p> <input type="submit" value="Начать"/> </p>
+             <p> <input type="submit" value=${button}> </p>
             </form>
          </div>
      </div>

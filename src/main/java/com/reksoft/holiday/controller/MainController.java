@@ -1,5 +1,6 @@
 package com.reksoft.holiday.controller;
 
+import com.reksoft.holiday.config.ResourceConfig;
 import com.reksoft.holiday.dto.SessionGameMapper;
 import com.reksoft.holiday.dto.SessionParameters;
 import com.reksoft.holiday.exception.ValidationException;
@@ -62,6 +63,8 @@ public class MainController {
     private KeycloakUserAccess keycloakUserAccess;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private ResourceConfig resourceConfig;
 
     private SessionGame session;
     private SessionParameters sessionParameters;
@@ -80,7 +83,10 @@ public class MainController {
     }
 
     @GetMapping(path = "/")
-    public String getWelcome(){
+    public String getWelcome(Model model){
+        model.addAttribute("title",resourceConfig.getBundle().getString("welcome_title"));
+        model.addAttribute("text",resourceConfig.getBundle().getString("welcome_info"));
+        model.addAttribute("button",resourceConfig.getBundle().getString("welcome_button"));
         return "welcome";
     }
 
