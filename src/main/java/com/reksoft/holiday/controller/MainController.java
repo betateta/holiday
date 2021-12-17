@@ -1,6 +1,5 @@
 package com.reksoft.holiday.controller;
 
-import com.reksoft.holiday.config.ResourceConfig;
 import com.reksoft.holiday.dto.SessionGameMapper;
 import com.reksoft.holiday.dto.SessionParameters;
 import com.reksoft.holiday.exception.ValidationException;
@@ -64,13 +63,12 @@ public class MainController {
     @Autowired
     private RoleService roleService;
     @Autowired
-    private ResourceConfig resourceConfig;
+    private ResourceService resourceService;
 
     private SessionGame session;
     private SessionParameters sessionParameters;
     private User user;
     private static final Logger log = LogManager.getLogger(MainController.class);
-
 
     @GetMapping(path = "/logout")
     public String logout(HttpServletRequest request){
@@ -84,9 +82,9 @@ public class MainController {
 
     @GetMapping(path = "/")
     public String getWelcome(Model model){
-        model.addAttribute("title",resourceConfig.getBundle().getString("welcome_title"));
-        model.addAttribute("text",resourceConfig.getBundle().getString("welcome_info"));
-        model.addAttribute("button",resourceConfig.getBundle().getString("welcome_button"));
+        model.addAttribute("welcome_title", resourceService.getBundle().getString("welcome.title"));
+        model.addAttribute("welcome_text", resourceService.getBundle().getString("welcome.text"));
+        model.addAttribute("welcome_button", resourceService.getBundle().getString("welcome.button"));
         return "welcome";
     }
 
@@ -165,12 +163,27 @@ public class MainController {
 
     @GetMapping(value = "/user/session")
     public String create_session (Model model){
+        model.addAttribute("session_title", resourceService.getBundle().getString("session.title"));
+        model.addAttribute("sessionPlayers", resourceService.getBundle().getString("session.sessionPlayers"));
+        model.addAttribute("sessionDuration", resourceService.getBundle().getString("session.sessionDuration"));
+        model.addAttribute("playersAddshotChance", resourceService.getBundle().getString("session.playersAddshotChance"));
+        model.addAttribute("playersAddshotMin", resourceService.getBundle().getString("session.playersAddshotMin"));
+        model.addAttribute("playersAddshotMax", resourceService.getBundle().getString("session.playersAddshotMax"));
+        model.addAttribute("playersNumberAddshot", resourceService.getBundle().getString("session.playersNumberAddshot"));
+        model.addAttribute("holidaySampleFreq", resourceService.getBundle().getString("session.holidaySampleFreq"));
+        model.addAttribute("holidayFillChance", resourceService.getBundle().getString("session.holidayFillChance"));
+        model.addAttribute("holidayPushChance", resourceService.getBundle().getString("session.holidayPushChance"));
+        model.addAttribute("holidaySimpleChance", resourceService.getBundle().getString("session.holidaySimpleChance"));
+        model.addAttribute("holidayBanquetChance", resourceService.getBundle().getString("session.holidayBanquetChance"));
+        model.addAttribute("holidayDinnerChance", resourceService.getBundle().getString("session.holidayDinnerChance"));
+        model.addAttribute("session_button_save", resourceService.getBundle().getString("session.button.save"));
+        model.addAttribute("session_button_begin", resourceService.getBundle().getString("session.button.begin"));
+        model.addAttribute("button_back", resourceService.getBundle().getString("common.button.back"));
+
         model.addAttribute("parameters", sessionParameters);
         session = sessionGameMapper.parametersToSession(sessionParameters);
         return "session";
     }
-
-
 
     @PostMapping(value = "/user/save")
     public String save(@ModelAttribute("parameters") @Valid SessionParameters parameters,

@@ -26,12 +26,12 @@
 </head>
 <body>
     <div class ="welcome">
-        <h1> <font color="red"  face="Marker Felt">${title}</font></h1>
-        <div class = "text"><b>${text}</b>
+        <h1> <font color="red"  face="Marker Felt">${welcome_title}</font></h1>
+        <div class = "text"><b>${welcome_text}</b>
         </div>
         <div >
             <form name="welcome" action="begin" method="GET">
-             <p> <input type="submit" value=${button}> </p>
+             <p> <input type="submit" value="${welcome_button}"> </p>
             </form>
          </div>
      </div>

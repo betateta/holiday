@@ -1,4 +1,4 @@
-package com.reksoft.holiday.config;
+package com.reksoft.holiday.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,8 +10,8 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 @Configuration
-public class ResourceConfig {
-    private static final Logger log = LogManager.getLogger(ResourceConfig.class);
+public class ResourceService {
+    private static final Logger log = LogManager.getLogger(ResourceService.class);
     private static final Locale currentLocale = Locale.getDefault();
 
     @Bean
@@ -41,5 +41,6 @@ public class ResourceConfig {
         }
         return bundle;
     }
+
 
 }
