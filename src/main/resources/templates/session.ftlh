@@ -4,7 +4,7 @@
 <html>
    <head>
       <meta charset="UTF-8" />
-      <title>Игровая сессия</title>
+      <title>${session_title}</title>
        <#include "css/style.css">
    </head>
    <body>
@@ -49,7 +49,7 @@
                         <@spring.formInput path="parameters.holidayDinnerChance" attributes="" fieldType="number"/>
                         <@spring.showErrors "<br>"/> <br>
 
-                        <input type="hidden" name="${_csrf.parameterName}"value="${_csrf.token}" />
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                     <div>
                       <p> <input type="submit" value="${session_button_save}" /> </p>
                     </div>

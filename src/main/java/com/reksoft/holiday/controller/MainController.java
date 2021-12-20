@@ -156,6 +156,28 @@ public class MainController {
 
         model.addAttribute("name",user.getUsername());
         model.addAttribute("sessions", sessionGameList);
+        model.addAttribute("index_title", resourceService.getBundle().getString("index.title"));
+        model.addAttribute("index_user", resourceService.getBundle().getString("index.user"));
+        model.addAttribute("index_button_new", resourceService.getBundle().getString("index.button.new"));
+        model.addAttribute("index_button_fast", resourceService.getBundle().getString("index.button.fast"));
+        model.addAttribute("index_list_session_title", resourceService.getBundle().getString("index.list.session.title"));
+        model.addAttribute("index_list_session_begin", resourceService.getBundle().getString("index.list.session.begin"));
+        model.addAttribute("index_list_session_end", resourceService.getBundle().getString("index.list.session.end"));
+        model.addAttribute("index_list_session_duration", resourceService.getBundle().getString("index.list.session.duration"));
+        model.addAttribute("index_list_session_players", resourceService.getBundle().getString("index.list.session.players"));
+        model.addAttribute("index_list_session_holidays", resourceService.getBundle().getString("index.list.session.holidays"));
+        model.addAttribute("index_list_session_points", resourceService.getBundle().getString("index.list.session.points"));
+        model.addAttribute("index_list_parameters_title", resourceService.getBundle().getString("index.list.parameters.title"));
+        model.addAttribute("playersAddshotChance", resourceService.getBundle().getString("session.playersAddshotChance"));
+        model.addAttribute("playersAddshotMin", resourceService.getBundle().getString("session.playersAddshotMin"));
+        model.addAttribute("playersAddshotMax", resourceService.getBundle().getString("session.playersAddshotMax"));
+        model.addAttribute("playersNumberAddshot", resourceService.getBundle().getString("session.playersNumberAddshot"));
+        model.addAttribute("holidaySampleFreq", resourceService.getBundle().getString("session.holidaySampleFreq"));
+        model.addAttribute("holidayFillChance", resourceService.getBundle().getString("session.holidayFillChance"));
+        model.addAttribute("holidayPushChance", resourceService.getBundle().getString("session.holidayPushChance"));
+        model.addAttribute("holidaySimpleChance", resourceService.getBundle().getString("session.holidaySimpleChance"));
+        model.addAttribute("holidayBanquetChance", resourceService.getBundle().getString("session.holidayBanquetChance"));
+        model.addAttribute("holidayDinnerChance", resourceService.getBundle().getString("session.holidayDinnerChance"));
 
         return "index";
     }
@@ -177,7 +199,7 @@ public class MainController {
         model.addAttribute("holidayDinnerChance", resourceService.getBundle().getString("session.holidayDinnerChance"));
         model.addAttribute("session_button_save", resourceService.getBundle().getString("session.button.save"));
         model.addAttribute("session_button_begin", resourceService.getBundle().getString("session.button.begin"));
-        model.addAttribute("button_back", resourceService.getBundle().getString("common.button.back"));
+        model.addAttribute("button_back", resourceService.getBundle().getString("session.button.back"));
         model.addAttribute("parameters", sessionParameters);
         session = sessionGameMapper.parametersToSession(sessionParameters);
         return "session";

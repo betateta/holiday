@@ -5,26 +5,25 @@
    <head>
       <meta charset="UTF-8" />
         <#include "css/style.css">
-      <title>User information</title>
+      <title>${index_title}</title>
    </head>
    <body>
-         <h2>Пользователь : ${name}</h2>
+         <h2>${index_user} ${name}</h2>
          <div>
                  <table border="1px" cellspacing="2" border="1" cellpadding="5">
-
                        <tr>
                             <td colspan="2">
                                 <input class="hide" id="hd-1" type="checkbox">
-                                <label for="hd-1">Показать список сессий</label>
+                                <label for="hd-1">${index_list_session_title}</label>
                                 <div>
                                     <table border="1px" cellspacing="1" border="1" cellpadding="5">
                                         <tr>
-                                            <th>Время начала</th>
-                                            <th>Время конца</th>
-                                            <th>Длительность</th>
-                                            <th>Игроков</th>
-                                            <th>Праздников</th>
-                                            <th>Очков</th>
+                                            <th>${index_list_session_begin}</th>
+                                            <th>${index_list_session_end}</th>
+                                            <th>${index_list_session_duration}</th>
+                                            <th>${index_list_session_players}</th>
+                                            <th>${index_list_session_holidays}</th>
+                                            <th>${index_list_session_points}</th>
                                         </tr>
                                         <#list sessions as session>
                                             <tr>
@@ -37,46 +36,46 @@
                                                 <tr>
                                                     <td colspan="6">
                                                         <input class="hide" id="hd-${session.id}" type="checkbox">
-                                                        <label for="hd-${session.id}">Установочные параметры</label>
+                                                        <label for="hd-${session.id}">${index_list_parameters_title}</label>
                                                         <div>
                                                             <table border="1px" cellspacing="1" border="1" cellpadding="5">
                                                                 <tr>
-                                                                    <td>Вероятность дополнительных попыток, %</td>
+                                                                    <td>${playersAddshotChance}</td>
                                                                     <td>${session.playersAddshotChance}</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>Минимальное количество дополнительных попыток</td>
+                                                                    <td>${playersAddshotMin}</td>
                                                                     <td>${session.playersAddshotMin}</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>Максимальное количество дополнительных попыток</td>
+                                                                    <td>${playersAddshotMax}</td>
                                                                     <td>${session.playersAddshotMax}</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>Количество игроков с шансом на дополнительные попытки</td>
+                                                                    <td>${playersNumberAddshot}</td>
                                                                     <td>${session.playersNumberAddshot}</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>Частота дискретизации, мин</td>
+                                                                    <td>${holidaySampleFreq}</td>
                                                                     <td>${session.holidaySampleFreq}</td>
                                                                 </tr>
-                                                                    <td>Вероятность заполнения праздника, %</td>
+                                                                    <td>${holidayFillChance}</td>
                                                                     <td>${session.holidayFillChance}</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>Вероятность смещения игрока с праздника ,%</td>
+                                                                    <td>${holidayPushChance}</td>
                                                                     <td>${session.holidayPushChance}</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>Вероятность простого праздника ,%</td>
+                                                                    <td>${holidaySimpleChance}</td>
                                                                     <td>${session.holidaySimpleChance}</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>Вероятность пиршенства ,%</td>
+                                                                    <td>${holidayBanquetChance}</td>
                                                                     <td>${session.holidayBanquetChance}</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>Вероятность ужина ,%</td>
+                                                                    <td>${holidayDinnerChance}</td>
                                                                     <td>${session.holidayDinnerChance}</td>
                                                                 </tr>
                                                             </table>
@@ -94,12 +93,12 @@
 
          <div>
             <form name="session" action="/user/session" method="GET">
-                <p> <input type="submit" value="Создать новую сессию ->" /> </p>
+                <p> <input type="submit" value="${index_button_new}" /> </p>
             </form>
          </div>
          <div>
             <form name="test" action="/user/test_sse" method="GET">
-                <p> <input type="submit" value="Быстрое создание сессии ->" /> </p>
+                <p> <input type="submit" value="${index_button_fast}" /> </p>
             </form>
          </div>
          <div>
