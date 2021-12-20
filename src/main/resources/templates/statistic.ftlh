@@ -6,60 +6,60 @@
     <title>start session page</title>
 </head>
 <body>
-    <h2>Статистика расчета</h2>
+    <h2>${statistic_title}</h2>
      <div>
         <form name="" action="/user/session" method="GET">
-            <input type="submit" value="<- Создать новую сессию" />
+            <input type="submit" value="${statistic_button_new}" />
         </form>
      </div>
 
     <div class="container">
         <div class="layer1">
              <table border="1px" cellspacing="2" border="1" cellpadding="5">
-             <caption><h3>Параметры сессии</h3></caption>
+             <caption><h3>${statistic_table_parameters_title}</h3></caption>
                 <tr>
-                    <td><b>Пользователь</b></td>
+                    <td><b>${statistic_table_parameters_user}</b></td>
                     <td>${user.username}</td>
                 </tr>
                 <tr>
-                    <td><b>Дата начала</b></td>
+                    <td><b>${statistic_table_parameters_begin}</b></td>
                     <td>${session.startTime}</td>
                 </tr>
                 <tr>
-                    <td><b>Дата завершения</b></td>
+                    <td><b>${statistic_table_parameters_end}</b></td>
                     <td>${session.stopTime}</td>
                 </tr>
                 <tr>
-                    <td><b>Длительность, суток</b></td>
+                    <td><b>${statistic_table_parameters_duration}</b></td>
                     <td>${session.sessionDuration}</td>
                 </tr>
                 <tr>
-                    <td><b>Всего игроков</b></td>
+                    <td><b>${statistic_table_parameters_players}</b></td>
                     <td>${session.sessionPlayers}</td>
                 </tr>
                 <tr>
-                    <td><b>Всего праздников</b></td>
+                    <td><b>${statistic_table_parameters_holidays}</b></td>
                     <td>${session.numberOfHolidays}</td>
                 </tr>
                 <tr>
-                    <td><b>Незаконченных праздников</b></td>
+                    <td><b>${statistic_table_parameters_uncomplete}</b></td>
                     <td>${session.numberOfIncompleteHolidays}</td>
                 </tr>
                 <tr>
-                    <td><b>Набранных очков</b></td>
+                    <td><b>${statistic_table_parameters_points}</b></td>
                     <td>${session.points}</td>
                 </tr>
                 <tr>
                     <td colspan="2">
                             <input class="hide" id="hd-2" type="checkbox">
-                            <label for="hd-2">Список игроков</label>
+                            <label for="hd-2">${statistic_list_players_title}</label>
                             <div>
                                 <table border="1px" cellspacing="2" border="1" cellpadding="5">
-                                <caption><h3>Список игроков</h3></caption>
+                                <caption><h3>${statistic_list_players_title}</h3></caption>
                                      <tr>
-                                        <th>Имя игрока</th>
-                                        <th>Количество очков</th>
-                                        <th>Количество доп. попыток</th>
+                                        <th>${statistic_list_players_name}</th>
+                                        <th>${statistic_list_players_points}</th>
+                                        <th>${statistic_list_players_shots}</th>
                                     </tr>
                                     <#list players as player>
                                         <tr>
@@ -75,46 +75,46 @@
                 <tr>
                     <td colspan="2">
                         <input class="hide" id="hd-1" type="checkbox">
-                        <label for="hd-1">Установочные параметры</label>
+                        <label for="hd-1">${statistic_list_param_title}</label>
                         <div>
                             <table border="1px" cellspacing="1" border="1" cellpadding="5">
                               <tr>
-                                <td>Вероятность дополнительных попыток, %</td>
+                                <td>${statistic_list_param_AddshotChance}</td>
                                 <td>${parameters.playersAddshotChance}</td>
                               </tr>
                               <tr>
-                                <td>Минимальное количество дополнительных попыток</td>
+                                <td>${statistic_list_param_AddshotMin}</td>
                                 <td>${parameters.playersAddshotMin}</td>
                               </tr>
                               <tr>
-                                <td>Максимальное количество дополнительных попыток</td>
+                                <td>${statistic_list_param_AddshotMax}</td>
                                 <td>${parameters.playersAddshotMax}</td>
                               </tr>
                               <tr>
-                                <td>Количество игроков с шансом на дополнительные попытки</td>
+                                <td>${statistic_list_param_NumberAddshot}</td>
                                 <td>${parameters.playersNumberAddshot}</td>
                               </tr>
                               <tr>
-                                <td>Частота дискретизации, мин</td>
+                                <td>${statistic_list_param_SampleFreq}</td>
                                 <td>${parameters.holidaySampleFreq}</td>
                               </tr>
-                                <td>Вероятность заполнения праздника, %</td>
+                                <td>${statistic_list_param_FillChance}</td>
                                 <td>${parameters.holidayFillChance}</td>
                               </tr>
                               <tr>
-                                <td>Вероятность смещения игрока с праздника ,%</td>
+                                <td>${statistic_list_param_PushChance}</td>
                                 <td>${parameters.holidayPushChance}</td>
                               </tr>
                               <tr>
-                                <td>Вероятность простого праздника ,%</td>
+                                <td>${statistic_list_param_SimpleChance}</td>
                                 <td>${parameters.holidaySimpleChance}</td>
                               </tr>
                               <tr>
-                                <td>Вероятность пиршенства ,%</td>
+                                <td>${statistic_list_param_BanquetChance}</td>
                                 <td>${parameters.holidayBanquetChance}</td>
                               </tr>
                               <tr>
-                                <td>Вероятность ужина ,%</td>
+                                <td>${statistic_list_param_DinnerChance}</td>
                                 <td>${parameters.holidayDinnerChance}</td>
                               </tr>
                             </table>
@@ -133,15 +133,15 @@
 
         <div class="layer3">
             <table border="1px" cellspacing="2" border="1" cellpadding="5">
-            <caption><h3>Список праздников</h3></caption>
+            <caption><h3>${statistic_table_holidays_title}</h3></caption>
                  <tr>
                     <th>ID</th>
-                    <th>Время начала</th>
-                    <th>Время конца</th>
-                    <th>Тип праздника</th>
-                    <th>Вместимость</th>
-                    <th>Количество очков</th>
-                    <th>Уникальных посетителей</th>
+                    <th>${statistic_table_holidays_begin}</th>
+                    <th>${statistic_table_holidays_end}</th>
+                    <th>${statistic_table_holidays_type}</th>
+                    <th>${statistic_table_holidays_cap}</th>
+                    <th>${statistic_table_holidays_points}</th>
+                    <th>${statistic_table_holidays_members}</th>
                 </tr>
                 <#list calculates as calculate>
                     <tr>
@@ -155,16 +155,16 @@
                         <tr>
                             <td colspan="7">
                                 <input class="hide" id="hc-${calculate.id}" type="checkbox">
-                                <label for="hc-${calculate.id}">Список участников</label>
+                                <label for="hc-${calculate.id}">${statistic_list_members_title}</label>
                                 <div>
                                     <table border="1px" cellspacing="1" border="1" cellpadding="5">
                                         <tr>
-                                            <th>Имя игрока</th>
-                                            <th>Вход</th>
-                                            <th>Выход</th>
-                                            <th>Время пребывания, сек</th>
-                                            <th>Очков</th>
-                                            <th>Организатор</th>
+                                            <th>${statistic_list_members_name}</th>
+                                            <th>${statistic_list_members_in}</th>
+                                            <th>${statistic_list_members_out}</th>
+                                            <th>${statistic_list_members_time}</th>
+                                            <th>${statistic_list_members_points}</th>
+                                            <th>${statistic_list_members_org}</th>
                                         </tr>
                                         <#list calculate.memberSet as member>
                                             <tr>
@@ -174,9 +174,9 @@
                                                 <td>${member.duration}</td>
                                                 <td>${member.holidayPoints}</td>
                                                 <#if member.isOrganizator == true>
-                                                    <td bgcolor="green">${member.isOrganizator?string('да', 'нет')}</td>
+                                                    <td bgcolor="green">${member.isOrganizator?string('${statistic_isOrg_yes}', '${statistic_isOrg_no}')}</td>
                                                 <#else>
-                                                    <td> ${member.isOrganizator?string('да', 'нет')}</td>
+                                                    <td> ${member.isOrganizator?string('${statistic_isOrg_yes}', '${statistic_isOrg_no}')}</td>
                                                 </#if>
                                             </tr>
                                         </#list>

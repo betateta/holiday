@@ -160,7 +160,6 @@ public class MainController {
         return "index";
     }
 
-
     @GetMapping(value = "/user/session")
     public String create_session (Model model){
         model.addAttribute("session_title", resourceService.getBundle().getString("session.title"));
@@ -179,7 +178,6 @@ public class MainController {
         model.addAttribute("session_button_save", resourceService.getBundle().getString("session.button.save"));
         model.addAttribute("session_button_begin", resourceService.getBundle().getString("session.button.begin"));
         model.addAttribute("button_back", resourceService.getBundle().getString("common.button.back"));
-
         model.addAttribute("parameters", sessionParameters);
         session = sessionGameMapper.parametersToSession(sessionParameters);
         return "session";
@@ -206,8 +204,6 @@ public class MainController {
         return "session";
     }
 
-
-
     @GetMapping(value = "/user/get_statistic")
     public String getStatistic (Model model){
         log.debug("get mapping:statistic page");
@@ -224,6 +220,48 @@ public class MainController {
         model.addAttribute("calculates",calculateSet);
         model.addAttribute("players",playerService.getAll());
 
+        model.addAttribute("statistic_title", resourceService.getBundle().getString("statistic.title"));
+        model.addAttribute("statistic_button_new", resourceService.getBundle().getString("statistic.button.new"));
+        model.addAttribute("statistic_table_parameters_title", resourceService.getBundle().getString("statistic.table.parameters.title"));
+        model.addAttribute("statistic_table_parameters_user", resourceService.getBundle().getString("statistic.table.parameters.user"));
+        model.addAttribute("statistic_table_parameters_begin", resourceService.getBundle().getString("statistic.table.parameters.begin"));
+        model.addAttribute("statistic_table_parameters_end", resourceService.getBundle().getString("statistic.table.parameters.end"));
+        model.addAttribute("statistic_table_parameters_duration", resourceService.getBundle().getString("statistic.table.parameters.duration"));
+        model.addAttribute("statistic_table_parameters_players", resourceService.getBundle().getString("statistic.table.parameters.players"));
+        model.addAttribute("statistic_table_parameters_holidays", resourceService.getBundle().getString("statistic.table.parameters.holidays"));
+        model.addAttribute("statistic_table_parameters_uncomplete", resourceService.getBundle().getString("statistic.table.parameters.uncomplete"));
+        model.addAttribute("statistic_table_parameters_points", resourceService.getBundle().getString("statistic.table.parameters.points"));
+        model.addAttribute("statistic_list_players_title", resourceService.getBundle().getString("statistic.list.players.title"));
+        model.addAttribute("statistic_list_players_name", resourceService.getBundle().getString("statistic.list.players.name"));
+        model.addAttribute("statistic_list_players_points", resourceService.getBundle().getString("statistic.list.players.points"));
+        model.addAttribute("statistic_list_players_shots", resourceService.getBundle().getString("statistic.list.players.shots"));
+        model.addAttribute("statistic_list_param_title", resourceService.getBundle().getString("statistic.list.param.title"));
+        model.addAttribute("statistic_list_param_AddshotChance", resourceService.getBundle().getString("statistic.list.param.AddshotChance"));
+        model.addAttribute("statistic_list_param_AddshotMin", resourceService.getBundle().getString("statistic.list.param.AddshotMin"));
+        model.addAttribute("statistic_list_param_AddshotMax", resourceService.getBundle().getString("statistic.list.param.AddshotMax"));
+        model.addAttribute("statistic_list_param_NumberAddshot", resourceService.getBundle().getString("statistic.list.param.NumberAddshot"));
+        model.addAttribute("statistic_list_param_SampleFreq", resourceService.getBundle().getString("statistic.list.param.SampleFreq"));
+        model.addAttribute("statistic_list_param_FillChance", resourceService.getBundle().getString("statistic.list.param.FillChance"));
+        model.addAttribute("statistic_list_param_PushChance", resourceService.getBundle().getString("statistic.list.param.PushChance"));
+        model.addAttribute("statistic_list_param_SimpleChance", resourceService.getBundle().getString("statistic.list.param.SimpleChance"));
+        model.addAttribute("statistic_list_param_BanquetChance", resourceService.getBundle().getString("statistic.list.param.BanquetChance"));
+        model.addAttribute("statistic_list_param_DinnerChance", resourceService.getBundle().getString("statistic.list.param.DinnerChance"));
+        model.addAttribute("statistic_table_holidays_title", resourceService.getBundle().getString("statistic.table.holidays.title"));
+        model.addAttribute("statistic_table_holidays_begin", resourceService.getBundle().getString("statistic.table.holidays.begin"));
+        model.addAttribute("statistic_table_holidays_end", resourceService.getBundle().getString("statistic.table.holidays.end"));
+        model.addAttribute("statistic_table_holidays_type", resourceService.getBundle().getString("statistic.table.holidays.type"));
+        model.addAttribute("statistic_table_holidays_cap", resourceService.getBundle().getString("statistic.table.holidays.cap"));
+        model.addAttribute("statistic_table_holidays_points", resourceService.getBundle().getString("statistic.table.holidays.points"));
+        model.addAttribute("statistic_table_holidays_members", resourceService.getBundle().getString("statistic.table.holidays.members"));
+        model.addAttribute("statistic_list_members_title", resourceService.getBundle().getString("statistic.list.members.title"));
+        model.addAttribute("statistic_list_members_name", resourceService.getBundle().getString("statistic.list.members.name"));
+        model.addAttribute("statistic_list_members_in", resourceService.getBundle().getString("statistic.list.members.in"));
+        model.addAttribute("statistic_list_members_out", resourceService.getBundle().getString("statistic.list.members.out"));
+        model.addAttribute("statistic_list_members_time", resourceService.getBundle().getString("statistic.list.members.time"));
+        model.addAttribute("statistic_list_members_points", resourceService.getBundle().getString("statistic.list.members.points"));
+        model.addAttribute("statistic_list_members_org", resourceService.getBundle().getString("statistic.list.members.org"));
+        model.addAttribute("statistic_isOrg_yes", resourceService.getBundle().getString("statistic.isOrg.yes"));
+        model.addAttribute("statistic_isOrg_no", resourceService.getBundle().getString("statistic.isOrg.no"));
         return "statistic";
     }
 
@@ -235,6 +273,7 @@ public class MainController {
                     .newSingleThreadExecutor();
            executor.submit(calculateSession);
            executor.shutdown();
+            model.addAttribute("sse_title", resourceService.getBundle().getString("sse.title"));
            return "sse";
         }
         else {
@@ -249,7 +288,7 @@ public class MainController {
                 .newSingleThreadExecutor();
         Future<Integer> future = executor.submit(calculateSession);
         executor.shutdown();
-
+        model.addAttribute("sse_title", resourceService.getBundle().getString("sse.title"));
        return "sse";
 }
 
